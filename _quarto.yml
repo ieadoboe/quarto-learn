@@ -3,30 +3,39 @@ project:
   output-dir: docs
 
 website:
-  title: "Learn with Isaac"
+  title: "Not Too Deep"
   site-url: "https://ieadoboe.github.io/quarto-learn"
   description: "Lessons on data science and deep learning."
 
   navbar:
-    left:
+    right:
       - text: "Home"
         href: index.qmd
       - text: "Lessons"
         href: lessons/index.qmd
+      - text: "Portfolio"
+        href: https://ieadoboe.github.io/
+        target: _blank
+      - text: "Articles"
+        href: https://ieadoboe.github.io/blog
+        target: _blank
+      - text: "Projects"
+        href: https://ieadoboe.github.io/projects
+        target: _blank
 
   sidebar:
     title: "Lessons"
     style: "floating"
     contents:
-      # - section: "Data Science"
-      #   contents: lessons/data-science/*
+      - section: "Data Science"
+        contents: lessons/data-science/*
       - section: "Deep Learning"
         contents: lessons/deep-learning/*
 
 format:
   html:
     theme:
-      light: cosmo
+      light: flatly
       dark: darkly
     toggle-theme: true # shows light/dark switch
     toc: true

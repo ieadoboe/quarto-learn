@@ -39,7 +39,7 @@
     "href": "lessons/deep-learning/intro-to-nns.html",
     "title": "Learn with Isaac",
     "section": "",
-    "text": "This is my growing collection of lessons, notes, and explorations in data science, machine learning, and deep learning.\n\n📘 These notes are part personal study guide, part public resource — feel free to browse, share, or build upon them.\n\n\n\n\n📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing\n\n\n\n\n\nIntro to Neural Networks\nGradient Descent\n\n\n\n\n\n\nI created this site to:\n\nClarify concepts by writing them out\nTrack my own progress through structured topics\nShare insights and resources with anyone interested in learning\n\n\n\n\n\n\n📈 Statistical learning fundamentals\n🤖 NLP and transformers\n⚙️ MLOps and reproducibility\n🔍 Real-world projects and case studies\n\n\n\n\n\nGot ideas, suggestions, or corrections? Reach out on GitHub or open an issue!",
+    "text": "This is my growing collection of lessons, notes, and explorations in data science, machine learning, and deep learning.\n\n📘 These notes are part personal study guide, part public resource — feel free to browse, share, or build upon them.\n\n\n\n📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing",
     "crumbs": [
       "Deep Learning",
       "Learn with Isaac"
@@ -50,7 +50,7 @@
     "href": "lessons/deep-learning/intro-to-nns.html#start-learning",
     "title": "Learn with Isaac",
     "section": "",
-    "text": "📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing\n\n\n\n\n\nIntro to Neural Networks\nGradient Descent",
+    "text": "📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing",
     "crumbs": [
       "Deep Learning",
       "Learn with Isaac"
@@ -88,5 +88,40 @@
       "Deep Learning",
       "Learn with Isaac"
     ]
+  },
+  {
+    "objectID": "lessons/index.html",
+    "href": "lessons/index.html",
+    "title": "Learn with Isaac",
+    "section": "",
+    "text": "This is my growing collection of lessons, notes, and explorations in data science, machine learning, and deep learning.\n\n📘 These notes are part personal study guide, part public resource — feel free to browse, share, or build upon them.\n\n\n\n\n📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing\n\n\n\n\n\nIntro to Neural Networks\nGradient Descent\n\n\n\n\n\n\nI created this site to:\n\nClarify concepts by writing them out\nTrack my own progress through structured topics\nShare insights and resources with anyone interested in learning\n\n\n\n\n\n\n📈 Statistical learning fundamentals\n🤖 NLP and transformers\n⚙️ MLOps and reproducibility\n🔍 Real-world projects and case studies\n\n\n\n\n\nGot ideas, suggestions, or corrections? Reach out on GitHub or open an issue!"
+  },
+  {
+    "objectID": "lessons/index.html#start-learning",
+    "href": "lessons/index.html#start-learning",
+    "title": "Learn with Isaac",
+    "section": "",
+    "text": "📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing\n\n\n\n\n\nIntro to Neural Networks\nGradient Descent"
+  },
+  {
+    "objectID": "lessons/index.html#why-this-exists",
+    "href": "lessons/index.html#why-this-exists",
+    "title": "Learn with Isaac",
+    "section": "",
+    "text": "I created this site to:\n\nClarify concepts by writing them out\nTrack my own progress through structured topics\nShare insights and resources with anyone interested in learning"
+  },
+  {
+    "objectID": "lessons/index.html#whats-coming-next",
+    "href": "lessons/index.html#whats-coming-next",
+    "title": "Learn with Isaac",
+    "section": "",
+    "text": "📈 Statistical learning fundamentals\n🤖 NLP and transformers\n⚙️ MLOps and reproducibility\n🔍 Real-world projects and case studies"
+  },
+  {
+    "objectID": "lessons/index.html#feedback",
+    "href": "lessons/index.html#feedback",
+    "title": "Learn with Isaac",
+    "section": "",
+    "text": "Got ideas, suggestions, or corrections? Reach out on GitHub or open an issue!"
   }
 ]

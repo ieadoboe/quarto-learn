@@ -12,43 +12,11 @@ This is my growing collection of lessons, notes, and explorations in **data scie
 
 > 📘 These notes are part personal study guide, part public resource — feel free to browse, share, or build upon them.
 
----
-
 ## 🧭 Start Learning
 
 📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:
 
-### 🔹 Data Science
+### Data Science
 - [Exploratory Data Analysis](lessons/data-science/eda.qmd)
 - [Hypothesis Testing](lessons/data-science/hypothesis-testing.qmd)
 
-### 🔹 Deep Learning
-- [Intro to Neural Networks](lessons/deep-learning/intro-to-nns.qmd)
-- [Gradient Descent](lessons/deep-learning/gradient-descent.qmd)
-
----
-
-## 🎯 Why This Exists
-
-I created this site to:
-
-- Clarify concepts by writing them out
-- Track my own progress through structured topics
-- Share insights and resources with anyone interested in learning
-
----
-
-## 🛠 What’s Coming Next
-
-- 📈 Statistical learning fundamentals
-- 🤖 NLP and transformers
-- ⚙️ MLOps and reproducibility
-- 🔍 Real-world projects and case studies
-
----
-
-## 💬 Feedback?
-
-Got ideas, suggestions, or corrections? Reach out on [GitHub](https://github.com/ieadoboe) or open an issue!
-
----

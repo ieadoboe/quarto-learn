@@ -23,6 +23,7 @@ This is my growing collection of lessons, notes, and explorations in **data scie
 - [Hypothesis Testing](lessons/data-science/hypothesis-testing.qmd)
 
 ### 🔹 Deep Learning
+
 - [Intro to Neural Networks](lessons/deep-learning/intro-to-nns.qmd)
 - [Gradient Descent](lessons/deep-learning/gradient-descent.qmd)
 

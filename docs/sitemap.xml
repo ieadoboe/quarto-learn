@@ -2,10 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/index.html</loc>
-    <lastmod>2025-04-13T03:47:20.128Z</lastmod>
+    <lastmod>2025-04-13T04:25:44.265Z</lastmod>
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/deep-learning/intro-to-nns.html</loc>
-    <lastmod>2025-04-13T03:47:47.886Z</lastmod>
+    <lastmod>2025-04-13T04:27:24.734Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/index.html</loc>
+    <lastmod>2025-04-13T04:09:11.896Z</lastmod>
   </url>
 </urlset>
