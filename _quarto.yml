@@ -25,6 +25,8 @@ website:
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: cosmo
+      dark: darkly
+    toggle-theme: true # shows light/dark switch
     toc: true
-    number-sections: true
