@@ -1,0 +1,6 @@
+project:
+  output-dir: docs
+
+website:
+  title: "Learn with Isaac"
+  site-url: "https://ieadoboe.github.io/learn"
