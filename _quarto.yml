@@ -1,6 +1,30 @@
 project:
+  type: website
   output-dir: docs
 
 website:
   title: "Learn with Isaac"
-  site-url: "https://ieadoboe.github.io/learn"
+  site-url: "https://ieadoboe.github.io/quarto-learn"
+  description: "Lessons on data science and deep learning."
+
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Lessons"
+        href: lessons/index.qmd
+
+  sidebar:
+    title: "Lessons"
+    style: "floating"
+    contents:
+      # - section: "Data Science"
+      #   contents: lessons/data-science/*
+      - section: "Deep Learning"
+        contents: lessons/deep-learning/*
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
