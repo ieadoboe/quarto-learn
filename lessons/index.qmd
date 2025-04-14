@@ -2,7 +2,7 @@
 title: "Deep Learning Roadmap"
 format:
   html:
-    toc: false
+    toc: true
     code-fold: show
 ---
 
@@ -12,90 +12,90 @@ The lessons are categorized into four main sections, each representing a differe
 
 ## Foundations (Beginner Level)
 
-### Lesson 1: Introduction to Machine Learning
-- [Basic concepts and terminology](lessons/basic-concepts-and-terms.qmd)
-- [Supervised vs. unsupervised learning](lessons/supervised-vs-unsupervised.qmd)
-- [The machine learning workflow](lessons/ml-workflow.qmd)
+###  1: Introduction to Machine Learning
+- [Basic concepts and terminology](beginner/basic-concepts-and-terms.qmd)
+- [Supervised vs. unsupervised learning](beginner/supervised-vs-unsupervised.qmd)
+- [The machine learning workflow](beginner/ml-workflow.qmd)
 
-### Lesson 2: Linear Models
-- [Linear regression](lessons/linear-regression.qmd)
-- [Logistic regression](lessons/logistic-regression.qmd)
-- [Gradient descent optimization](lessons/gradient-descent.qmd)
+###  2: Linear Models
+- [Linear regression](beginner/linear-regression.qmd)
+- [Logistic regression](beginner/logistic-regression.qmd)
+- [Gradient descent optimization](beginner/gradient-descent.qmd)
 
-### Lesson 3: Model Evaluation
-- [Training, validation, and test sets](lessons/train-val-test.qmd)
-- [Overfitting and underfitting](lessons/overfitting-underfitting.qmd)
-- [Cross-validation techniques](lessons/cross-validation.qmd)
+###  3: Model Evaluation
+- [Training, validation, and test sets](beginner/train-val-test.qmd)
+- [Overfitting and underfitting](beginner/overfitting-underfitting.qmd)
+- [Cross-validation techniques](beginner/cross-validation.qmd)
 
-### Lesson 4: Decision Trees and Ensemble Methods
-- [Decision trees](lessons/decision-trees.qmd)
-- [Random forests](lessons/random-forests.qmd)
-- [Gradient boosting](lessons/gradient-boosting.qmd)
+###  4: Decision Trees and Ensemble Methods
+- [Decision trees](beginner/decision-trees.qmd)
+- [Random forests](beginner/random-forests.qmd)
+- [Gradient boosting](beginner/gradient-boosting.qmd)
 
 ## Neural Networks Fundamentals (Intermediate Level)
 
-### Lesson 5: Neural Network Basics
-- [Perceptrons and activation functions](lessons/perceptrons-activation.qmd)
-- [Feedforward neural networks](lessons/feedforward-nn.qmd)
-- [Backpropagation algorithm](lessons/backpropagation.qmd)
+###  5: Neural Network Basics
+- [Perceptrons and activation functions](intermediate/perceptrons-activation.qmd)
+- [Feedforward neural networks](intermediate/feedforward-nn.qmd)
+- [Backpropagation algorithm](intermediate/backpropagation.qmd)
 
-### Lesson 6: Building Your First Neural Network
-- [TensorFlow and Keras introduction](lessons/tensorflow-keras.qmd)
-- [Implementing a simple neural network](lessons/simple-nn-implementation.qmd)
-- [Training and evaluation](lessons/training-evaluation.qmd)
+###  6: Building Your First Neural Network
+- [TensorFlow and Keras introduction](intermediate/tensorflow-keras.qmd)
+- [Implementing a simple neural network](intermediate/simple-nn-implementation.qmd)
+- [Training and evaluation](intermediate/training-evaluation.qmd)
 
-### Lesson 7: Convolutional Neural Networks
-- [Image data and convolution operations](lessons/cnn-convolutions.qmd)
-- [CNN architectures (LeNet, AlexNet)](lessons/cnn-architectures.qmd)
-- [Image classification tasks](lessons/image-classification.qmd)
+###  7: Convolutional Neural Networks
+- [Image data and convolution operations](intermediate/cnn-convolutions.qmd)
+- [CNN architectures (LeNet, AlexNet)](intermediate/cnn-architectures.qmd)
+- [Image classification tasks](intermediate/image-classification.qmd)
 
-### Lesson 8: Recurrent Neural Networks
-- [Sequential data processing](lessons/sequential-data.qmd)
-- [LSTM and GRU architectures](lessons/lstm-gru.qmd)
-- [Time series prediction](lessons/time-series.qmd)
+###  8: Recurrent Neural Networks
+- [Sequential data processing](intermediate/sequential-data.qmd)
+- [LSTM and GRU architectures](intermediate/lstm-gru.qmd)
+- [Time series prediction](intermediate/time-series.qmd)
 
 ## Advanced Deep Learning (Advanced Level)
 
-### Lesson 9: Advanced CNN Architectures
-- [ResNet, Inception, and EfficientNet](lessons/advanced-cnns.qmd)
-- [Transfer learning techniques](lessons/transfer-learning.qmd)
-- [Computer vision applications](lessons/cv-applications.qmd)
+###  9: Advanced CNN Architectures
+- [ResNet, Inception, and EfficientNet](advanced/advanced-cnns.qmd)
+- [Transfer learning techniques](advanced/transfer-learning.qmd)
+- [Computer vision applications](advanced/cv-applications.qmd)
 
-### Lesson 10: Natural Language Processing
-- [Word embeddings (Word2Vec, GloVe)](lessons/word-embeddings.qmd)
-- [RNN-based language models](lessons/rnn-language-models.qmd)
-- [Text classification and generation](lessons/text-class-gen.qmd)
+###  10: Natural Language Processing
+- [Word embeddings (Word2Vec, GloVe)](advanced/word-embeddings.qmd)
+- [RNN-based language models](advanced/rnn-language-models.qmd)
+- [Text classification and generation](advanced/text-class-gen.qmd)
 
-### Lesson 11: Transformers and Attention
-- [Attention mechanisms](lessons/attention.qmd)
-- [Transformer architecture](lessons/transformers.qmd)
-- [BERT, GPT, and their applications](lessons/bert-gpt.qmd)
+###  11: Transformers and Attention
+- [Attention mechanisms](advanced/attention.qmd)
+- [Transformer architecture](advanced/transformers.qmd)
+- [BERT, GPT, and their applications](advanced/bert-gpt.qmd)
 
-### Lesson 12: Generative Models
-- [Autoencoders and variational autoencoders](lessons/autoencoders-vaes.qmd)
-- [Generative Adversarial Networks (GANs)](lessons/gans.qmd)
-- [Diffusion models](lessons/diffusion-models.qmd)
+###  12: Generative Models
+- [Autoencoders and variational autoencoders](advanced/autoencoders-vaes.qmd)
+- [Generative Adversarial Networks (GANs)](advanced/gans.qmd)
+- [Diffusion models](advanced/diffusion-models.qmd)
 
 ## Cutting-Edge Techniques (Expert Level)
 
-### Lesson 13: Reinforcement Learning
-- [RL fundamentals](lessons/rl-fundamentals.qmd)
-- [Deep Q-Networks](lessons/dqn.qmd)
-- [Policy gradient methods](lessons/policy-gradients.qmd)
+###  13: Reinforcement Learning
+- [RL fundamentals](expert/rl-fundamentals.qmd)
+- [Deep Q-Networks](expert/dqn.qmd)
+- [Policy gradient methods](expert/policy-gradients.qmd)
 
-### Lesson 14: Self-Supervised Learning
-- [Contrastive learning](lessons/contrastive-learning.qmd)
-- [CLIP and SimCLR](lessons/clip-simclr.qmd)
-- [Foundation models](lessons/foundation-models.qmd)
+###  14: Self-Supervised Learning
+- [Contrastive learning](expert/contrastive-learning.qmd)
+- [CLIP and SimCLR](expert/clip-simclr.qmd)
+- [Foundation models](expert/foundation-models.qmd)
 
-### Lesson 15: Multimodal Learning
-- [Vision-language models](lessons/vision-language.qmd)
-- [Audio-visual integration](lessons/audio-visual.qmd)
-- [Cross-modal transformers](lessons/cross-modal-transformers.qmd)
+###  15: Multimodal Learning
+- [Vision-language models](expert/vision-language.qmd)
+- [Audio-visual integration](expert/audio-visual.qmd)
+- [Cross-modal transformers](expert/cross-modal-transformers.qmd)
 
-### Lesson 16: Deploying Deep Learning Models
-- [Model optimization and quantization](lessons/model-optimization.qmd)
-- [Edge deployment](lessons/edge-deployment.qmd)
-- [Monitoring and maintaining production models](lessons/model-monitoring.qmd)
+###  16: Deploying Deep Learning Models
+- [Model optimization and quantization](expert/model-optimization.qmd)
+- [Edge deployment](expert/edge-deployment.qmd)
+- [Monitoring and maintaining production models](expert/model-monitoring.qmd)
 
 ---

@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "Not That Deep"
+  title: "Not That Deep - The Gradient's Journey"
   site-url: "https://ieadoboe.github.io/quarto-learn"
   description: "Lessons on data science and deep learning."
 
@@ -16,12 +16,6 @@ website:
       - text: "Portfolio"
         href: https://ieadoboe.github.io/
         target: _blank
-#      - text: "Articles"
-#        href: https://ieadoboe.github.io/blog
-#        target: _blank
-#      - text: "Projects"
-#        href: https://ieadoboe.github.io/projects
-#        target: _blank
 
   sidebar:
     title: "Lessons"

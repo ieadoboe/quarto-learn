@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Isaac Adoboe">
+<meta name="description" content="Demystifying neural networks and advanced data science - a structured curriculum that builds expertise without the unnecessary complexity.">
 
-<title>Deep Learning: From Foundations to Frontiers – Not That Deep</title>
+<title>Welcome to Not That Deep - The Course – Not That Deep - The Gradient’s Journey</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -36,13 +38,13 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-7271f29f9498218151f3120baddb7363.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-226bd0f977fa82dfae4534cac220d79a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-19f9516e6480ff13323e2bc603413b36.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-4fb89cd985c47b5e5a618d7131831ad4.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f59c84d31ff110b3f81515ebca98a680.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-c236ccd2c1b722de780a3080448e3731.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-f59c84d31ff110b3f81515ebca98a680.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e832ec0c2b172e227e975b43f8d47e57.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-9f3909748ddb288bf7c28cefa14510eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-e832ec0c2b172e227e975b43f8d47e57.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -74,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -241,7 +243,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Not That Deep</span>
+    <span class="navbar-title">Not That Deep - The Gradient’s Journey</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -274,20 +276,55 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-deep-learning" id="toc-what-is-deep-learning" class="nav-link active" data-scroll-target="#what-is-deep-learning">What is Deep Learning?</a></li>
+  <li><a href="#why-learn-deep-learning" id="toc-why-learn-deep-learning" class="nav-link" data-scroll-target="#why-learn-deep-learning">Why Learn Deep Learning?</a></li>
+  <li><a href="#course-structure" id="toc-course-structure" class="nav-link" data-scroll-target="#course-structure">Course Structure</a>
+  <ul class="collapse">
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#who-is-this-course-for" id="toc-who-is-this-course-for" class="nav-link" data-scroll-target="#who-is-this-course-for">Who is This Course For?</a></li>
+  <li><a href="#what-youll-learn" id="toc-what-youll-learn" class="nav-link" data-scroll-target="#what-youll-learn">What You’ll Learn</a></li>
+  </ul></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a></li>
+  <li><a href="#feedback" id="toc-feedback" class="nav-link" data-scroll-target="#feedback">Feedback?</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Deep Learning: From Foundations to Frontiers</h1>
-</div>
+<h1 class="title">Welcome to Not That Deep - The Course</h1>
+<p class="subtitle lead">Deep Learning: From Foundations to Frontiers</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">machine learning</div>
+    <div class="quarto-category">deep learning</div>
+    <div class="quarto-category">data science</div>
+    <div class="quarto-category">statistics</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Demystifying neural networks and advanced data science - a structured curriculum that builds expertise without the unnecessary complexity.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Isaac Adoboe </p>
+          </div>
+  </div>
     
   
     
@@ -298,6 +335,12 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/Machine_Learning_101.jpg" class="img-fluid figure-img"></p>
+<figcaption>In a world full of intelligence, humanity is the final exam.</figcaption>
+</figure>
+</div>
 <section id="what-is-deep-learning" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-deep-learning">What is Deep Learning?</h2>
 <p>Deep learning is a subset of machine learning that uses neural networks with multiple layers (hence “deep”) to analyze various forms of data. Think of it as teaching computers to learn like humans do - through experience and examples rather than explicit programming.</p>
@@ -325,9 +368,8 @@ ul.task-list li input[type="checkbox"] {
 <section id="course-structure" class="level2">
 <h2 class="anchored" data-anchor-id="course-structure">Course Structure</h2>
 <p>This course takes you from the fundamentals of machine learning to the cutting edge of deep learning research. You’ll build a solid foundation before tackling increasingly sophisticated concepts, with each lesson reinforcing your knowledge through practical examples and hands-on implementation. I developed this course to be accessible to anyone with a basic understanding of programming and mathematics, while also providing depth for those looking to specialize in deep learning. And most importantly, it’s designed this course for myself, to help me learn and understand deep learning better. I hope you find it as useful as I do!</p>
-</section>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<section id="prerequisites" class="level3">
+<h3 class="anchored" data-anchor-id="prerequisites">Prerequisites</h3>
 <p>To get the most from this course, you should have:</p>
 <ol type="1">
 <li><strong>Basic Python programming skills</strong> - You should be comfortable writing functions, using loops, and working with libraries. These are some resources that can help you get started:
@@ -349,6 +391,27 @@ ul.task-list li input[type="checkbox"] {
 </ol>
 <p>Don’t worry if your math is rusty or your programming skills are basic - we’ll review key concepts as needed and build your skills gradually. The most important prerequisite is enthusiasm for learning.</p>
 </section>
+<section id="who-is-this-course-for" class="level3">
+<h3 class="anchored" data-anchor-id="who-is-this-course-for">Who is This Course For?</h3>
+<p>This course a meant to be an ideal repository of knowledge and better explanation of key concepts with practical examples. This course is ideal for:</p>
+<ul>
+<li>Software developers transitioning to AI/ML roles</li>
+<li>Data analysts looking to expand their technical toolkit</li>
+<li>Students seeking practical skills beyond academic theory</li>
+</ul>
+</section>
+<section id="what-youll-learn" class="level3">
+<h3 class="anchored" data-anchor-id="what-youll-learn">What You’ll Learn</h3>
+<p>You’ll develop a working knowledge of:</p>
+<ul>
+<li>Core machine learning algorithms and when to use them</li>
+<li>Deep neural network architectures and their applications</li>
+<li>Data preparation and feature engineering techniques</li>
+<li>Model evaluation, tuning, and deployment strategies</li>
+<li>Current best practices in the field</li>
+</ul>
+</section>
+</section>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
 <p>Ready to begin your deep learning journey? Head to the <a href="./lessons/index.html">Lessons</a> page to explore the road to see what lies ahead.</p>
@@ -357,7 +420,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="feedback" class="level2">
 <h2 class="anchored" data-anchor-id="feedback">Feedback?</h2>
 <p>Got ideas, suggestions, or corrections? Reach out on <a href="https://github.com/ieadoboe">GitHub</a> or open an issue!</p>
-<hr>
 
 
 </section>

@@ -1,10 +1,18 @@
 ---
-title: "Deep Learning: From Foundations to Frontiers"
+title: "Welcome to Not That Deep - The Course"
+subtitle: "Deep Learning: From Foundations to Frontiers"
+description: "Demystifying neural networks and advanced data science - a structured curriculum that builds expertise without the unnecessary complexity."
+author: "Isaac Adoboe"
+categories: [machine learning, deep learning, data science, statistics]
+toc: true
 format:
   html:
-    toc: false
+    highlight-style: github
     code-fold: show
+    
 ---
+
+![In a world full of intelligence, humanity is the final exam.](assets/Machine_Learning_101.jpg)
 
 ## What is Deep Learning?
 
@@ -34,7 +42,7 @@ Beyond these applications, deep learning is transforming entire industries - fro
 
 This course takes you from the fundamentals of machine learning to the cutting edge of deep learning research. You'll build a solid foundation before tackling increasingly sophisticated concepts, with each lesson reinforcing your knowledge through practical examples and hands-on implementation. I developed this course to be accessible to anyone with a basic understanding of programming and mathematics, while also providing depth for those looking to specialize in deep learning. And most importantly, it's designed this course for myself, to help me learn and understand deep learning better. I hope you find it as useful as I do!
 
-## Prerequisites
+### Prerequisites
 
 To get the most from this course, you should have:
 
@@ -53,6 +61,24 @@ To get the most from this course, you should have:
 
 Don't worry if your math is rusty or your programming skills are basic - we'll review key concepts as needed and build your skills gradually. The most important prerequisite is enthusiasm for learning.
 
+### Who is This Course For?
+
+This course a meant to be an ideal repository of knowledge and better explanation of key concepts with practical examples. This course is ideal for:
+
+- Software developers transitioning to AI/ML roles
+- Data analysts looking to expand their technical toolkit
+- Students seeking practical skills beyond academic theory
+
+### What You'll Learn
+
+You'll develop a working knowledge of:
+
+- Core machine learning algorithms and when to use them
+- Deep neural network architectures and their applications
+- Data preparation and feature engineering techniques
+- Model evaluation, tuning, and deployment strategies
+- Current best practices in the field
+
 ## Getting Started
 
 Ready to begin your deep learning journey? Head to the [Lessons](lessons/index.qmd) page to explore the road to see what lies ahead.
@@ -62,5 +88,3 @@ Let's transform the way you think about computing and artificial intelligence!
 ## Feedback?
 
 Got ideas, suggestions, or corrections? Reach out on [GitHub](https://github.com/ieadoboe) or open an issue!
-
----
