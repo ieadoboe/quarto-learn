@@ -1,54 +1,101 @@
 ---
-title: "Learn with Isaac"
+title: "Deep Learning Roadmap"
 format:
   html:
     toc: false
     code-fold: show
 ---
 
-# 👋 Welcome to Learn with Isaac
+This curriculum is designed to progressively build your knowledge and skills, with each lesson preparing you for the next. I recommend following the sequence as presented, but feel free to adjust based on your specific interests and prior experience.
 
-This is my growing collection of lessons, notes, and explorations in **data science**, **machine learning**, and **deep learning**.
+The lessons are categorized into four main sections, each representing a different level of expertise:
 
-> 📘 These notes are part personal study guide, part public resource — feel free to browse, share, or build upon them.
+## Foundations (Beginner Level)
 
----
+### Lesson 1: Introduction to Machine Learning
+- [Basic concepts and terminology](lessons/basic-concepts-and-terms.qmd)
+- [Supervised vs. unsupervised learning](lessons/supervised-vs-unsupervised.qmd)
+- [The machine learning workflow](lessons/ml-workflow.qmd)
 
-## 🧭 Start Learning
+### Lesson 2: Linear Models
+- [Linear regression](lessons/linear-regression.qmd)
+- [Logistic regression](lessons/logistic-regression.qmd)
+- [Gradient descent optimization](lessons/gradient-descent.qmd)
 
-📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:
+### Lesson 3: Model Evaluation
+- [Training, validation, and test sets](lessons/train-val-test.qmd)
+- [Overfitting and underfitting](lessons/overfitting-underfitting.qmd)
+- [Cross-validation techniques](lessons/cross-validation.qmd)
 
-### 🔹 Data Science
-- [Exploratory Data Analysis](lessons/data-science/eda.qmd)
-- [Hypothesis Testing](lessons/data-science/hypothesis-testing.qmd)
+### Lesson 4: Decision Trees and Ensemble Methods
+- [Decision trees](lessons/decision-trees.qmd)
+- [Random forests](lessons/random-forests.qmd)
+- [Gradient boosting](lessons/gradient-boosting.qmd)
 
-### 🔹 Deep Learning
-- [Intro to Neural Networks](lessons/deep-learning/intro-to-nns.qmd)
-- [Gradient Descent](lessons/deep-learning/gradient-descent.qmd)
+## Neural Networks Fundamentals (Intermediate Level)
 
----
+### Lesson 5: Neural Network Basics
+- [Perceptrons and activation functions](lessons/perceptrons-activation.qmd)
+- [Feedforward neural networks](lessons/feedforward-nn.qmd)
+- [Backpropagation algorithm](lessons/backpropagation.qmd)
 
-## 🎯 Why This Exists
+### Lesson 6: Building Your First Neural Network
+- [TensorFlow and Keras introduction](lessons/tensorflow-keras.qmd)
+- [Implementing a simple neural network](lessons/simple-nn-implementation.qmd)
+- [Training and evaluation](lessons/training-evaluation.qmd)
 
-I created this site to:
+### Lesson 7: Convolutional Neural Networks
+- [Image data and convolution operations](lessons/cnn-convolutions.qmd)
+- [CNN architectures (LeNet, AlexNet)](lessons/cnn-architectures.qmd)
+- [Image classification tasks](lessons/image-classification.qmd)
 
-- Clarify concepts by writing them out
-- Track my own progress through structured topics
-- Share insights and resources with anyone interested in learning
+### Lesson 8: Recurrent Neural Networks
+- [Sequential data processing](lessons/sequential-data.qmd)
+- [LSTM and GRU architectures](lessons/lstm-gru.qmd)
+- [Time series prediction](lessons/time-series.qmd)
 
----
+## Advanced Deep Learning (Advanced Level)
 
-## 🛠 What’s Coming Next
+### Lesson 9: Advanced CNN Architectures
+- [ResNet, Inception, and EfficientNet](lessons/advanced-cnns.qmd)
+- [Transfer learning techniques](lessons/transfer-learning.qmd)
+- [Computer vision applications](lessons/cv-applications.qmd)
 
-- 📈 Statistical learning fundamentals
-- 🤖 NLP and transformers
-- ⚙️ MLOps and reproducibility
-- 🔍 Real-world projects and case studies
+### Lesson 10: Natural Language Processing
+- [Word embeddings (Word2Vec, GloVe)](lessons/word-embeddings.qmd)
+- [RNN-based language models](lessons/rnn-language-models.qmd)
+- [Text classification and generation](lessons/text-class-gen.qmd)
 
----
+### Lesson 11: Transformers and Attention
+- [Attention mechanisms](lessons/attention.qmd)
+- [Transformer architecture](lessons/transformers.qmd)
+- [BERT, GPT, and their applications](lessons/bert-gpt.qmd)
 
-## 💬 Feedback?
+### Lesson 12: Generative Models
+- [Autoencoders and variational autoencoders](lessons/autoencoders-vaes.qmd)
+- [Generative Adversarial Networks (GANs)](lessons/gans.qmd)
+- [Diffusion models](lessons/diffusion-models.qmd)
 
-Got ideas, suggestions, or corrections? Reach out on [GitHub](https://github.com/ieadoboe) or open an issue!
+## Cutting-Edge Techniques (Expert Level)
+
+### Lesson 13: Reinforcement Learning
+- [RL fundamentals](lessons/rl-fundamentals.qmd)
+- [Deep Q-Networks](lessons/dqn.qmd)
+- [Policy gradient methods](lessons/policy-gradients.qmd)
+
+### Lesson 14: Self-Supervised Learning
+- [Contrastive learning](lessons/contrastive-learning.qmd)
+- [CLIP and SimCLR](lessons/clip-simclr.qmd)
+- [Foundation models](lessons/foundation-models.qmd)
+
+### Lesson 15: Multimodal Learning
+- [Vision-language models](lessons/vision-language.qmd)
+- [Audio-visual integration](lessons/audio-visual.qmd)
+- [Cross-modal transformers](lessons/cross-modal-transformers.qmd)
+
+### Lesson 16: Deploying Deep Learning Models
+- [Model optimization and quantization](lessons/model-optimization.qmd)
+- [Edge deployment](lessons/edge-deployment.qmd)
+- [Monitoring and maintaining production models](lessons/model-monitoring.qmd)
 
 ---

@@ -1,54 +1,65 @@
 ---
-title: "Learn with Isaac"
+title: "Deep Learning: From Foundations to Frontiers"
 format:
   html:
     toc: false
     code-fold: show
 ---
 
-# 👋 Welcome to Learn with Isaac
+## What is Deep Learning?
 
-This is my growing collection of lessons, notes, and explorations in **data science**, **machine learning**, and **deep learning**.
+Deep learning is a subset of machine learning that uses neural networks with multiple layers (hence "deep") to analyze various forms of data. Think of it as teaching computers to learn like humans do - through experience and examples rather than explicit programming.
 
-> 📘 These notes are part personal study guide, part public resource — feel free to browse, share, or build upon them.
+Much like how a child learns to recognize cats not by memorizing rules about whiskers and tails, but by seeing thousands of examples, deep learning models learn patterns directly from data. The key difference? These models can process millions of examples at incredible speeds, finding patterns too subtle or complex for humans to detect manually.
 
----
+## Why Learn Deep Learning?
 
-## 🧭 Start Learning
+Deep learning is continuing to revolutionize computing and is behind many technological breakthroughs you encounter daily:
 
-📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:
+- **The voice assistant** that understands your requests
+- **Recommendation systems** that suggest your next favorite movie or product
+- **Medical imaging tools** that detect diseases earlier than ever before
+- **Self-driving vehicles** that can interpret their surroundings
+- **Language translation** that gets better every year
 
-### 🔹 Data Science
-- [Exploratory Data Analysis](lessons/data-science/eda.qmd)
-- [Hypothesis Testing](lessons/data-science/hypothesis-testing.qmd)
+Beyond these applications, deep learning is transforming entire industries - from healthcare and finance to transportation and entertainment. As AI continues to advance, understanding deep learning has become an essential skill for:
 
-### 🔹 Deep Learning
+- Software engineers who want to build intelligent systems
+- Data scientists seeking to extract deeper insights from data
+- Researchers pushing the boundaries of what's possible
+- Entrepreneurs identifying new opportunities in the AI revolution
+- Professionals in any field looking to future-proof their careers
 
-- [Intro to Neural Networks](lessons/deep-learning/intro-to-nns.qmd)
-- [Gradient Descent](lessons/deep-learning/gradient-descent.qmd)
+## Course Structure
 
----
+This course takes you from the fundamentals of machine learning to the cutting edge of deep learning research. You'll build a solid foundation before tackling increasingly sophisticated concepts, with each lesson reinforcing your knowledge through practical examples and hands-on implementation. I developed this course to be accessible to anyone with a basic understanding of programming and mathematics, while also providing depth for those looking to specialize in deep learning. And most importantly, it's designed this course for myself, to help me learn and understand deep learning better. I hope you find it as useful as I do!
 
-## 🎯 Why This Exists
+## Prerequisites
 
-I created this site to:
+To get the most from this course, you should have:
 
-- Clarify concepts by writing them out
-- Track my own progress through structured topics
-- Share insights and resources with anyone interested in learning
+1. **Basic Python programming skills** - You should be comfortable writing functions, using loops, and working with libraries. These are some resources that can help you get started:
+   - [Python for Everybody](https://www.py4e.com/)
+   - [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/)
+   - [Learn Python the Hard Way](https://learnpythonthehardway.org/)
+   - [Codecademy Python Course](https://www.codecademy.com/learn/learn-python-3)
+   - [Google's Python Class](https://developers.google.com/edu/python)
+2. **Fundamental mathematics and statistics** - Understanding of algebra, calculus (derivatives), and basic statistics will help significantly. These are some resources that can help you get started:
+   - [3Blue1Brown's Essence of Calculus](https://www.3blue1brown.com/topics/calculus) 
+   - [StatQuest with Josh Starmer](https://statquest.org/)
+   - [Very Normal YouTube Channel](https://www.youtube.com/@very-normals)
+   - [Khan Academy Math Courses](https://www.khanacademy.org/math)
+3. **Curiosity and persistence** - Some concepts may challenge you at first, but with practice, they'll become clear.
 
----
+Don't worry if your math is rusty or your programming skills are basic - we'll review key concepts as needed and build your skills gradually. The most important prerequisite is enthusiasm for learning.
 
-## 🛠 What’s Coming Next
+## Getting Started
 
-- 📈 Statistical learning fundamentals
-- 🤖 NLP and transformers
-- ⚙️ MLOps and reproducibility
-- 🔍 Real-world projects and case studies
+Ready to begin your deep learning journey? Head to the [Lessons](lessons/index.qmd) page to explore the road to see what lies ahead.
 
----
+Let's transform the way you think about computing and artificial intelligence!
 
-## 💬 Feedback?
+## Feedback?
 
 Got ideas, suggestions, or corrections? Reach out on [GitHub](https://github.com/ieadoboe) or open an issue!
 

@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "Not Too Deep"
+  title: "Not That Deep"
   site-url: "https://ieadoboe.github.io/quarto-learn"
   description: "Lessons on data science and deep learning."
 
@@ -16,22 +16,26 @@ website:
       - text: "Portfolio"
         href: https://ieadoboe.github.io/
         target: _blank
-      - text: "Articles"
-        href: https://ieadoboe.github.io/blog
-        target: _blank
-      - text: "Projects"
-        href: https://ieadoboe.github.io/projects
-        target: _blank
+#      - text: "Articles"
+#        href: https://ieadoboe.github.io/blog
+#        target: _blank
+#      - text: "Projects"
+#        href: https://ieadoboe.github.io/projects
+#        target: _blank
 
   sidebar:
     title: "Lessons"
     style: "floating"
     contents:
-      - section: "Data Science"
-        contents: lessons/data-science/*
-      - section: "Deep Learning"
-        contents: lessons/deep-learning/*
-
+      - section: "Data Science Foundations"
+        contents: lessons/beginner/*
+      - section: "Neural Networks Fundamentals"
+        contents: lessons/intermediate/*
+      - section: "Advanced Deep Learning"
+        contents: lessons/advanced/*
+      - section: "Cutting-Edge Techniques"
+        contents: lessons/expert/*
+        
 format:
   html:
     theme:
