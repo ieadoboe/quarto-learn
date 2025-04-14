@@ -1,14 +1,15 @@
 ---
-title: "Deep Learning Roadmap"
+title: "Deep Learning - The Seeker's Path"
 format:
   html:
     toc: true
     code-fold: show
 ---
 
-This curriculum is designed to progressively build your knowledge and skills, with each lesson preparing you for the next. I recommend following the sequence as presented, but feel free to adjust based on your specific interests and prior experience.
+"The world speaks many languages," the old mathematician said to the young programmer. "There is the language of numbers, the language of patterns, and now, the language of machines that learn. To understand this language is to discover your Personal Legend in the digital age."
 
-The lessons are categorized into four main sections, each representing a different level of expertise:
+The young programmer nodded, uncertain but eager to begin the journey.
+"Remember," continued the mathematician, "the journey to wisdom is not about complexity, but about seeing the simple truths hidden within the complex, one at a time."
 
 ## Foundations (Beginner Level)
 

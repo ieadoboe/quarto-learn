@@ -69,35 +69,35 @@
   {
     "objectID": "lessons/index.html",
     "href": "lessons/index.html",
-    "title": "Deep Learning Roadmap",
+    "title": "Deep Learning - The Seeker’s Path",
     "section": "",
-    "text": "This curriculum is designed to progressively build your knowledge and skills, with each lesson preparing you for the next. I recommend following the sequence as presented, but feel free to adjust based on your specific interests and prior experience.\nThe lessons are categorized into four main sections, each representing a different level of expertise:"
+    "text": "“The world speaks many languages,” the old mathematician said to the young programmer. “There is the language of numbers, the language of patterns, and now, the language of machines that learn. To understand this language is to discover your Personal Legend in the digital age.”\nThe young programmer nodded, uncertain but eager to begin the journey. “Remember,” continued the mathematician, “the journey to wisdom is not about complexity, but about seeing the simple truths hidden within the complex, one at a time.”"
   },
   {
     "objectID": "lessons/index.html#foundations-beginner-level",
     "href": "lessons/index.html#foundations-beginner-level",
-    "title": "Deep Learning Roadmap",
+    "title": "Deep Learning - The Seeker’s Path",
     "section": "Foundations (Beginner Level)",
     "text": "Foundations (Beginner Level)\n\n1: Introduction to Machine Learning\n\nBasic concepts and terminology\nSupervised vs. unsupervised learning\nThe machine learning workflow\n\n\n\n2: Linear Models\n\nLinear regression\nLogistic regression\nGradient descent optimization\n\n\n\n3: Model Evaluation\n\nTraining, validation, and test sets\nOverfitting and underfitting\nCross-validation techniques\n\n\n\n4: Decision Trees and Ensemble Methods\n\nDecision trees\nRandom forests\nGradient boosting"
   },
   {
     "objectID": "lessons/index.html#neural-networks-fundamentals-intermediate-level",
     "href": "lessons/index.html#neural-networks-fundamentals-intermediate-level",
-    "title": "Deep Learning Roadmap",
+    "title": "Deep Learning - The Seeker’s Path",
     "section": "Neural Networks Fundamentals (Intermediate Level)",
     "text": "Neural Networks Fundamentals (Intermediate Level)\n\n5: Neural Network Basics\n\nPerceptrons and activation functions\nFeedforward neural networks\nBackpropagation algorithm\n\n\n\n6: Building Your First Neural Network\n\nTensorFlow and Keras introduction\nImplementing a simple neural network\nTraining and evaluation\n\n\n\n7: Convolutional Neural Networks\n\nImage data and convolution operations\nCNN architectures (LeNet, AlexNet)\nImage classification tasks\n\n\n\n8: Recurrent Neural Networks\n\nSequential data processing\nLSTM and GRU architectures\nTime series prediction"
   },
   {
     "objectID": "lessons/index.html#advanced-deep-learning-advanced-level",
     "href": "lessons/index.html#advanced-deep-learning-advanced-level",
-    "title": "Deep Learning Roadmap",
+    "title": "Deep Learning - The Seeker’s Path",
     "section": "Advanced Deep Learning (Advanced Level)",
     "text": "Advanced Deep Learning (Advanced Level)\n\n9: Advanced CNN Architectures\n\nResNet, Inception, and EfficientNet\nTransfer learning techniques\nComputer vision applications\n\n\n\n10: Natural Language Processing\n\nWord embeddings (Word2Vec, GloVe)\nRNN-based language models\nText classification and generation\n\n\n\n11: Transformers and Attention\n\nAttention mechanisms\nTransformer architecture\nBERT, GPT, and their applications\n\n\n\n12: Generative Models\n\nAutoencoders and variational autoencoders\nGenerative Adversarial Networks (GANs)\nDiffusion models"
   },
   {
     "objectID": "lessons/index.html#cutting-edge-techniques-expert-level",
     "href": "lessons/index.html#cutting-edge-techniques-expert-level",
-    "title": "Deep Learning Roadmap",
+    "title": "Deep Learning - The Seeker’s Path",
     "section": "Cutting-Edge Techniques (Expert Level)",
     "text": "Cutting-Edge Techniques (Expert Level)\n\n13: Reinforcement Learning\n\nRL fundamentals\nDeep Q-Networks\nPolicy gradient methods\n\n\n\n14: Self-Supervised Learning\n\nContrastive learning\nCLIP and SimCLR\nFoundation models\n\n\n\n15: Multimodal Learning\n\nVision-language models\nAudio-visual integration\nCross-modal transformers\n\n\n\n16: Deploying Deep Learning Models\n\nModel optimization and quantization\nEdge deployment\nMonitoring and maintaining production models"
   }
