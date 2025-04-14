@@ -1,128 +1,24 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Deep Learning: From Foundations to Frontiers",
-    "section": "",
-    "text": "Deep learning is a subset of machine learning that uses neural networks with multiple layers (hence “deep”) to analyze various forms of data. Think of it as teaching computers to learn like humans do - through experience and examples rather than explicit programming.\nMuch like how a child learns to recognize cats not by memorizing rules about whiskers and tails, but by seeing thousands of examples, deep learning models learn patterns directly from data. The key difference? These models can process millions of examples at incredible speeds, finding patterns too subtle or complex for humans to detect manually."
-  },
-  {
-    "objectID": "index.html#start-learning",
-    "href": "index.html#start-learning",
-    "title": "Learn Data Science & Deep Learning",
-    "section": "",
-    "text": "📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing\n\n\n\n\n\nIntro to Neural Networks\nGradient Descent"
-  },
-  {
-    "objectID": "index.html#why-this-exists",
-    "href": "index.html#why-this-exists",
-    "title": "Learn Data Science & Deep Learning",
-    "section": "",
-    "text": "I created this site to:\n\nClarify concepts by writing them out\nTrack my own progress through structured topics\nShare insights and resources with anyone interested in learning"
-  },
-  {
-    "objectID": "index.html#whats-coming-next",
-    "href": "index.html#whats-coming-next",
-    "title": "Learn Data Science & Deep Learning",
-    "section": "",
-    "text": "📈 Statistical learning fundamentals\n🤖 NLP and transformers\n⚙️ MLOps and reproducibility\n🔍 Real-world projects and case studies"
-  },
-  {
-    "objectID": "index.html#feedback",
-    "href": "index.html#feedback",
-    "title": "Deep Learning: From Foundations to Frontiers",
-    "section": "Feedback?",
-    "text": "Feedback?\nGot ideas, suggestions, or corrections? Reach out on GitHub or open an issue!"
-  },
-  {
     "objectID": "lessons/deep-learning/intro-to-nns.html",
     "href": "lessons/deep-learning/intro-to-nns.html",
     "title": "Learn with Isaac",
     "section": "",
-    "text": "This is my growing collection of lessons, notes, and explorations in data science, machine learning, and deep learning.\n\n📘 These notes are part personal study guide, part public resource — feel free to browse, share, or build upon them.\n\n\n\n📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing",
-    "crumbs": [
-      "Deep Learning",
-      "Learn with Isaac"
-    ]
+    "text": "This is my growing collection of lessons, notes, and explorations in data science, machine learning, and deep learning.\n\n📘 These notes are part personal study guide, part public resource — feel free to browse, share, or build upon them.\n\n\n\n📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing"
   },
   {
     "objectID": "lessons/deep-learning/intro-to-nns.html#start-learning",
     "href": "lessons/deep-learning/intro-to-nns.html#start-learning",
     "title": "Learn with Isaac",
     "section": "",
-    "text": "📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing",
-    "crumbs": [
-      "Deep Learning",
-      "Learn with Isaac"
-    ]
+    "text": "📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing"
   },
   {
-    "objectID": "lessons/deep-learning/intro-to-nns.html#why-this-exists",
-    "href": "lessons/deep-learning/intro-to-nns.html#why-this-exists",
-    "title": "Learn with Isaac",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Deep Learning: From Foundations to Frontiers",
     "section": "",
-    "text": "I created this site to:\n\nClarify concepts by writing them out\nTrack my own progress through structured topics\nShare insights and resources with anyone interested in learning",
-    "crumbs": [
-      "Deep Learning",
-      "Learn with Isaac"
-    ]
-  },
-  {
-    "objectID": "lessons/deep-learning/intro-to-nns.html#whats-coming-next",
-    "href": "lessons/deep-learning/intro-to-nns.html#whats-coming-next",
-    "title": "Learn with Isaac",
-    "section": "",
-    "text": "📈 Statistical learning fundamentals\n🤖 NLP and transformers\n⚙️ MLOps and reproducibility\n🔍 Real-world projects and case studies",
-    "crumbs": [
-      "Deep Learning",
-      "Learn with Isaac"
-    ]
-  },
-  {
-    "objectID": "lessons/deep-learning/intro-to-nns.html#feedback",
-    "href": "lessons/deep-learning/intro-to-nns.html#feedback",
-    "title": "Learn with Isaac",
-    "section": "",
-    "text": "Got ideas, suggestions, or corrections? Reach out on GitHub or open an issue!",
-    "crumbs": [
-      "Deep Learning",
-      "Learn with Isaac"
-    ]
-  },
-  {
-    "objectID": "lessons/index.html",
-    "href": "lessons/index.html",
-    "title": "Deep Learning Roadmap",
-    "section": "",
-    "text": "This curriculum is designed to progressively build your knowledge and skills, with each lesson preparing you for the next. I recommend following the sequence as presented, but feel free to adjust based on your specific interests and prior experience.\nThe lessons are categorized into four main sections, each representing a different level of expertise:"
-  },
-  {
-    "objectID": "lessons/index.html#start-learning",
-    "href": "lessons/index.html#start-learning",
-    "title": "Learn with Isaac",
-    "section": "",
-    "text": "📚 Navigate the full list of lessons from the sidebar or jump into one of the sections below:\n\n\n\nExploratory Data Analysis\nHypothesis Testing\n\n\n\n\n\nIntro to Neural Networks\nGradient Descent"
-  },
-  {
-    "objectID": "lessons/index.html#why-this-exists",
-    "href": "lessons/index.html#why-this-exists",
-    "title": "Learn with Isaac",
-    "section": "",
-    "text": "I created this site to:\n\nClarify concepts by writing them out\nTrack my own progress through structured topics\nShare insights and resources with anyone interested in learning"
-  },
-  {
-    "objectID": "lessons/index.html#whats-coming-next",
-    "href": "lessons/index.html#whats-coming-next",
-    "title": "Learn with Isaac",
-    "section": "",
-    "text": "📈 Statistical learning fundamentals\n🤖 NLP and transformers\n⚙️ MLOps and reproducibility\n🔍 Real-world projects and case studies"
-  },
-  {
-    "objectID": "lessons/index.html#feedback",
-    "href": "lessons/index.html#feedback",
-    "title": "Learn with Isaac",
-    "section": "",
-    "text": "Got ideas, suggestions, or corrections? Reach out on GitHub or open an issue!"
+    "text": "Deep learning is a subset of machine learning that uses neural networks with multiple layers (hence “deep”) to analyze various forms of data. Think of it as teaching computers to learn like humans do - through experience and examples rather than explicit programming.\nMuch like how a child learns to recognize cats not by memorizing rules about whiskers and tails, but by seeing thousands of examples, deep learning models learn patterns directly from data. The key difference? These models can process millions of examples at incredible speeds, finding patterns too subtle or complex for humans to detect manually."
   },
   {
     "objectID": "index.html#what-is-deep-learning",
@@ -160,6 +56,20 @@
     "text": "Getting Started\nReady to begin your deep learning journey? Head to the Lessons page to explore the road to see what lies ahead.\nLet’s transform the way you think about computing and artificial intelligence!"
   },
   {
+    "objectID": "index.html#feedback",
+    "href": "index.html#feedback",
+    "title": "Deep Learning: From Foundations to Frontiers",
+    "section": "Feedback?",
+    "text": "Feedback?\nGot ideas, suggestions, or corrections? Reach out on GitHub or open an issue!"
+  },
+  {
+    "objectID": "lessons/index.html",
+    "href": "lessons/index.html",
+    "title": "Deep Learning Roadmap",
+    "section": "",
+    "text": "This curriculum is designed to progressively build your knowledge and skills, with each lesson preparing you for the next. I recommend following the sequence as presented, but feel free to adjust based on your specific interests and prior experience.\nThe lessons are categorized into four main sections, each representing a different level of expertise:"
+  },
+  {
     "objectID": "lessons/index.html#foundations-beginner-level",
     "href": "lessons/index.html#foundations-beginner-level",
     "title": "Deep Learning Roadmap",
@@ -186,12 +96,5 @@
     "title": "Deep Learning Roadmap",
     "section": "Cutting-Edge Techniques (Expert Level)",
     "text": "Cutting-Edge Techniques (Expert Level)\n\nLesson 13: Reinforcement Learning\n\nRL fundamentals\nDeep Q-Networks\nPolicy gradient methods\n\n\n\nLesson 14: Self-Supervised Learning\n\nContrastive learning\nCLIP and SimCLR\nFoundation models\n\n\n\nLesson 15: Multimodal Learning\n\nVision-language models\nAudio-visual integration\nCross-modal transformers\n\n\n\nLesson 16: Deploying Deep Learning Models\n\nModel optimization and quantization\nEdge deployment\nMonitoring and maintaining production models"
-  },
-  {
-    "objectID": "lessons/index.html#capstone-project",
-    "href": "lessons/index.html#capstone-project",
-    "title": "Deep Learning Roadmap",
-    "section": "Capstone Project",
-    "text": "Capstone Project\n\nLesson 17: End-to-End Deep Learning Project\n\nProblem formulation\nData preparation\nModel development\nEvaluation and deployment\nProject presentation\n\n\nThis curriculum is designed to progressively build your knowledge and skills, with each lesson preparing you for the next. We recommend following the sequence as presented, but feel free to adjust based on your specific interests and prior experience."
   }
 ]

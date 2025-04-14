@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ieadoboe.github.io/quarto-learn/index.html</loc>
-    <lastmod>2025-04-14T03:24:55.850Z</lastmod>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/intermediate/perceptrons-activation.html</loc>
+    <lastmod>2025-04-14T03:45:57.591Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/beginner/basic-concepts-and-terms.html</loc>
+    <lastmod>2025-04-14T03:43:27.757Z</lastmod>
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/deep-learning/intro-to-nns.html</loc>
     <lastmod>2025-04-14T02:01:53.305Z</lastmod>
   </url>
   <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/index.html</loc>
+    <lastmod>2025-04-14T03:24:55.850Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/advanced/advanced-cnns.html</loc>
+    <lastmod>2025-04-14T03:44:40.793Z</lastmod>
+  </url>
+  <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/index.html</loc>
     <lastmod>2025-04-14T02:50:33.250Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/rl-fundamentals.html</loc>
+    <lastmod>2025-04-14T03:46:44.934Z</lastmod>
   </url>
 </urlset>
