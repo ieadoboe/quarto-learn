@@ -11,6 +11,8 @@ format:
 The young programmer nodded, uncertain but eager to begin the journey.
 "Remember," continued the mathematician, "the journey to wisdom is not about complexity, but about seeing the simple truths hidden within the complex, one at a time."
 
+> "When you want something, all the universe conspires in helping you to achieve it." - Paulo Coelho
+
 ## Foundations (Beginner Level)
 
 ###  1: Introduction to Machine Learning

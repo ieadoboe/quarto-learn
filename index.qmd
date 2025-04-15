@@ -1,7 +1,7 @@
 ---
 title: "Welcome to Not That Deep - The Course"
 subtitle: "Deep Learning: From Foundations to Frontiers"
-description: "Demystifying neural networks and advanced data science - a structured curriculum that builds expertise without the unnecessary complexity."
+description: "Unpacking neural networks and advanced data science - a structured curriculum that builds expertise."
 author: "Isaac Adoboe"
 categories: [machine learning, deep learning, data science, statistics]
 toc: true
@@ -46,18 +46,19 @@ This course takes you from the fundamentals of machine learning to the cutting e
 
 To get the most from this course, you should have:
 
-1. **Basic Python programming skills** - You should be comfortable writing functions, using loops, and working with libraries. These are some resources that can help you get started:
+1. **Curiosity and persistence** - Some concepts may challenge you at first, but with practice, they'll become clear.
+2. **Basic Python programming skills** - You should be comfortable writing functions, using loops, and working with libraries. These are some resources that can help you get started:
    - [Python for Everybody](https://www.py4e.com/)
    - [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/)
    - [Learn Python the Hard Way](https://learnpythonthehardway.org/)
    - [Codecademy Python Course](https://www.codecademy.com/learn/learn-python-3)
    - [Google's Python Class](https://developers.google.com/edu/python)
-2. **Fundamental mathematics and statistics** - Understanding of algebra, calculus (derivatives), and basic statistics will help significantly. These are some resources that can help you get started:
+3. **Fundamental mathematics and statistics** - Understanding of algebra, calculus (derivatives), and basic statistics will help significantly. These are some resources that can help you get started:
    - [3Blue1Brown's Essence of Calculus](https://www.3blue1brown.com/topics/calculus) 
    - [StatQuest with Josh Starmer](https://statquest.org/)
    - [Very Normal YouTube Channel](https://www.youtube.com/@very-normals)
    - [Khan Academy Math Courses](https://www.khanacademy.org/math)
-3. **Curiosity and persistence** - Some concepts may challenge you at first, but with practice, they'll become clear.
+
 
 Don't worry if your math is rusty or your programming skills are basic - we'll review key concepts as needed and build your skills gradually. The most important prerequisite is enthusiasm for learning.
 
