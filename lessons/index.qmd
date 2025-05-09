@@ -1,5 +1,5 @@
 ---
-title: "Deep Learning - The Seeker's Path"
+title: "Deep Learning - The Gradient's Journey"
 format:
   html:
     toc: true

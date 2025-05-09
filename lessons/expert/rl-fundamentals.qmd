@@ -1,5 +1,129 @@
 ---
-title: "rl-fundamentals"
+title: "Reinforcement Learning Fundamentals"
 format: html
 ---
+
+## What is Reinforcement Learning?
+
+- Sequential decision making tasks
+- "Agent" that interacts with an external "environment"
+
+- Agent maintains a "state" $s_t$ 
+- State $s_t$ is passed to a policy $\pi$
+- Based on $\pi$, we choose an action $a_t = \pi(s_t)$
+
+Environment gives us back an observation $o_t$ 
+
+Finally, the agent updates its state $s_{t+1}$ using a "state-update" function $s_{t+1} = u(s_t, a_t, o_{t+1})$
+
+## How do we determine what a good policy is?
+
+We introduce a "reward function" to guide the choice of a policy.
+
+$R(s_t, a_t)$ is the reward function -> "value" for performing an action in a given state.
+
+$U_{\pi}(s_0)$ is value function for policy $\pi$ evaluated at $s_0$.
+
+$$
+U_{\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \pi) \left[ \sum_{t=0}^T  R(s_t, a_t) | s_0 \right]
+$$
+
+Initial state that the agent is in $\pi$ could correspond to a random choice.
+
+Sample 1: $a^{(1)}_0, s^{(1)}_1, ... , a^{(1)}_T, s^{(1)}_T \implies \sum R(s_t^{(1)},a_t^{(1)})$ 
+
+Sample 2: $a^{(2)}_0, s^{(2)}_1, ... , a^{(2)}_T, s^{(2)}_T \implies \sum R(s_t^{(2)},a_t^{(2)})$
+.
+.
+.
+Sample N: $a^{(N)}_0, s^{(N)}_1, ... , a^{(N)}_T, s^{(N)}_T \implies \sum R(s_t^{(N)},a_t^{(N)})$
+
+$$U_{\pi}(s_0) = \frac{1}{N} \sum_{i=1}^N{R^{(i)}}$$
+
+Average reward over different (random) choices of trajectories of interacting with an environment.
+
+Optimal policy $\arg\max_{\pi}{E_p(s_0)[U_{\pi}(s_0)]}$
+
+## Multi-Armed Bandit Problem
+
+Imagine you're in a Vegas casino with a row of slot machines (the "bandits" - they're called one-armed bandits because of the lever).
+
+Each machine has different odds of paying out, but you don't know which ones are better. You have limited money and time. Your challenge: figure out which machines are the best while still making money.
+
+This is the multi-armed bandit problem - **how do you balance exploring new options to find the best one, versus exploiting what you already know works?**
+
+### Examine Scenario
+
+Let's say you have 3 coffee shops near your office:
+
+- Joe's Java: You've been there 5 times, it's decent (7/10 rating)
+- Bean Scene: You tried it once, it was amazing (9/10)
+- Café Mystery: You've never tried it
+
+Each morning, you face the bandit problem:
+
+- Keep going to Bean Scene (exploit your best known option)?
+- Try Café Mystery (explore to potentially find something better)?
+- Give Joe's more chances (gather more data)?
+
+If you only exploit, you might miss an even better coffee shop. If you only explore, you waste money on potentially bad coffee.
+
+### Real-World Applications
+
+1. Online Advertising: Which ad version gets the most clicks? Companies test different versions while still showing profitable ones.
+2. Netflix Recommendations: Which movies to suggest? Netflix balances showing you movies similar to what you liked (exploit) vs. new genres you might enjoy (explore).
+3. Clinical Trials: Which treatment works best? Doctors must balance giving patients proven treatments vs. testing new ones.
+4. Restaurant Apps: DoorDash decides which restaurants to show first - popular ones you'll likely order from, or new ones you might love.
+
+The key insight is that information has value - sometimes it's worth taking a suboptimal choice now to learn something that helps you make better choices later.
+Now, let me challenge an implicit assumption in how this problem is often framed: Is pure optimization always the goal? In real life, variety itself has value. Humans get bored. The "best" coffee shop might not be best every day. Perhaps the real problem isn't just finding the optimal choice, but maintaining a satisfying portfolio of choices over time.RetryClaude can make mistakes. Please double-check responses.
+
+Let's delve into the theory behind the multi-armed bandit problem.
+
+- Choice amongst R options at each time step.
+Step
+
+- returns a numerical reward sampled from a reward distribution.
+
+Goal: Maximize expected total reward over time.
+
+Let $A_t$ be action selected at time $t$.
+- $R_t$ is the reward received at time $t$.
+
+Value of an Action $q_*(a) = E(R_t|A_t = a)$
+(a = choice of a given machine)
+
+But since we do not know $q_*(a)$, the true action-value function, we must estimate it.
+
+If we know $q_*(a)$, for every possible choice of a , we always pick the a which maximizes it. Denote the estimate by $Q(a)$.
+
+Ideally, $Q(a)$ should converge to $q_*(a)$.
+
+### How do we choose $Q_t(a)$?
+
+One possibiliy is:
+
+$$
+Q_t(a) = \frac{\text{total rewards for }a}{\text{Number of times }a \text{ was performed}}
+$$
+
+$$
+Q_t(a) = \frac{\sum_{i=1}^{t-1}{R_i I(A_i=a)}}{\sum_{i=1}^{t-1}{I(A_i=a)}}
+$$
+
+### Action-Value" methods
+
+$Q_t(a) \implies q_*(a)$ by LLN.
+
+How do we use this for decision-making?
+
+1. "Greedy" Action Selection
+
+$A_t = \arg\max_a{Q_t(a)}$ ties ave broken at random $Q_t(a)$ is initialized to be 0, for all $a$.
+
+2. "$\epsilon$-Greedy" Method
+
+Use greedy action selection most of the time. "Occasionally", with probability $\epsilon > 0$, select an action amongst all actions uniformly at random.
+
+
 

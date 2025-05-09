@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Reinforcement Learning Fundamentals – Not That Deep</title>
+<title>untitled – Not That Deep</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,26 +23,26 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7271f29f9498218151f3120baddb7363.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-226bd0f977fa82dfae4534cac220d79a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-f59c84d31ff110b3f81515ebca98a680.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-c236ccd2c1b722de780a3080448e3731.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-f59c84d31ff110b3f81515ebca98a680.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-7271f29f9498218151f3120baddb7363.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-226bd0f977fa82dfae4534cac220d79a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-f59c84d31ff110b3f81515ebca98a680.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-c236ccd2c1b722de780a3080448e3731.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-f59c84d31ff110b3f81515ebca98a680.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,53 +72,10 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
-  <script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
-<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -284,7 +241,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Not That Deep</span>
     </a>
   </div>
@@ -295,11 +252,11 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../index.html"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../lessons/index.html"> 
+    <a class="nav-link" href="./lessons/index.html"> 
 <span class="menu-text">Lessons</span></a>
   </li>  
   <li class="nav-item">
@@ -313,230 +270,39 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/rl-fundamentals.html">Reinforcement Learning Fundamentals</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Data Science Foundations</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../lessons/beginner/basic-concepts-and-terms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Basic Concepts and Terms</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Neural Networks Fundamentals</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../lessons/intermediate/perceptrons-activation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">perceptrons-activation</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Advanced Deep Learning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../lessons/advanced/advanced-cnns.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">advanced-cnns</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Cutting-Edge Techniques</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/rl-fundamentals.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Reinforcement Learning Fundamentals</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-reinforcement-learning" id="toc-what-is-reinforcement-learning" class="nav-link active" data-scroll-target="#what-is-reinforcement-learning">What is Reinforcement Learning?</a></li>
-  <li><a href="#how-do-we-determine-what-a-good-policy-is" id="toc-how-do-we-determine-what-a-good-policy-is" class="nav-link" data-scroll-target="#how-do-we-determine-what-a-good-policy-is">How do we determine what a good policy is?</a></li>
-  <li><a href="#multi-armed-bandit-problem" id="toc-multi-armed-bandit-problem" class="nav-link" data-scroll-target="#multi-armed-bandit-problem">Multi-Armed Bandit Problem</a>
-  <ul class="collapse">
-  <li><a href="#examine-scenario" id="toc-examine-scenario" class="nav-link" data-scroll-target="#examine-scenario">Examine Scenario</a></li>
-  <li><a href="#real-world-applications" id="toc-real-world-applications" class="nav-link" data-scroll-target="#real-world-applications">Real-World Applications</a></li>
-  <li><a href="#how-do-we-choose-q_ta" id="toc-how-do-we-choose-q_ta" class="nav-link" data-scroll-target="#how-do-we-choose-q_ta">How do we choose <span class="math inline">Q_t(a)</span>?</a></li>
-  <li><a href="#action-value-methods" id="toc-action-value-methods" class="nav-link" data-scroll-target="#action-value-methods">Action-Value” methods</a></li>
-  </ul></li>
+  <li><a href="#statement-of-purpose-msc-in-scientific-computing-at-memorial-university-of-newfoundland" id="toc-statement-of-purpose-msc-in-scientific-computing-at-memorial-university-of-newfoundland" class="nav-link active" data-scroll-target="#statement-of-purpose-msc-in-scientific-computing-at-memorial-university-of-newfoundland">Statement of Purpose – MSc in Scientific Computing at Memorial University of Newfoundland</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/rl-fundamentals.html">Reinforcement Learning Fundamentals</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">Reinforcement Learning Fundamentals</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
 
 
-</header>
+<section id="statement-of-purpose-msc-in-scientific-computing-at-memorial-university-of-newfoundland" class="level2">
+<h2 class="anchored" data-anchor-id="statement-of-purpose-msc-in-scientific-computing-at-memorial-university-of-newfoundland">Statement of Purpose – MSc in Scientific Computing at Memorial University of Newfoundland</h2>
+<p>“The more I know, the more I realize I know nothing.” – Socrates. This sentiment has guided my academic journey, from my first encounter with programming to my current pursuit of integrating advanced computational techniques with scientific applications. My academic path began with a pivotal moment in my sophomore year when programming was introduced in my university curriculum. The ability to transform abstract concepts into executable code that solved real-world problems ignited an intellectual passion that continues to drive me today.</p>
+<p>A pivotal moment in my academic journey came during my undergraduate research project, “Machine Learning-based fault detection system in Induction motors.” This project allowed me to apply deep learning models to a practical engineering problem, where I implemented neural networks to identify anomalies in motor performance without extensive feature engineering. This experience demonstrated the transformative potential of combining domain-specific knowledge with advanced computational techniques – a synergy that lies at the heart of scientific computing.</p>
+<p>My professional experience at Newmont Corporation further exposed me to large-scale data systems and computational infrastructure in an industrial setting. Currently, I am enrolled in a Master of Data Science program where I’ve developed strong foundations in statistical analysis and machine learning while significantly advancing my programming capabilities in Python and R. This program has equipped me with valuable skills in algorithm development, data structures, and computational thinking that I’m eager to apply to scientific computing challenges, particularly those requiring high-performance computing solutions for complex simulations.</p>
+<p>My decision to pursue an MSc in Scientific Computing at Memorial University stems from my desire to bridge the gap between data science techniques and scientific applications. I am particularly drawn to MUN’s interdisciplinary approach, which would allow me to apply advanced computational methods to substantive scientific problems. The program’s emphasis on high-performance computing architectures and software development tools for parallel and vector computers aligns perfectly with my research interests.</p>
+<p>I am especially interested in working with Dr.&nbsp;Elsa Cardoso-Bihlo in the Mathematics and Statistics department. Her research in physics-informed neural networks (PINNs) and deep operator networks represents an exciting frontier where traditional numerical analysis meets modern machine learning techniques. The application of symmetry methods to reduce computational complexity in solving differential equations and the development of invariant numerical schemes for high-performance simulations particularly resonate with my interests. I am eager to explore how deep learning techniques can be applied to scientific computing problems, particularly in designing efficient numerical methods for large-scale simulations. Having developed a foundation in machine learning through my current data science program, I am now motivated to understand how these techniques can be optimized and scaled using high-performance computing resources for solving complex scientific and engineering problems.</p>
+<p>The MSc in Scientific Computing at Memorial University, with its focus on state-of-the-art numerical methods, high-performance computer architectures, and software development tools for parallel computing, offers the ideal environment for me to develop these skills. The program’s connection with ACEnet would provide invaluable access to high-performance computing resources that are essential for the research I hope to pursue. Additionally, the interdisciplinary nature of the program would expose me to a broader range of scientific applications than traditional discipline-based programs, enhancing my versatility as a researcher.</p>
+<p>My long-term goal is to work in research roles in applied fields, where I can contribute to pushing the boundaries of what is computationally possible in scientific domains. I believe that the MSc in Scientific Computing at MUN, particularly the thesis-based path, would provide me with the advanced computational skills and research experience necessary to achieve this goal.</p>
+<p>I am committed to this intellectual journey and to contributing to Memorial University’s tradition of excellence in scientific computing. Given the opportunity, I will work assiduously to advance our understanding of how computational methods can address complex scientific challenges. I have made my decision to pursue this path, and I eagerly await yours.</p>
 
 
-<section id="what-is-reinforcement-learning" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-reinforcement-learning">What is Reinforcement Learning?</h2>
-<ul>
-<li><p>Sequential decision making tasks</p></li>
-<li><p>“Agent” that interacts with an external “environment”</p></li>
-<li><p>Agent maintains a “state” <span class="math inline">s_t</span></p></li>
-<li><p>State <span class="math inline">s_t</span> is passed to a policy <span class="math inline">\pi</span></p></li>
-<li><p>Based on <span class="math inline">\pi</span>, we choose an action <span class="math inline">a_t = \pi(s_t)</span></p></li>
-</ul>
-<p>Environment gives us back an observation <span class="math inline">o_t</span></p>
-<p>Finally, the agent updates its state <span class="math inline">s_{t+1}</span> using a “state-update” function <span class="math inline">s_{t+1} = u(s_t, a_t, o_{t+1})</span></p>
-</section>
-<section id="how-do-we-determine-what-a-good-policy-is" class="level2">
-<h2 class="anchored" data-anchor-id="how-do-we-determine-what-a-good-policy-is">How do we determine what a good policy is?</h2>
-<p>We introduce a “reward function” to guide the choice of a policy.</p>
-<p><span class="math inline">R(s_t, a_t)</span> is the reward function -&gt; “value” for performing an action in a given state.</p>
-<p><span class="math inline">U_{\pi}(s_0)</span> is value function for policy <span class="math inline">\pi</span> evaluated at <span class="math inline">s_0</span>.</p>
-<p><span class="math display">
-U_{\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \pi) \left[ \sum_{t=0}^T  R(s_t, a_t) | s_0 \right]
-</span></p>
-<p>Initial state that the agent is in <span class="math inline">\pi</span> could correspond to a random choice.</p>
-<p>Sample 1: <span class="math inline">a^{(1)}_0, s^{(1)}_1, ... , a^{(1)}_T, s^{(1)}_T \implies \sum R(s_t^{(1)},a_t^{(1)})</span></p>
-<p>Sample 2: <span class="math inline">a^{(2)}_0, s^{(2)}_1, ... , a^{(2)}_T, s^{(2)}_T \implies \sum R(s_t^{(2)},a_t^{(2)})</span> . . . Sample N: <span class="math inline">a^{(N)}_0, s^{(N)}_1, ... , a^{(N)}_T, s^{(N)}_T \implies \sum R(s_t^{(N)},a_t^{(N)})</span></p>
-<p><span class="math display">U_{\pi}(s_0) = \frac{1}{N} \sum_{i=1}^N{R^{(i)}}</span></p>
-<p>Average reward over different (random) choices of trajectories of interacting with an environment.</p>
-<p>Optimal policy <span class="math inline">\arg\max_{\pi}{E_p(s_0)[U_{\pi}(s_0)]}</span></p>
-</section>
-<section id="multi-armed-bandit-problem" class="level2">
-<h2 class="anchored" data-anchor-id="multi-armed-bandit-problem">Multi-Armed Bandit Problem</h2>
-<p>Imagine you’re in a Vegas casino with a row of slot machines (the “bandits” - they’re called one-armed bandits because of the lever).</p>
-<p>Each machine has different odds of paying out, but you don’t know which ones are better. You have limited money and time. Your challenge: figure out which machines are the best while still making money.</p>
-<p>This is the multi-armed bandit problem - <strong>how do you balance exploring new options to find the best one, versus exploiting what you already know works?</strong></p>
-<section id="examine-scenario" class="level3">
-<h3 class="anchored" data-anchor-id="examine-scenario">Examine Scenario</h3>
-<p>Let’s say you have 3 coffee shops near your office:</p>
-<ul>
-<li>Joe’s Java: You’ve been there 5 times, it’s decent (7/10 rating)</li>
-<li>Bean Scene: You tried it once, it was amazing (9/10)</li>
-<li>Café Mystery: You’ve never tried it</li>
-</ul>
-<p>Each morning, you face the bandit problem:</p>
-<ul>
-<li>Keep going to Bean Scene (exploit your best known option)?</li>
-<li>Try Café Mystery (explore to potentially find something better)?</li>
-<li>Give Joe’s more chances (gather more data)?</li>
-</ul>
-<p>If you only exploit, you might miss an even better coffee shop. If you only explore, you waste money on potentially bad coffee.</p>
-</section>
-<section id="real-world-applications" class="level3">
-<h3 class="anchored" data-anchor-id="real-world-applications">Real-World Applications</h3>
-<ol type="1">
-<li>Online Advertising: Which ad version gets the most clicks? Companies test different versions while still showing profitable ones.</li>
-<li>Netflix Recommendations: Which movies to suggest? Netflix balances showing you movies similar to what you liked (exploit) vs.&nbsp;new genres you might enjoy (explore).</li>
-<li>Clinical Trials: Which treatment works best? Doctors must balance giving patients proven treatments vs.&nbsp;testing new ones.</li>
-<li>Restaurant Apps: DoorDash decides which restaurants to show first - popular ones you’ll likely order from, or new ones you might love.</li>
-</ol>
-<p>The key insight is that information has value - sometimes it’s worth taking a suboptimal choice now to learn something that helps you make better choices later. Now, let me challenge an implicit assumption in how this problem is often framed: Is pure optimization always the goal? In real life, variety itself has value. Humans get bored. The “best” coffee shop might not be best every day. Perhaps the real problem isn’t just finding the optimal choice, but maintaining a satisfying portfolio of choices over time.RetryClaude can make mistakes. Please double-check responses.</p>
-<p>Let’s delve into the theory behind the multi-armed bandit problem.</p>
-<ul>
-<li><p>Choice amongst R options at each time step. Step</p></li>
-<li><p>returns a numerical reward sampled from a reward distribution.</p></li>
-</ul>
-<p>Goal: Maximize expected total reward over time.</p>
-<p>Let <span class="math inline">A_t</span> be action selected at time <span class="math inline">t</span>. - <span class="math inline">R_t</span> is the reward received at time <span class="math inline">t</span>.</p>
-<p>Value of an Action <span class="math inline">q_*(a) = E(R_t|A_t = a)</span> (a = choice of a given machine)</p>
-<p>But since we do not know <span class="math inline">q_*(a)</span>, the true action-value function, we must estimate it.</p>
-<p>If we know <span class="math inline">q_*(a)</span>, for every possible choice of a , we always pick the a which maximizes it. Denote the estimate by <span class="math inline">Q(a)</span>.</p>
-<p>Ideally, <span class="math inline">Q(a)</span> should converge to <span class="math inline">q_*(a)</span>.</p>
-</section>
-<section id="how-do-we-choose-q_ta" class="level3">
-<h3 class="anchored" data-anchor-id="how-do-we-choose-q_ta">How do we choose <span class="math inline">Q_t(a)</span>?</h3>
-<p>One possibiliy is:</p>
-<p><span class="math display">
-Q_t(a) = \frac{\text{total rewards for }a}{\text{Number of times }a \text{ was performed}}
-</span></p>
-<p><span class="math display">
-Q_t(a) = \frac{\sum_{i=1}^{t-1}{R_i I(A_i=a)}}{\sum_{i=1}^{t-1}{I(A_i=a)}}
-</span></p>
-</section>
-<section id="action-value-methods" class="level3">
-<h3 class="anchored" data-anchor-id="action-value-methods">Action-Value” methods</h3>
-<p><span class="math inline">Q_t(a) \implies q_*(a)</span> by LLN.</p>
-<p>How do we use this for decision-making?</p>
-<ol type="1">
-<li>“Greedy” Action Selection</li>
-</ol>
-<p><span class="math inline">A_t = \arg\max_a{Q_t(a)}</span> ties ave broken at random <span class="math inline">Q_t(a)</span> is initialized to be 0, for all <span class="math inline">a</span>.</p>
-<ol start="2" type="1">
-<li>“<span class="math inline">\epsilon</span>-Greedy” Method</li>
-</ol>
-<p>Use greedy action selection most of the time. “Occasionally”, with probability <span class="math inline">\epsilon &gt; 0</span>, select an action amongst all actions uniformly at random.</p>
-
-
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -957,5 +723,5 @@ Q_t(a) = \frac{\sum_{i=1}^{t-1}{R_i I(A_i=a)}}{\sum_{i=1}^{t-1}{I(A_i=a)}}
 
 
 
-<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

@@ -1,14 +1,13 @@
 project:
   type: website
   output-dir: docs
-
 website:
-  title: "Not That Deep - The Gradient's Journey"
+  title: "Not That Deep"
   site-url: "https://ieadoboe.github.io/quarto-learn"
   description: "Lessons on data science and deep learning."
-
   navbar:
-    right:
+    # background: "#13b8a7"
+    left:
       - text: "Home"
         href: index.qmd
       - text: "Lessons"
@@ -16,7 +15,6 @@ website:
       - text: "Portfolio"
         href: https://ieadoboe.github.io/
         target: _blank
-
   sidebar:
     title: "Lessons"
     style: "floating"
@@ -35,5 +33,48 @@ format:
     theme:
       light: flatly
       dark: darkly
+    # css: styles.css
+    html-math-method: katex
+    smooth-scroll: true
     toggle-theme: true # shows light/dark switch
     toc: true
+    
+# project:
+#   type: website
+#   output-dir: docs
+# 
+# website:
+#   title: "Not That Deep - The Gradient's Journey"
+#   site-url: "https://ieadoboe.github.io/quarto-learn"
+#   description: "Lessons on data science and deep learning."
+# 
+#   navbar:
+#     right:
+#       - text: "Home"
+#         href: index.qmd
+#       - text: "Lessons"
+#         href: lessons/index.qmd
+#       - text: "Portfolio"
+#         href: https://ieadoboe.github.io/
+#         target: _blank
+# 
+#   sidebar:
+#     title: "Lessons"
+#     style: "floating"
+#     contents:
+#       - section: "Data Science Foundations"
+#         contents: lessons/beginner/*
+#       - section: "Neural Networks Fundamentals"
+#         contents: lessons/intermediate/*
+#       - section: "Advanced Deep Learning"
+#         contents: lessons/advanced/*
+#       - section: "Cutting-Edge Techniques"
+#         contents: lessons/expert/*
+#         
+# format:
+#   html:
+#     theme:
+#       light: flatly
+#       dark: darkly
+#     toggle-theme: true # shows light/dark switch
+#     toc: true
