@@ -5,6 +5,8 @@ format: html
 
 ## What is Reinforcement Learning?
 
+Reinforcement Learning (RL) is like teaching a dog new tricks - but instead of treats, we use numerical rewards, and instead of a dog, we have an algorithm.
+
 - Sequential decision making tasks
 - "Agent" that interacts with an external "environment"
 
@@ -33,9 +35,9 @@ Initial state that the agent is in $\pi$ could correspond to a random choice.
 Sample 1: $a^{(1)}_0, s^{(1)}_1, ... , a^{(1)}_T, s^{(1)}_T \implies \sum R(s_t^{(1)},a_t^{(1)})$ 
 
 Sample 2: $a^{(2)}_0, s^{(2)}_1, ... , a^{(2)}_T, s^{(2)}_T \implies \sum R(s_t^{(2)},a_t^{(2)})$
-.
-.
-.
+
+:
+
 Sample N: $a^{(N)}_0, s^{(N)}_1, ... , a^{(N)}_T, s^{(N)}_T \implies \sum R(s_t^{(N)},a_t^{(N)})$
 
 $$U_{\pi}(s_0) = \frac{1}{N} \sum_{i=1}^N{R^{(i)}}$$

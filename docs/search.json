@@ -106,7 +106,7 @@
     "href": "lessons/expert/rl-fundamentals.html",
     "title": "Reinforcement Learning Fundamentals",
     "section": "",
-    "text": "Sequential decision making tasks\n“Agent” that interacts with an external “environment”\nAgent maintains a “state” s_t\nState s_t is passed to a policy \\pi\nBased on \\pi, we choose an action a_t = \\pi(s_t)\n\nEnvironment gives us back an observation o_t\nFinally, the agent updates its state s_{t+1} using a “state-update” function s_{t+1} = u(s_t, a_t, o_{t+1})",
+    "text": "Reinforcement Learning (RL) is like teaching a dog new tricks - but instead of treats, we use numerical rewards, and instead of a dog, we have an algorithm.\n\nSequential decision making tasks\n“Agent” that interacts with an external “environment”\nAgent maintains a “state” s_t\nState s_t is passed to a policy \\pi\nBased on \\pi, we choose an action a_t = \\pi(s_t)\n\nEnvironment gives us back an observation o_t\nFinally, the agent updates its state s_{t+1} using a “state-update” function s_{t+1} = u(s_t, a_t, o_{t+1})",
     "crumbs": [
       "Cutting-Edge Techniques",
       "Reinforcement Learning Fundamentals"
@@ -117,7 +117,7 @@
     "href": "lessons/expert/rl-fundamentals.html#how-do-we-determine-what-a-good-policy-is",
     "title": "Reinforcement Learning Fundamentals",
     "section": "How do we determine what a good policy is?",
-    "text": "How do we determine what a good policy is?\nWe introduce a “reward function” to guide the choice of a policy.\nR(s_t, a_t) is the reward function -&gt; “value” for performing an action in a given state.\nU_{\\pi}(s_0) is value function for policy \\pi evaluated at s_0.\n\nU_{\\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \\pi) \\left[ \\sum_{t=0}^T  R(s_t, a_t) | s_0 \\right]\n\nInitial state that the agent is in \\pi could correspond to a random choice.\nSample 1: a^{(1)}_0, s^{(1)}_1, ... , a^{(1)}_T, s^{(1)}_T \\implies \\sum R(s_t^{(1)},a_t^{(1)})\nSample 2: a^{(2)}_0, s^{(2)}_1, ... , a^{(2)}_T, s^{(2)}_T \\implies \\sum R(s_t^{(2)},a_t^{(2)}) . . . Sample N: a^{(N)}_0, s^{(N)}_1, ... , a^{(N)}_T, s^{(N)}_T \\implies \\sum R(s_t^{(N)},a_t^{(N)})\nU_{\\pi}(s_0) = \\frac{1}{N} \\sum_{i=1}^N{R^{(i)}}\nAverage reward over different (random) choices of trajectories of interacting with an environment.\nOptimal policy \\arg\\max_{\\pi}{E_p(s_0)[U_{\\pi}(s_0)]}",
+    "text": "How do we determine what a good policy is?\nWe introduce a “reward function” to guide the choice of a policy.\nR(s_t, a_t) is the reward function -&gt; “value” for performing an action in a given state.\nU_{\\pi}(s_0) is value function for policy \\pi evaluated at s_0.\n\nU_{\\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \\pi) \\left[ \\sum_{t=0}^T  R(s_t, a_t) | s_0 \\right]\n\nInitial state that the agent is in \\pi could correspond to a random choice.\nSample 1: a^{(1)}_0, s^{(1)}_1, ... , a^{(1)}_T, s^{(1)}_T \\implies \\sum R(s_t^{(1)},a_t^{(1)})\nSample 2: a^{(2)}_0, s^{(2)}_1, ... , a^{(2)}_T, s^{(2)}_T \\implies \\sum R(s_t^{(2)},a_t^{(2)})\n:\nSample N: a^{(N)}_0, s^{(N)}_1, ... , a^{(N)}_T, s^{(N)}_T \\implies \\sum R(s_t^{(N)},a_t^{(N)})\nU_{\\pi}(s_0) = \\frac{1}{N} \\sum_{i=1}^N{R^{(i)}}\nAverage reward over different (random) choices of trajectories of interacting with an environment.\nOptimal policy \\arg\\max_{\\pi}{E_p(s_0)[U_{\\pi}(s_0)]}",
     "crumbs": [
       "Cutting-Edge Techniques",
       "Reinforcement Learning Fundamentals"
@@ -153,7 +153,7 @@
     "href": "lessons/expert/rl-fundamentals.html#what-is-reinforcement-learning",
     "title": "Reinforcement Learning Fundamentals",
     "section": "",
-    "text": "Sequential decision making tasks\n“Agent” that interacts with an external “environment”\nAgent maintains a “state” s_t\nState s_t is passed to a policy \\pi\nBased on \\pi, we choose an action a_t = \\pi(s_t)\n\nEnvironment gives us back an observation o_t\nFinally, the agent updates its state s_{t+1} using a “state-update” function s_{t+1} = u(s_t, a_t, o_{t+1})",
+    "text": "Reinforcement Learning (RL) is like teaching a dog new tricks - but instead of treats, we use numerical rewards, and instead of a dog, we have an algorithm.\n\nSequential decision making tasks\n“Agent” that interacts with an external “environment”\nAgent maintains a “state” s_t\nState s_t is passed to a policy \\pi\nBased on \\pi, we choose an action a_t = \\pi(s_t)\n\nEnvironment gives us back an observation o_t\nFinally, the agent updates its state s_{t+1} using a “state-update” function s_{t+1} = u(s_t, a_t, o_{t+1})",
     "crumbs": [
       "Cutting-Edge Techniques",
       "Reinforcement Learning Fundamentals"
