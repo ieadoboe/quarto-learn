@@ -7,6 +7,7 @@ website:
   description: "Lessons on data science and deep learning."
   navbar:
     # background: "#13b8a7"
+    logo: assets/logo.png
     left:
       - text: "Home"
         href: index.qmd
@@ -27,7 +28,7 @@ website:
         contents: lessons/advanced/*
       - section: "Cutting-Edge Techniques"
         contents: lessons/expert/*
-        
+
 format:
   html:
     theme:
@@ -38,16 +39,15 @@ format:
     smooth-scroll: true
     toggle-theme: true # shows light/dark switch
     toc: true
-    
 # project:
 #   type: website
 #   output-dir: docs
-# 
+#
 # website:
 #   title: "Not That Deep - The Gradient's Journey"
 #   site-url: "https://ieadoboe.github.io/quarto-learn"
 #   description: "Lessons on data science and deep learning."
-# 
+#
 #   navbar:
 #     right:
 #       - text: "Home"
@@ -57,7 +57,7 @@ format:
 #       - text: "Portfolio"
 #         href: https://ieadoboe.github.io/
 #         target: _blank
-# 
+#
 #   sidebar:
 #     title: "Lessons"
 #     style: "floating"
@@ -70,7 +70,7 @@ format:
 #         contents: lessons/advanced/*
 #       - section: "Cutting-Edge Techniques"
 #         contents: lessons/expert/*
-#         
+#
 # format:
 #   html:
 #     theme:
