@@ -32,19 +32,19 @@ $$
 
 Initial state that the agent is in $\pi$ could correspond to a random choice.
 
-Sample 1: $a^{(1)}_0, s^{(1)}_1, ... , a^{(1)}_T, s^{(1)}_T \implies \sum R(s_t^{(1)},a_t^{(1)})$ 
+$$ \text{Sample 1: } a^{(1)}_0, s^{(1)}_1, ... , a^{(1)}_T, s^{(1)}_T \implies \sum R(s_t^{(1)},a_t^{(1)})$$ 
 
-Sample 2: $a^{(2)}_0, s^{(2)}_1, ... , a^{(2)}_T, s^{(2)}_T \implies \sum R(s_t^{(2)},a_t^{(2)})$
+$$\text{Sample 2: } a^{(2)}_0, s^{(2)}_1, ... , a^{(2)}_T, s^{(2)}_T \implies \sum R(s_t^{(2)},a_t^{(2)})$$
 
-:
+$$:$$
 
-Sample N: $a^{(N)}_0, s^{(N)}_1, ... , a^{(N)}_T, s^{(N)}_T \implies \sum R(s_t^{(N)},a_t^{(N)})$
+$$\text{Sample N: }a^{(N)}_0, s^{(N)}_1, ... , a^{(N)}_T, s^{(N)}_T \implies \sum R(s_t^{(N)},a_t^{(N)})$$
 
 $$U_{\pi}(s_0) = \frac{1}{N} \sum_{i=1}^N{R^{(i)}}$$
 
 Average reward over different (random) choices of trajectories of interacting with an environment.
 
-Optimal policy $\arg\max_{\pi}{E_p(s_0)[U_{\pi}(s_0)]}$
+Optimal policy: $\arg\max_{\pi}{E_p(s_0)[U_{\pi}(s_0)]}$
 
 ## Multi-Armed Bandit Problem
 
@@ -78,7 +78,10 @@ If you only exploit, you might miss an even better coffee shop. If you only expl
 4. Restaurant Apps: DoorDash decides which restaurants to show first - popular ones you'll likely order from, or new ones you might love.
 
 The key insight is that information has value - sometimes it's worth taking a suboptimal choice now to learn something that helps you make better choices later.
-Now, let me challenge an implicit assumption in how this problem is often framed: Is pure optimization always the goal? In real life, variety itself has value. Humans get bored. The "best" coffee shop might not be best every day. Perhaps the real problem isn't just finding the optimal choice, but maintaining a satisfying portfolio of choices over time.RetryClaude can make mistakes. Please double-check responses.
+
+Now, let me challenge an implicit assumption in how this problem is often framed: Is pure optimization always the goal? 
+
+In real life, variety itself has value. Humans get bored. The "best" coffee shop might not be best every day. Perhaps the real problem isn't just finding the optimal choice, but maintaining a satisfying portfolio of choices over time.
 
 Let's delve into the theory behind the multi-armed bandit problem.
 
@@ -90,10 +93,10 @@ Step
 Goal: Maximize expected total reward over time.
 
 Let $A_t$ be action selected at time $t$.
+
 - $R_t$ is the reward received at time $t$.
 
-Value of an Action $q_*(a) = E(R_t|A_t = a)$
-(a = choice of a given machine)
+Value of an Action $q_*(a) = E(R_t|A_t = a)$ (a = choice of a given machine)
 
 But since we do not know $q_*(a)$, the true action-value function, we must estimate it.
 
@@ -103,7 +106,7 @@ Ideally, $Q(a)$ should converge to $q_*(a)$.
 
 ### How do we choose $Q_t(a)$?
 
-One possibiliy is:
+One possibility is to use the average of all rewards received for action $a$ up to time $t$.:
 
 $$
 Q_t(a) = \frac{\text{total rewards for }a}{\text{Number of times }a \text{ was performed}}
@@ -113,19 +116,36 @@ $$
 Q_t(a) = \frac{\sum_{i=1}^{t-1}{R_i I(A_i=a)}}{\sum_{i=1}^{t-1}{I(A_i=a)}}
 $$
 
-### Action-Value" methods
+**"Action-Value"** methods
 
-$Q_t(a) \implies q_*(a)$ by LLN.
+$Q_t(a) \implies q_*(a)$ by Law of Large Numbers (LLN).
 
-How do we use this for decision-making?
+### How do we use this for decision-making?
 
 1. "Greedy" Action Selection
 
-$A_t = \arg\max_a{Q_t(a)}$ ties ave broken at random $Q_t(a)$ is initialized to be 0, for all $a$.
+    $A_t = \arg\max_a{Q_t(a)}$ ties ave broken at random $Q_t(a)$ is initialized to be 0, for all $a$. This means that at time t, we choose the action (A) that gives us the maximum expected reward according to our current estimate of the Q-value for each possible action.
+
+    ```python
+    import jax
+    
+    # Greedy action selection
+    
+    ```
 
 2. "$\epsilon$-Greedy" Method
-
-Use greedy action selection most of the time. "Occasionally", with probability $\epsilon > 0$, select an action amongst all actions uniformly at random.
+    
+    Use greedy action selection most of the time. "Occasionally", with probability $\epsilon > 0$, select an action amongst **all** possible actions uniformly at random. Eventually guaranteed to estimate all $q_*(a)$ (but might not be practical).
+    
+    ```python
+    import jax
+    
+    # Epsilon-Greedy action selection
+    
+    # Do some visualizations for different values of epsilon
+    # for say 1000 simulations, and 1000 time steps
+    
+    ```
 
 
 

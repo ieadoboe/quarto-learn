@@ -6,14 +6,13 @@ website:
   site-url: "https://ieadoboe.github.io/quarto-learn"
   description: "Lessons on data science and deep learning."
   navbar:
-    # background: "#13b8a7"
     logo: assets/logo.png
     left:
-      - text: "Home"
+      - text: "Welcome"
         href: index.qmd
       - text: "Lessons"
         href: lessons/index.qmd
-      - text: "Portfolio"
+      - text: "About Me"
         href: https://ieadoboe.github.io/
         target: _blank
   sidebar:
@@ -31,10 +30,8 @@ website:
 
 format:
   html:
-    theme:
-      light: flatly
-      dark: darkly
-    # css: styles.css
+    theme: flatly
+    css: styles.css
     html-math-method: katex
     smooth-scroll: true
     toggle-theme: true # shows light/dark switch
