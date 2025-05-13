@@ -122,8 +122,7 @@ $Q_t(a) \implies q_*(a)$ by Law of Large Numbers (LLN).
 
 ### How do we use this for decision-making?
 
-1. "Greedy" Action Selection
-
+1. "Greedy" Action Selection  
     $A_t = \arg\max_a{Q_t(a)}$ ties ave broken at random $Q_t(a)$ is initialized to be 0, for all $a$. This means that at time t, we choose the action (A) that gives us the maximum expected reward according to our current estimate of the Q-value for each possible action.
 
     ```python
@@ -133,8 +132,7 @@ $Q_t(a) \implies q_*(a)$ by Law of Large Numbers (LLN).
     
     ```
 
-2. "$\epsilon$-Greedy" Method
-    
+2. "$\epsilon$-Greedy" Method  
     Use greedy action selection most of the time. "Occasionally", with probability $\epsilon > 0$, select an action amongst **all** possible actions uniformly at random. Eventually guaranteed to estimate all $q_*(a)$ (but might not be practical).
     
     ```python
@@ -148,4 +146,9 @@ $Q_t(a) \implies q_*(a)$ by Law of Large Numbers (LLN).
     ```
 
 
+Initial values affect the outcome of a run.   
+**Idea:** We can choose larger initial values to encourage exploration.
 
+E.g. $Q_t(a)$ = 5 (large relative to the means of the reward distributions) will encourage more exploration.
+
+In conclusion, initial values matter for determining how much exploration happens early in the learning process.

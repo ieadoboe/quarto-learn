@@ -410,14 +410,24 @@ Q_t(a) = \frac{\sum_{i=1}^{t-1}{R_i I(A_i=a)}}{\sum_{i=1}^{t-1}{I(A_i=a)}}
 <section id="how-do-we-use-this-for-decision-making" class="level3">
 <h3 class="anchored" data-anchor-id="how-do-we-use-this-for-decision-making">How do we use this for decision-making?</h3>
 <ol type="1">
-<li><p>“Greedy” Action Selection</p>
-<p><span class="math inline">A_t = \arg\max_a{Q_t(a)}</span> ties ave broken at random <span class="math inline">Q_t(a)</span> is initialized to be 0, for all <span class="math inline">a</span>. This means that at time t, we choose the action (A) that gives us the maximum expected reward according to our current estimate of the Q-value for each possible action.</p>
+<li><p>“Greedy” Action Selection<br>
+<span class="math inline">A_t = \arg\max_a{Q_t(a)}</span> ties ave broken at random <span class="math inline">Q_t(a)</span> is initialized to be 0, for all <span class="math inline">a</span>. This means that at time t, we choose the action (A) that gives us the maximum expected reward according to our current estimate of the Q-value for each possible action.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Greedy action selection</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>“<span class="math inline">\epsilon</span>-Greedy” Method</p>
-<p>Use greedy action selection most of the time. “Occasionally”, with probability <span class="math inline">\epsilon &gt; 0</span>, select an action amongst <strong>all</strong> possible actions uniformly at random. Eventually guaranteed to estimate all <span class="math inline">q_*(a)</span> (but might not be practical).</p></li>
+<li><p>“<span class="math inline">\epsilon</span>-Greedy” Method<br>
+Use greedy action selection most of the time. “Occasionally”, with probability <span class="math inline">\epsilon &gt; 0</span>, select an action amongst <strong>all</strong> possible actions uniformly at random. Eventually guaranteed to estimate all <span class="math inline">q_*(a)</span> (but might not be practical).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Epsilon-Greedy action selection</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Do some visualizations for different values of epsilon</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># for say 1000 simulations, and 1000 time steps</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
+<p>Initial values affect the outcome of a run.<br>
+<strong>Idea:</strong> We can choose larger initial values to encourage exploration.</p>
+<p>E.g. <span class="math inline">Q_t(a)</span> = 5 (large relative to the means of the reward distributions) will encourage more exploration.</p>
+<p>In conclusion, initial values matter for determining how much exploration happens early in the learning process.</p>
 
 
 </section>

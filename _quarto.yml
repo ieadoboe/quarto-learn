@@ -34,7 +34,6 @@ format:
     css: styles.css
     html-math-method: katex
     smooth-scroll: true
-    toggle-theme: true # shows light/dark switch
     toc: true
 # project:
 #   type: website
