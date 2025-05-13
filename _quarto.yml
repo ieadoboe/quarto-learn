@@ -4,10 +4,11 @@ project:
 website:
   title: "Not That Deep"
   site-url: "https://ieadoboe.github.io/quarto-learn"
-  description: "Lessons on data science and deep learning."
+  description: "Learn data science."
   navbar:
     logo: assets/logo.png
-    left:
+    toggle-position: right
+    right:
       - text: "Welcome"
         href: index.qmd
       - text: "Lessons"

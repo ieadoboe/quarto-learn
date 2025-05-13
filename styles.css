@@ -5,6 +5,7 @@
 :root {
   --navbar-bg: white;
   --navbar-fg: black;
+  --brand-color: #15b8a6;
 }
 
 body {
@@ -20,10 +21,11 @@ body {
   --navbar-fg: white;
 } */
 
+
 /* Apply custom colors to navbar */
 .navbar {
   background-color: var(--navbar-bg);
-  border-bottom: 0.5px solid var(--navbar-fg);
+  border-bottom: 0.5px solid rgba(128, 128, 128, 0.3); 
 }
 
 .navbar-brand {
@@ -33,11 +35,23 @@ body {
 .navbar-brand,
 .nav-link,
 .menu-text {
-  color: var(--navbar-fg) !important;
+  color: var(--navbar-fg);
 }
 
-/* Adjust hover state */
-.nav-link:hover,
-.navbar-brand:hover {
-  opacity: 0.8;
+.menu-text:hover {
+  color: var(--brand-color);
+  transition: color 0.1s ease-in-out;
+  text-decoration: underline;
 }
+
+/* Center navbar items */
+.navbar-nav {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
+
