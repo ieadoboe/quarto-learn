@@ -284,13 +284,16 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-reinforcement-learning" id="toc-what-is-reinforcement-learning" class="nav-link active" data-scroll-target="#what-is-reinforcement-learning">What is Reinforcement Learning?</a></li>
+  <li><a href="#what-is-reinforcement-learning" id="toc-what-is-reinforcement-learning" class="nav-link active" data-scroll-target="#what-is-reinforcement-learning">What is Reinforcement Learning?</a>
+  <ul class="collapse">
+  <li><a href="#how-to-think-of-these-key-concepts" id="toc-how-to-think-of-these-key-concepts" class="nav-link" data-scroll-target="#how-to-think-of-these-key-concepts">How to think of these key concepts</a></li>
+  </ul></li>
   <li><a href="#how-do-we-determine-what-a-good-policy-is" id="toc-how-do-we-determine-what-a-good-policy-is" class="nav-link" data-scroll-target="#how-do-we-determine-what-a-good-policy-is">How do we determine what a good policy is?</a></li>
   <li><a href="#multi-armed-bandit-problem" id="toc-multi-armed-bandit-problem" class="nav-link" data-scroll-target="#multi-armed-bandit-problem">Multi-Armed Bandit Problem</a>
   <ul class="collapse">
   <li><a href="#examine-scenario" id="toc-examine-scenario" class="nav-link" data-scroll-target="#examine-scenario">Examine Scenario</a></li>
   <li><a href="#real-world-applications" id="toc-real-world-applications" class="nav-link" data-scroll-target="#real-world-applications">Real-World Applications</a></li>
-  <li><a href="#how-do-we-choose-q_ta" id="toc-how-do-we-choose-q_ta" class="nav-link" data-scroll-target="#how-do-we-choose-q_ta">How do we choose <span class="math inline">Q_t(a)</span>?</a></li>
+  <li><a href="#multi-armed-bandit-theory" id="toc-multi-armed-bandit-theory" class="nav-link" data-scroll-target="#multi-armed-bandit-theory">Multi-Armed Bandit Theory</a></li>
   <li><a href="#how-do-we-use-this-for-decision-making" id="toc-how-do-we-use-this-for-decision-making" class="nav-link" data-scroll-target="#how-do-we-use-this-for-decision-making">How do we use this for decision-making?</a></li>
   </ul></li>
   </ul>
@@ -320,47 +323,69 @@ window.Quarto = {
 
 <section id="what-is-reinforcement-learning" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-reinforcement-learning">What is Reinforcement Learning?</h2>
-<p>Reinforcement Learning (RL) is like teaching a dog new tricks - but instead of treats, we use numerical rewards, and instead of a dog, we have an algorithm.</p>
+<p>Reinforcement learning (RL) is a class of methods for solving various kinds of sequential decision making problems.</p>
+<p>RL is like teaching a dog new tricks - but instead of treats, we use numerical rewards, and instead of a dog, we have an algorithm.</p>
+<p><strong>Goal of RL:</strong> To design an <strong>agent</strong> that interacts with an external <strong>environment</strong></p>
 <ul>
-<li><p>Sequential decision making tasks</p></li>
-<li><p>“Agent” that interacts with an external “environment”</p></li>
-<li><p>Agent maintains a “state” <span class="math inline">s_t</span></p></li>
-<li><p>State <span class="math inline">s_t</span> is passed to a policy <span class="math inline">\pi</span></p></li>
-<li><p>Based on <span class="math inline">\pi</span>, we choose an action <span class="math inline">a_t = \pi(s_t)</span></p></li>
+<li><p>The <strong>agent</strong> maintains an internal <strong>state</strong> <span class="math inline">s_t</span></p></li>
+<li><p>The <strong>state</strong> <span class="math inline">s_t</span> is passed to a <strong>policy</strong> <span class="math inline">\pi</span></p></li>
+<li><p>Based on <span class="math inline">\pi</span>, we choose an <strong>action</strong> <span class="math inline">a_t = \pi(s_t)</span></p></li>
+<li><p>Environment gives us back an <strong>observation</strong> <span class="math inline">o_{t+1}</span></p></li>
+<li><p>Finally, the agent updates its state <span class="math inline">s_{t+1}</span> using a <strong>state-update</strong> function <span class="math inline">s_{t+1} = U(s_t, a_t, o_{t+1})</span></p></li>
 </ul>
-<p>Environment gives us back an observation <span class="math inline">o_t</span></p>
-<p>Finally, the agent updates its state <span class="math inline">s_{t+1}</span> using a “state-update” function <span class="math inline">s_{t+1} = u(s_t, a_t, o_{t+1})</span></p>
+<section id="how-to-think-of-these-key-concepts" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-think-of-these-key-concepts">How to think of these key concepts</h3>
+<ul>
+<li><p><strong>Agent</strong> - decision maker or learner. E.g. a robot trying to navigate a maze.</p></li>
+<li><p><strong>Environment</strong> - Everything outside the agent. E.g. The maze.</p></li>
+<li><p><strong>State</strong> - The agent’s internal representation of a situation at a particular time, t. It’s a “mental map” of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is face and what it has learnt so far.</p></li>
+<li><p><strong>Policy</strong> - The strategy (or rule) that guides decision making (that is maps states to actions). <strong>It is the decision making function.</strong> E.g. if the robot is a wall in front, turn right or left.</p></li>
+<li><p><strong>Action</strong> - Choice made by the agent. E.g. Robot turning right or moving forward.</p></li>
+<li><p><strong>Observation</strong> - The information received from environment by an agent. E.g. Robot observes “I bumped into a wall” or “I found a clear path.”</p></li>
+<li><p><strong>State-update</strong> <strong>function</strong> - The function that the agent uses to update what it knows. It is how the agent learns and adapts. E.g. Our robot updates its mental map of the maze after each move, incorporating new information like “there’s a wall here” or “there’s a reward there.”</p></li>
+</ul>
+</section>
 </section>
 <section id="how-do-we-determine-what-a-good-policy-is" class="level2">
 <h2 class="anchored" data-anchor-id="how-do-we-determine-what-a-good-policy-is">How do we determine what a good policy is?</h2>
-<p>We introduce a “reward function” to guide the choice of a policy.</p>
-<p><span class="math inline">R(s_t, a_t)</span> is the reward function -&gt; “value” for performing an action in a given state.</p>
-<p><span class="math inline">U_{\pi}(s_0)</span> is value function for policy <span class="math inline">\pi</span> evaluated at <span class="math inline">s_0</span>.</p>
+<p><strong>Goal of the agent:</strong> <u>To choose a policy that maximizes the sum of expected rewards.</u> We introduce a <strong>reward function</strong> to guide the choice of a policy.</p>
+<ul>
+<li><p><strong>Reward function</strong>, <span class="math inline">R(s_t, a_t)</span>, is the <strong>value</strong> for performing an action in a given state.</p></li>
+<li><p><strong>Value function</strong>, <span class="math inline">V_{\pi}(s_0)</span> is for policy <span class="math inline">\pi</span> evaluated at the agent’s initial state, <span class="math inline">s_0</span>.</p></li>
+</ul>
 <p><span class="math display">
-U_{\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \pi) \left[ \sum_{t=0}^T  R(s_t, a_t) | s_0 \right]
+V_{\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \pi) \left[ \sum_{t=0}^T  R(s_t, a_t) | s_0 \right]
 </span></p>
-<p>Initial state that the agent is in <span class="math inline">\pi</span> could correspond to a random choice.</p>
+<ul>
+<li>Initial state that the agent is in <span class="math inline">\pi</span> could correspond to a random choice.</li>
+</ul>
 <p><span class="math display"> \text{Sample 1: } a^{(1)}_0, s^{(1)}_1, ... , a^{(1)}_T, s^{(1)}_T \implies \sum R(s_t^{(1)},a_t^{(1)})</span></p>
 <p><span class="math display">\text{Sample 2: } a^{(2)}_0, s^{(2)}_1, ... , a^{(2)}_T, s^{(2)}_T \implies \sum R(s_t^{(2)},a_t^{(2)})</span></p>
 <p><span class="math display">:</span></p>
 <p><span class="math display">\text{Sample N: }a^{(N)}_0, s^{(N)}_1, ... , a^{(N)}_T, s^{(N)}_T \implies \sum R(s_t^{(N)},a_t^{(N)})</span></p>
-<p><span class="math display">U_{\pi}(s_0) = \frac{1}{N} \sum_{i=1}^N{R^{(i)}}</span></p>
-<p>Average reward over different (random) choices of trajectories of interacting with an environment.</p>
-<p>Optimal policy: <span class="math inline">\arg\max_{\pi}{E_p(s_0)[U_{\pi}(s_0)]}</span></p>
+<ul>
+<li><strong>Average reward</strong> over different (random) choices of trajectories of interacting with an environment.</li>
+</ul>
+<p><span class="math display">V_{\pi}(s_0) = \frac{1}{N} \sum_{i=1}^N{R^{(i)}}</span></p>
+<p>We can define the <strong>Optimal policy</strong>:</p>
+<p><span class="math display">
+\pi^* = \arg\max_{\pi}{E_{p(s_0)}[V_{\pi}(s_0)]}
+</span></p>
+<p>Note that, this is one way of designing an optimal policy - <strong>Maximum expected utility</strong> principle. Policy will vary depending on the assumptions we make about the environment and the form of an agent.</p>
 </section>
 <section id="multi-armed-bandit-problem" class="level2">
 <h2 class="anchored" data-anchor-id="multi-armed-bandit-problem">Multi-Armed Bandit Problem</h2>
-<p>Imagine you’re in a Vegas casino with a row of slot machines (the “bandits” - they’re called one-armed bandits because of the lever).</p>
-<p>Each machine has different odds of paying out, but you don’t know which ones are better. You have limited money and time. Your challenge: figure out which machines are the best while still making money.</p>
-<p>This is the multi-armed bandit problem - <strong>how do you balance exploring new options to find the best one, versus exploiting what you already know works?</strong></p>
+<p>When there are a finite number of possible actions, this is called a multi-armed bandit.</p>
+<p>Imagine you’re in a Vegas casino with a row of slot machines (the “bandits” - they’re called one-armed bandits because of the lever). Each machine has different odds of paying out, but you don’t know which ones are better. You have limited money and time.</p>
+<p>Your challenge: figure out which machines are the best while still making money. This is the multi-armed bandit problem - <strong>how do you balance exploring new options to find the best one, versus exploiting what you already know works?</strong></p>
 <section id="examine-scenario" class="level3">
 <h3 class="anchored" data-anchor-id="examine-scenario">Examine Scenario</h3>
 <p>Let’s say you have 3 coffee shops near your office:</p>
-<ul>
+<ol type="1">
 <li>Joe’s Java: You’ve been there 5 times, it’s decent (7/10 rating)</li>
 <li>Bean Scene: You tried it once, it was amazing (9/10)</li>
 <li>Café Mystery: You’ve never tried it</li>
-</ul>
+</ol>
 <p>Each morning, you face the bandit problem:</p>
 <ul>
 <li>Keep going to Bean Scene (exploit your best known option)?</li>
@@ -372,40 +397,42 @@ U_{\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \pi) \left[ \sum_{t=0}^T  R(s_
 <section id="real-world-applications" class="level3">
 <h3 class="anchored" data-anchor-id="real-world-applications">Real-World Applications</h3>
 <ol type="1">
-<li>Online Advertising: Which ad version gets the most clicks? Companies test different versions while still showing profitable ones.</li>
-<li>Netflix Recommendations: Which movies to suggest? Netflix balances showing you movies similar to what you liked (exploit) vs.&nbsp;new genres you might enjoy (explore).</li>
-<li>Clinical Trials: Which treatment works best? Doctors must balance giving patients proven treatments vs.&nbsp;testing new ones.</li>
-<li>Restaurant Apps: DoorDash decides which restaurants to show first - popular ones you’ll likely order from, or new ones you might love.</li>
+<li><strong>Online Advertising:</strong> Which ad version gets the most clicks? Companies test different versions while still showing profitable ones.</li>
+<li><strong>Netflix Recommendations:</strong> Which movies to suggest? Netflix balances showing you movies similar to what you liked (exploit) vs.&nbsp;new genres you might enjoy (explore).</li>
+<li><strong>Clinical Trials</strong>: Which treatment works best? Doctors must balance giving patients proven treatments vs.&nbsp;testing new ones.</li>
+<li><strong>Restaurant Apps:</strong> DoorDash decides which restaurants to show first - popular ones you’ll likely order from, or new ones you might love.</li>
 </ol>
 <p>The key insight is that information has value - sometimes it’s worth taking a suboptimal choice now to learn something that helps you make better choices later.</p>
 <p>Now, let me challenge an implicit assumption in how this problem is often framed: Is pure optimization always the goal?</p>
 <p>In real life, variety itself has value. Humans get bored. The “best” coffee shop might not be best every day. Perhaps the real problem isn’t just finding the optimal choice, but maintaining a satisfying portfolio of choices over time.</p>
-<p>Let’s delve into the theory behind the multi-armed bandit problem.</p>
-<ul>
-<li><p>Choice amongst R options at each time step. Step</p></li>
-<li><p>returns a numerical reward sampled from a reward distribution.</p></li>
-</ul>
+</section>
+<section id="multi-armed-bandit-theory" class="level3">
+<h3 class="anchored" data-anchor-id="multi-armed-bandit-theory">Multi-Armed Bandit Theory</h3>
+<p>Let’s delve into the theory behind the multi-armed bandit problem. Choice amongst R options at each time step. Step returns a numerical reward sampled from a reward distribution.</p>
 <p>Goal: Maximize expected total reward over time.</p>
-<p>Let <span class="math inline">A_t</span> be action selected at time <span class="math inline">t</span>.</p>
 <ul>
 <li><span class="math inline">R_t</span> is the reward received at time <span class="math inline">t</span>.</li>
+<li><span class="math inline">A_t</span> be action selected at time <span class="math inline">t</span>.</li>
+<li><span class="math inline">a</span> is choice of a given machine/agent.</li>
 </ul>
-<p>Value of an Action <span class="math inline">q_*(a) = E(R_t|A_t = a)</span> (a = choice of a given machine)</p>
-<p>But since we do not know <span class="math inline">q_*(a)</span>, the true action-value function, we must estimate it.</p>
-<p>If we know <span class="math inline">q_*(a)</span>, for every possible choice of a , we always pick the a which maximizes it. Denote the estimate by <span class="math inline">Q(a)</span>.</p>
-<p>Ideally, <span class="math inline">Q(a)</span> should converge to <span class="math inline">q_*(a)</span>.</p>
+<section id="true-value-of-an-action" class="level4">
+<h4 class="anchored" data-anchor-id="true-value-of-an-action"><strong>True Value of an Action</strong></h4>
+<p><span class="math display">q_*(a) = E(R_t|A_t = a)</span></p>
+<p>But since we do not know <span class="math inline">q_*(a)</span>, the true action-value function, we must estimate it. If we knew the true value of an agent’s action, <span class="math inline">q_*(a)</span>, for every possible choice of <span class="math inline">a</span>, we would always pick the <span class="math inline">a</span> which maximizes it.</p>
 </section>
-<section id="how-do-we-choose-q_ta" class="level3">
-<h3 class="anchored" data-anchor-id="how-do-we-choose-q_ta">How do we choose <span class="math inline">Q_t(a)</span>?</h3>
-<p>One possibility is to use the average of all rewards received for action <span class="math inline">a</span> up to time <span class="math inline">t</span>.:</p>
+<section id="estimated-value-of-an-action" class="level4">
+<h4 class="anchored" data-anchor-id="estimated-value-of-an-action"><strong>Estimated value of an Action</strong></h4>
+<p>We denote the estimate by <span class="math inline">Q(a)</span>. Ideally, <span class="math inline">Q(a)</span> should converge to <span class="math inline">q_*(a)</span>.</p>
+<p><strong>How do we choose</strong> <span class="math inline">Q_t(a)</span>?</p>
+<p>One possibility is to use the average (expected value) of all rewards received for action <span class="math inline">a</span> up to time <span class="math inline">t</span>:</p>
 <p><span class="math display">
 Q_t(a) = \frac{\text{total rewards for }a}{\text{Number of times }a \text{ was performed}}
 </span></p>
 <p><span class="math display">
 Q_t(a) = \frac{\sum_{i=1}^{t-1}{R_i I(A_i=a)}}{\sum_{i=1}^{t-1}{I(A_i=a)}}
 </span></p>
-<p><strong>“Action-Value”</strong> methods</p>
 <p><span class="math inline">Q_t(a) \implies q_*(a)</span> by Law of Large Numbers (LLN).</p>
+</section>
 </section>
 <section id="how-do-we-use-this-for-decision-making" class="level3">
 <h3 class="anchored" data-anchor-id="how-do-we-use-this-for-decision-making">How do we use this for decision-making?</h3>
@@ -424,12 +451,36 @@ Use greedy action selection most of the time. “Occasionally”, with probabili
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Do some visualizations for different values of epsilon</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># for say 1000 simulations, and 1000 time steps</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
-<p>Initial values affect the outcome of a run.<br>
-<strong>Idea:</strong> We can choose larger initial values to encourage exploration.</p>
-<p>E.g. <span class="math inline">Q_t(a)</span> = 5 (large relative to the means of the reward distributions) will encourage more exploration.</p>
+<section id="how-initial-values-impact-exploration-in-bandit-methods" class="level4">
+<h4 class="anchored" data-anchor-id="how-initial-values-impact-exploration-in-bandit-methods">How initial values impact exploration in Bandit Methods</h4>
+<p>Initial values affect the outcome of a run in both greedy and epsilon-greedy approaches, but in different ways.</p>
+<p><strong>Idea:</strong> Setting optimistic initial values (higher than realistic rewards) naturally encourages exploration without adding randomness.</p>
+<p>For <strong>pure greedy method,</strong> when <span class="math inline">Q_t(a) = 5</span> for instance for all actions (much higher than actual expected rewards/means of the reward distributions):</p>
+<ul>
+<li><p>The agent starts believing all actions are excellent.</p></li>
+<li><p>After trying action A, its estimate typically drops below 5</p></li>
+<li><p>This makes untried actions look better by comparison</p></li>
+<li><p>Eventually, the agent tries all actions at least once</p></li>
+<li><p>Then it settles into exploiting what it learned</p></li>
+</ul>
+<p>Think of it like a food critic who starts with unrealistically high expectations for every restaurant. The disappointment after each visit ensures they’ll try every restaurant before settling on favorites.</p>
+<p>With <strong>epsilon-greedy,</strong> initial values matter less because:</p>
+<ul>
+<li><p>Random exploration happens regardless of initial values (<span class="math inline">\epsilon</span> portion of the time)</p></li>
+<li><p>High initial values still affect the exploitation phase (1-<span class="math inline">\epsilon</span> portion of the time)</p></li>
+</ul>
+<p>If <span class="math inline">Q_t(a) = 5</span> with epsilon-greedy:</p>
+<ul>
+<li><p>Random exploration happens anyway (at rate <span class="math inline">\epsilon</span>)</p></li>
+<li><p>During exploitation (1-<span class="math inline">\epsilon</span>), untried actions initially appear better</p></li>
+<li><p>The combination creates more thorough early exploration</p></li>
+</ul>
+<p>This contradicts the common assumption that epsilon-greedy solves all exploration problems on its own. In practice, optimistic initialization can work synergistically with epsilon-greedy to front-load exploration when it matters most.</p>
+<p>A key limitation worth considering: optimistic initialization only drives temporary exploration. In non-stationary environments where reward distributions change over time, the initial optimism wears off, potentially leading to suboptimal performance if not combined with ongoing exploration mechanisms.</p>
 <p>In conclusion, initial values matter for determining how much exploration happens early in the learning process.</p>
 
 
+</section>
 </section>
 </section>
 
