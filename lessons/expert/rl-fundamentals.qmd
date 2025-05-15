@@ -27,11 +27,11 @@ RL is like teaching a dog new tricks - but instead of treats, we use numerical r
 
 -   **Environment** - Everything outside the agent. E.g. The maze.
 
--   **State** - The agent's internal representation of a situation at a particular time, t. It's a "mental map" of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is face and what it has learnt so far.
+-   **State, $s_t$** - The agent's internal representation of a situation at a particular time, t. It's a "mental map" of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is face and what it has learnt so far.
 
--   **Policy** - The strategy (or rule) that guides decision making (that is maps states to actions). **It is the decision making function.** E.g. if the robot is a wall in front, turn right or left.
+-   **Policy, $\pi$** - The strategy (or rule) that guides decision making (that is maps states to actions). **It is the decision making function.** E.g. if the robot is a wall in front, turn right or left.
 
--   **Action** - Choice made by the agent. E.g. Robot turning right or moving forward.
+-   **Action, $a_t = \pi(s_t)$** - Choice made by the agent. E.g. Robot turning right or moving forward.
 
 -   **Observation** - The information received from environment by an agent. E.g. Robot observes "I bumped into a wall" or "I found a clear path."
 
@@ -108,99 +108,3 @@ Now, let me challenge an implicit assumption in how this problem is often framed
 
 In real life, variety itself has value. Humans get bored. The "best" coffee shop might not be best every day. Perhaps the real problem isn't just finding the optimal choice, but maintaining a satisfying portfolio of choices over time.
 
-### Multi-Armed Bandit Theory
-
-Let's delve into the theory behind the multi-armed bandit problem. Choice amongst R options at each time step. Step returns a numerical reward sampled from a reward distribution.
-
-Goal: Maximize expected total reward over time.
-
--   $R_t$ is the reward received at time $t$.
--   $A_t$ be action selected at time $t$.
--   $a$ is choice of a given machine/agent.
-
-#### **True Value of an Action** 
-
-$$q_*(a) = E(R_t|A_t = a)$$
-
-But since we do not know $q_*(a)$, the true action-value function, we must estimate it. If we knew the true value of an agent's action, $q_*(a)$, for every possible choice of $a$, we would always pick the $a$ which maximizes it.
-
-#### **Estimated value of an Action**
-
-We denote the estimate by $Q(a)$. Ideally, $Q(a)$ should converge to $q_*(a)$.
-
-**How do we choose** $Q_t(a)$?
-
-One possibility is to use the average (expected value) of all rewards received for action $a$ up to time $t$:
-
-$$
-Q_t(a) = \frac{\text{total rewards for }a}{\text{Number of times }a \text{ was performed}}
-$$
-
-$$
-Q_t(a) = \frac{\sum_{i=1}^{t-1}{R_i I(A_i=a)}}{\sum_{i=1}^{t-1}{I(A_i=a)}}
-$$
-
-$Q_t(a) \implies q_*(a)$ by Law of Large Numbers (LLN).
-
-### How do we use this for decision-making?
-
-1.  "Greedy" Action Selection\
-    $A_t = \arg\max_a{Q_t(a)}$ ties ave broken at random $Q_t(a)$ is initialized to be 0, for all $a$. This means that at time t, we choose the action (A) that gives us the maximum expected reward according to our current estimate of the Q-value for each possible action.
-
-    ``` python
-    import jax
-
-    # Greedy action selection
-    ```
-
-2.  "$\epsilon$-Greedy" Method\
-    Use greedy action selection most of the time. "Occasionally", with probability $\epsilon > 0$, select an action amongst **all** possible actions uniformly at random. Eventually guaranteed to estimate all $q_*(a)$ (but might not be practical).
-
-    ``` python
-    import jax
-
-    # Epsilon-Greedy action selection
-
-    # Do some visualizations for different values of epsilon
-    # for say 1000 simulations, and 1000 time steps
-    ```
-
-#### How initial values impact exploration in Bandit Methods
-
-Initial values affect the outcome of a run in both greedy and epsilon-greedy approaches, but in different ways.
-
-**Idea:** Setting optimistic initial values (higher than realistic rewards) naturally encourages exploration without adding randomness.
-
-For **pure greedy method,** when $Q_t(a) = 5$ for instance for all actions (much higher than actual expected rewards/means of the reward distributions):
-
--   The agent starts believing all actions are excellent.
-
--   After trying action A, its estimate typically drops below 5
-
--   This makes untried actions look better by comparison
-
--   Eventually, the agent tries all actions at least once
-
--   Then it settles into exploiting what it learned
-
-Think of it like a food critic who starts with unrealistically high expectations for every restaurant. The disappointment after each visit ensures they'll try every restaurant before settling on favorites.
-
-With **epsilon-greedy,** initial values matter less because:
-
--   Random exploration happens regardless of initial values ($\epsilon$ portion of the time)
-
--   High initial values still affect the exploitation phase (1-$\epsilon$ portion of the time)
-
-If $Q_t(a) = 5$ with epsilon-greedy:
-
--   Random exploration happens anyway (at rate $\epsilon$)
-
--   During exploitation (1-$\epsilon$), untried actions initially appear better
-
--   The combination creates more thorough early exploration
-
-This contradicts the common assumption that epsilon-greedy solves all exploration problems on its own. In practice, optimistic initialization can work synergistically with epsilon-greedy to front-load exploration when it matters most.
-
-A key limitation worth considering: optimistic initialization only drives temporary exploration. In non-stationary environments where reward distributions change over time, the initial optimism wears off, potentially leading to suboptimal performance if not combined with ongoing exploration mechanisms.
-
-In conclusion, initial values matter for determining how much exploration happens early in the learning process.
