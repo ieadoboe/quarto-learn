@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Bandit Algorithms – Not That Deep</title>
+<title>2. Bandit Algorithms – Not That Deep</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -194,7 +194,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/gradient-bandit-algos.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/gradient-bandit-algos.html">Bandit Algorithms</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/gradient-bandit-algos.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/gradient-bandit-algos.html">2. Bandit Algorithms</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -269,13 +269,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../lessons/expert/gradient-bandit-algos.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Bandit Algorithms</span></a>
+ <span class="menu-text">2. Bandit Algorithms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../lessons/expert/rl-fundamentals.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Reinforcement Learning Fundamentals</span></a>
+ <span class="menu-text">1. Reinforcement Learning Introduction</span></a>
   </div>
 </li>
       </ul>
@@ -293,6 +293,7 @@ window.Quarto = {
   <li><a href="#multi-armed-bandit-theory" id="toc-multi-armed-bandit-theory" class="nav-link active" data-scroll-target="#multi-armed-bandit-theory">Multi-Armed Bandit Theory</a>
   <ul class="collapse">
   <li><a href="#how-do-we-use-this-for-decision-making" id="toc-how-do-we-use-this-for-decision-making" class="nav-link" data-scroll-target="#how-do-we-use-this-for-decision-making">How do we use this for decision-making?</a></li>
+  <li><a href="#how-initial-values-impact-exploration-in-bandit-methods" id="toc-how-initial-values-impact-exploration-in-bandit-methods" class="nav-link" data-scroll-target="#how-initial-values-impact-exploration-in-bandit-methods">How initial values impact exploration in Bandit Methods</a></li>
   </ul></li>
   <li><a href="#gradient-bandit-algorithms" id="toc-gradient-bandit-algorithms" class="nav-link" data-scroll-target="#gradient-bandit-algorithms">Gradient Bandit Algorithms</a>
   <ul class="collapse">
@@ -305,9 +306,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/gradient-bandit-algos.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/gradient-bandit-algos.html">Bandit Algorithms</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/gradient-bandit-algos.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/gradient-bandit-algos.html">2. Bandit Algorithms</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Bandit Algorithms</h1>
+<h1 class="title">2. Bandit Algorithms</h1>
 </div>
 
 
@@ -368,8 +369,9 @@ Use greedy action selection most of the time. “Occasionally”, with probabili
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Do some visualizations for different values of epsilon</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># for say 1000 simulations, and 1000 time steps</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
-<section id="how-initial-values-impact-exploration-in-bandit-methods" class="level4">
-<h4 class="anchored" data-anchor-id="how-initial-values-impact-exploration-in-bandit-methods">How initial values impact exploration in Bandit Methods</h4>
+</section>
+<section id="how-initial-values-impact-exploration-in-bandit-methods" class="level3">
+<h3 class="anchored" data-anchor-id="how-initial-values-impact-exploration-in-bandit-methods">How initial values impact exploration in Bandit Methods</h3>
 <p>Initial values affect the outcome of a run in both greedy and epsilon-greedy approaches, but in different ways.</p>
 <p><strong>Idea:</strong> Setting optimistic initial values (higher than realistic rewards) naturally encourages exploration without adding randomness.</p>
 <p>For <strong>pure greedy method,</strong> when <span class="math inline">Q_t(a) = 5</span> for instance for all actions (much higher than actual expected rewards/means of the reward distributions):</p>
@@ -395,7 +397,6 @@ Use greedy action selection most of the time. “Occasionally”, with probabili
 <p>This contradicts the common assumption that epsilon-greedy solves all exploration problems on its own. In practice, optimistic initialization can work synergistically with epsilon-greedy to front-load exploration when it matters most.</p>
 <p><strong>A key limitation worth considering:</strong> optimistic initialization only drives temporary exploration. In non-stationary environments where reward distributions change over time, the initial optimism wears off, potentially leading to suboptimal performance if not combined with ongoing exploration mechanisms.</p>
 <p>In conclusion, initial values matter for determining how much exploration happens early in the learning process.</p>
-</section>
 </section>
 </section>
 <section id="gradient-bandit-algorithms" class="level2">

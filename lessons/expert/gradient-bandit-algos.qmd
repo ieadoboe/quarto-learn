@@ -1,5 +1,5 @@
 ---
-title: "Bandit Algorithms"
+title: "2. Bandit Algorithms"
 format: html
 ---
 
@@ -60,7 +60,7 @@ $Q_t(a) \implies q_*(a)$ by Law of Large Numbers (LLN).
     # for say 1000 simulations, and 1000 time steps
     ```
 
-#### How initial values impact exploration in Bandit Methods
+### How initial values impact exploration in Bandit Methods
 
 Initial values affect the outcome of a run in both greedy and epsilon-greedy approaches, but in different ways.
 
