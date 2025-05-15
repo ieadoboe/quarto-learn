@@ -7,6 +7,7 @@ website:
   description: "Learn data science."
   navbar:
     logo: assets/logo.png
+    style: "floating"
     toggle-position: right
     right:
       - text: "Welcome"

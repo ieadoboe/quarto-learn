@@ -82,7 +82,8 @@ The young programmer nodded, uncertain but eager to begin the journey.
 ## Cutting-Edge Techniques (Expert Level)
 
 ###  13: Reinforcement Learning
-- [RL fundamentals](expert/rl-fundamentals.qmd)
+- [RL Introduction](expert/1-rl-fundamentals.qmd)
+- [Bandit Algorithms](expert/2-bandit-algos.qmd)
 - [Deep Q-Networks](expert/dqn.qmd)
 - [Policy gradient methods](expert/policy-gradients.qmd)
 

@@ -1,5 +1,5 @@
 ---
-title: "1. Reinforcement Learning Introduction"
+title: "Reinforcement Learning Introduction"
 format: html
 ---
 
