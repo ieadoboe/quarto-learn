@@ -90,7 +90,7 @@
     "href": "index.html#what-is-deep-learning",
     "title": "Welcome to Not That Deep - The Course",
     "section": "What is Deep Learning?",
-    "text": "What is Deep Learning?\nDeep learning is a subset of machine learning that uses neural networks with multiple layers (hence “deep”) to analyze various forms of data. Think of it as teaching computers to learn like humans do - through experience and examples rather than explicit programming.\nMuch like how a child learns to recognize cats not by memorizing rules about whiskers and tails, but by seeing thousands of examples, deep learning models learn patterns directly from data. The key difference? These models can process millions of examples at incredible speeds, finding patterns too subtle or complex for humans to detect manually."
+    "text": "What is Deep Learning?\nDeep learning is a subset of machine learning that uses neural networks with multiple layers (hence “deep”) to analyze various forms of data. Think of it as teaching computers to learn like humans do - through experience and examples rather than explicit programming.\nMuch like how a child learns to recognize cats not by memorizing rules about whiskers and tails, but by seeing thousands of examples, deep learning models learn patterns directly from data. The key difference? These models can process millions of examples at incredible speeds, finding patterns too subtle or complex for humans to detect manually.\n\nSkip to Lessons →"
   },
   {
     "objectID": "index.html#why-learn-deep-learning",
@@ -111,14 +111,14 @@
     "href": "index.html#getting-started",
     "title": "Welcome to Not That Deep - The Course",
     "section": "Getting Started",
-    "text": "Getting Started\nReady to begin your deep learning journey? Head to the Lessons page to explore the road to see what lies ahead.\nLet’s transform the way you think about computing and artificial intelligence!"
+    "text": "Getting Started\nReady to begin your deep learning journey?\nLet’s expand the way you think about computing and artificial intelligence!\n\nStart Learning →"
   },
   {
     "objectID": "index.html#feedback",
     "href": "index.html#feedback",
     "title": "Welcome to Not That Deep - The Course",
     "section": "Feedback?",
-    "text": "Feedback?\nGot ideas, suggestions, or corrections? Reach out on GitHub or open an issue!"
+    "text": "Feedback?\nGot ideas, suggestions, or corrections? Open an Issue on GitHub or reach out on X formerly Twitter."
   },
   {
     "objectID": "lessons/deep-learning/intro-to-nns.html",

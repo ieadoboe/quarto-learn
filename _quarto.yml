@@ -9,6 +9,7 @@ website:
     logo: assets/logo.png
     style: "floating"
     toggle-position: right
+    pinned: true
     right:
       - text: "Welcome"
         href: index.qmd

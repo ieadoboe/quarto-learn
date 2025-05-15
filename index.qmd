@@ -13,11 +13,14 @@ format:
 
 ![In a world full of intelligence, humanity is the final exam.](assets/Machine_Learning_101.jpg)
 
+
 ## What is Deep Learning?
 
 Deep learning is a subset of machine learning that uses neural networks with multiple layers (hence "deep") to analyze various forms of data. Think of it as teaching computers to learn like humans do - through experience and examples rather than explicit programming.
 
 Much like how a child learns to recognize cats not by memorizing rules about whiskers and tails, but by seeing thousands of examples, deep learning models learn patterns directly from data. The key difference? These models can process millions of examples at incredible speeds, finding patterns too subtle or complex for humans to detect manually.
+
+<button href="/lessons" class="btn btn-outline-success">Skip to Lessons →</button>
 
 ## Why Learn Deep Learning?
 
@@ -81,10 +84,12 @@ You'll develop a working knowledge of:
 
 ## Getting Started
 
-Ready to begin your deep learning journey? Head to the [Lessons](lessons/index.qmd) page to explore the road to see what lies ahead.
+Ready to begin your deep learning journey?
 
-Let's transform the way you think about computing and artificial intelligence!
+Let's expand the way you think about computing and artificial intelligence!
+
+<button href="/lessons" class="btn btn-outline-success">Start Learning →</button>
 
 ## Feedback?
 
-Got ideas, suggestions, or corrections? Reach out on [GitHub](https://github.com/ieadoboe) or open an issue!
+Got ideas, suggestions, or corrections? [Open an Issue on GitHub](https://github.com/ieadoboe/quarto-learn/issues) or reach out on [X formerly Twitter](https://x.com/ieadoboe).
