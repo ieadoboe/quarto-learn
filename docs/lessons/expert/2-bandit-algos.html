@@ -441,8 +441,25 @@ P(A_t = a) = \frac{e^{H_t(a)}}{\sum_{b=1}^R e^{H_t(b)}}=\pi_t(a)
 </ul></li>
 </ul></li>
 </ul></li>
-<li></li>
 </ul>
+<p><strong>Note:</strong> On baselines (in our case <span class="math inline">\bar R_t</span>):</p>
+<p>Say we select our expected rewards from a normal distribution <span class="math inline">N(u, 1)</span> and not N(0, 1). <span class="math inline">\implies</span> Algorithm adapts rapidly.</p>
+<p>The below are questions assuming we ignore the baseline.</p>
+<p><span class="math inline">H_{t}(A_t) = H_t(A_t) + \alpha(R_t)(1-\pi_t(A_t))</span></p>
+<p><span class="math inline">H_{t}(a) = H_t(a) - \alpha(R_t)\pi_t(a)</span></p>
+<ul>
+<li>where <span class="math inline">A_t \neq a</span>.</li>
+</ul>
+<p>The baseline helps us to make the correct decision. It can be used to compare the action we took with the average reward of all actions. This helps us to determine if the action we took was better or worse than expected.</p>
+<p>Performs way worse: No reason to not use the baseline.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Gradient Bandit Algorithm</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Comment:</strong> The gradient bandit algorithm can be viewed as an approximation to an exact algorithm.</p>
+<p><span class="math inline">H_{t+1}(a) = H_t(a) + \frac{dE(R_t)}{dH_ta)}</span></p>
+<p><span class="math inline">E(R_t) = \sum_{x}\pi_t(x)q_*(x)</span></p>
+<p>where <span class="math inline">q_*(x)</span> is the true action value of action <span class="math inline">x</span> which we don’t know.</p>
+<p>Our Algorithm earlier approximates these updates in expectation.</p>
 
 
 </section>
