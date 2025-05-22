@@ -1,0 +1,105 @@
+---
+title: "Deep Learning - The Gradient's Journey"
+format:
+  html:
+    toc: true
+    code-fold: show
+---
+
+"The world speaks many languages," the old mathematician said to the young programmer. "There is the language of numbers, the language of patterns, and now, the language of machines that learn. To understand this language is to discover your Personal Legend in the digital age."
+
+The young programmer nodded, uncertain but eager to begin the journey.
+"Remember," continued the mathematician, "the journey to wisdom is not about complexity, but about seeing the simple truths hidden within the complex, one at a time."
+
+> "When you want something, all the universe conspires in helping you to achieve it." - Paulo Coelho
+
+## Foundations (Beginner Level)
+
+###  1: Introduction to Machine Learning
+- [Basic concepts and terminology](beginner/basic-concepts-and-terms.qmd)
+- [Supervised vs. unsupervised learning](beginner/supervised-vs-unsupervised.qmd)
+- [The machine learning workflow](beginner/ml-workflow.qmd)
+
+###  2: Linear Models
+- [Linear regression](beginner/linear-regression.qmd)
+- [Logistic regression](beginner/logistic-regression.qmd)
+- [Gradient descent optimization](beginner/gradient-descent.qmd)
+
+###  3: Model Evaluation
+- [Training, validation, and test sets](beginner/train-val-test.qmd)
+- [Overfitting and underfitting](beginner/overfitting-underfitting.qmd)
+- [Cross-validation techniques](beginner/cross-validation.qmd)
+
+###  4: Decision Trees and Ensemble Methods
+- [Decision trees](beginner/decision-trees.qmd)
+- [Random forests](beginner/random-forests.qmd)
+- [Gradient boosting](beginner/gradient-boosting.qmd)
+
+## Neural Networks Fundamentals (Intermediate Level)
+
+###  5: Neural Network Basics
+- [Perceptrons and activation functions](intermediate/perceptrons-activation.qmd)
+- [Feedforward neural networks](intermediate/feedforward-nn.qmd)
+- [Backpropagation algorithm](intermediate/backpropagation.qmd)
+
+###  6: Building Your First Neural Network
+- [TensorFlow and Keras introduction](intermediate/tensorflow-keras.qmd)
+- [Implementing a simple neural network](intermediate/simple-nn-implementation.qmd)
+- [Training and evaluation](intermediate/training-evaluation.qmd)
+
+###  7: Convolutional Neural Networks
+- [Image data and convolution operations](intermediate/cnn-convolutions.qmd)
+- [CNN architectures (LeNet, AlexNet)](intermediate/cnn-architectures.qmd)
+- [Image classification tasks](intermediate/image-classification.qmd)
+
+###  8: Recurrent Neural Networks
+- [Sequential data processing](intermediate/sequential-data.qmd)
+- [LSTM and GRU architectures](intermediate/lstm-gru.qmd)
+- [Time series prediction](intermediate/time-series.qmd)
+
+## Advanced Deep Learning (Advanced Level)
+
+###  9: Advanced CNN Architectures
+- [ResNet, Inception, and EfficientNet](advanced/advanced-cnns.qmd)
+- [Transfer learning techniques](advanced/transfer-learning.qmd)
+- [Computer vision applications](advanced/cv-applications.qmd)
+
+###  10: Natural Language Processing
+- [Word embeddings (Word2Vec, GloVe)](advanced/word-embeddings.qmd)
+- [RNN-based language models](advanced/rnn-language-models.qmd)
+- [Text classification and generation](advanced/text-class-gen.qmd)
+
+###  11: Transformers and Attention
+- [Attention mechanisms](advanced/attention.qmd)
+- [Transformer architecture](advanced/transformers.qmd)
+- [BERT, GPT, and their applications](advanced/bert-gpt.qmd)
+
+###  12: Generative Models
+- [Autoencoders and variational autoencoders](advanced/autoencoders-vaes.qmd)
+- [Generative Adversarial Networks (GANs)](advanced/gans.qmd)
+- [Diffusion models](advanced/diffusion-models.qmd)
+
+## Cutting-Edge Techniques (Expert Level)
+
+###  13: Reinforcement Learning
+- [RL Introduction](expert/1-rl-fundamentals.qmd)
+- [Bandit Algorithms](expert/2-bandit-algos.qmd)
+- [Deep Q-Networks](expert/dqn.qmd)
+- [Policy gradient methods](expert/policy-gradients.qmd)
+
+###  14: Self-Supervised Learning
+- [Contrastive learning](expert/contrastive-learning.qmd)
+- [CLIP and SimCLR](expert/clip-simclr.qmd)
+- [Foundation models](expert/foundation-models.qmd)
+
+###  15: Multimodal Learning
+- [Vision-language models](expert/vision-language.qmd)
+- [Audio-visual integration](expert/audio-visual.qmd)
+- [Cross-modal transformers](expert/cross-modal-transformers.qmd)
+
+###  16: Deploying Deep Learning Models
+- [Model optimization and quantization](expert/model-optimization.qmd)
+- [Edge deployment](expert/edge-deployment.qmd)
+- [Monitoring and maintaining production models](expert/model-monitoring.qmd)
+
+---
