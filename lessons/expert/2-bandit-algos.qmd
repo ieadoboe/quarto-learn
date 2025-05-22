@@ -156,8 +156,7 @@ Do a kind of gradient ascent step.
 
 **Note:** On baselines (in our case $\bar R_t$):
 
-Say we select our expected rewards from a normal distribution $N(u, 1)$ and not N(0, 1).
-$\implies$ Algorithm adapts rapidly.
+Say we select our expected rewards from a normal distribution $N(u, 1)$ and not N(0, 1). $\implies$ Algorithm adapts rapidly.
 
 The below are questions assuming we ignore the baseline.
 
@@ -165,7 +164,7 @@ $H_{t}(A_t) = H_t(A_t) + \alpha(R_t)(1-\pi_t(A_t))$
 
 $H_{t}(a) = H_t(a) - \alpha(R_t)\pi_t(a)$
 
-- where $A_t \neq a$.
+-   where $A_t \neq a$.
 
 The baseline helps us to make the correct decision. It can be used to compare the action we took with the average reward of all actions. This helps us to determine if the action we took was better or worse than expected.
 
@@ -175,10 +174,9 @@ Performs way worse: No reason to not use the baseline.
 
 # Gradient Bandit Algorithm
 import jax
-
 ```
 
-**Comment:** The gradient bandit algorithm can be viewed as an approximation to an exact algorithm. 
+**Comment:** The gradient bandit algorithm can be viewed as an approximation to an exact algorithm.
 
 $H_{t+1}(a) = H_t(a) + \frac{dE(R_t)}{dH_ta)}$
 
@@ -188,8 +186,10 @@ where $q_*(x)$ is the true action value of action $x$ which we don't know.
 
 Our Algorithm earlier approximates these updates in expectation.
 
+### Upper Confidence Bound (UCB) Action Seleciton (Algorithms)
 
+Idea: If an action is nearly optimal, but has not been selected much, give it a boost.
 
+Rule: $A_t = \arg\max_a{Q_t(a) + c\sqrt{\frac{\ln t}{N_t(a)}}}$
 
-
-
+where $Q_t(a)$ is the action-value estimates as before
