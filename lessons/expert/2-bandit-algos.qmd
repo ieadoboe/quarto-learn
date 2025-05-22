@@ -186,10 +186,12 @@ where $q_*(x)$ is the true action value of action $x$ which we don't know.
 
 Our Algorithm earlier approximates these updates in expectation.
 
-### Upper Confidence Bound (UCB) Action Seleciton (Algorithms)
+### Upper Confidence Bound (UCB) Action Selection
 
 Idea: If an action is nearly optimal, but has not been selected much, give it a boost.
 
 Rule: $A_t = \arg\max_a{Q_t(a) + c\sqrt{\frac{\ln t}{N_t(a)}}}$
 
-where $Q_t(a)$ is the action-value estimates as before
+where $Q_t(a)$ is the action-value estimates as before and $c$ is a tunable constant.
+
+If $N_t(a)=0$, we always select it.
