@@ -1,0 +1,10 @@
+---
+title: "Markov Decision Process (MDP)"
+format: html
+---
+
+We choose an action given a **state** that we are in. We think of an **agent** with an **environment** in discrete time. $t=0,1,2,...$
+
+**Key Idea:** At time $t$, the agent gets to observe the state $s_t$ ($s_t=s$) and on the basis of that chooses an action $A_t t A(s)$ set of allowable actions.
+
+Then the agent gets a **reward** $R_{t+1}$ and goes to state $s_{t+1}$.

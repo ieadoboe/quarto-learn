@@ -195,3 +195,22 @@ Rule: $A_t = \arg\max_a{Q_t(a) + c\sqrt{\frac{\ln t}{N_t(a)}}}$
 where $Q_t(a)$ is the action-value estimates as before and $c$ is a tunable constant.
 
 If $N_t(a)=0$, we always select it.
+
+### What about Non-stationarity in Bandit problems?
+
+$Q_n = \sum_{i=1}^{n-1}R_i$ - Action-value estimate
+
+$Q_{n+1} = Q_n + \frac{1}{n}(R_n - Q_n)$ - Incremental way of computing $Q_n$.
+
+This lead to an interpretation of $\frac{1}{n}$ as A step size parameter that [goes to 0.]{.underline}
+
+Not good if the environment undergoes a change, as you will be very slow to adapt to this change.
+
+A single solution is to use a constant step size.
+
+$Q_{n+1} = Q_n + \alpha(R_n - Q_n)$
+
+$\implies (1+alpha)Q_1 + ... + \sum_{i=1}^{n}\alpha(1-alpha)^{n-i}R_i$
+
+where $\alpha$ is a constant step size. $\alpha$ quantifies the tradeoff between how much you remember and how much you forget. 
+$\alpha = 1$  means we only pay attention to the last observed reward. 

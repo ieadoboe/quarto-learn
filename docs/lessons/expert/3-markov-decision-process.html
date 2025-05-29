@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Basic Concepts and Terms – Not That Deep</title>
+<title>Markov Decision Process (MDP) – Not That Deep</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -68,6 +68,49 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -115,7 +158,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/beginner/basic-concepts-and-terms.html">Data Science Foundations</a></li><li class="breadcrumb-item"><a href="../../lessons/beginner/basic-concepts-and-terms.html">Basic Concepts and Terms</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/3-markov-decision-process.html">Markov Decision Process (MDP)</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -138,7 +181,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/beginner/basic-concepts-and-terms.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../lessons/beginner/basic-concepts-and-terms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basic Concepts and Terms</span></a>
   </div>
 </li>
@@ -201,8 +244,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/3-markov-decision-process.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3-markov-decision-process</span></a>
+  <a href="../../lessons/expert/3-markov-decision-process.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Markov Decision Process (MDP)</span></a>
   </div>
 </li>
       </ul>
@@ -212,21 +255,15 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#basic-concepts-and-terms" id="toc-basic-concepts-and-terms" class="nav-link active" data-scroll-target="#basic-concepts-and-terms">Basic Concepts and Terms</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/beginner/basic-concepts-and-terms.html">Data Science Foundations</a></li><li class="breadcrumb-item"><a href="../../lessons/beginner/basic-concepts-and-terms.html">Basic Concepts and Terms</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/3-markov-decision-process.html">Markov Decision Process (MDP)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Basic Concepts and Terms</h1>
+<h1 class="title">Markov Decision Process (MDP)</h1>
 </div>
 
 
@@ -243,12 +280,11 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="basic-concepts-and-terms" class="level1">
-<h1>Basic Concepts and Terms</h1>
-<p>Hihi</p>
+<p>We choose an action given a <strong>state</strong> that we are in. We think of an <strong>agent</strong> with an <strong>environment</strong> in discrete time. <span class="math inline">t=0,1,2,...</span></p>
+<p><strong>Key Idea:</strong> At time <span class="math inline">t</span>, the agent gets to observe the state <span class="math inline">s_t</span> (<span class="math inline">s_t=s</span>) and on the basis of that chooses an action <span class="math inline">A_t t A(s)</span> set of allowable actions.</p>
+<p>Then the agent gets a <strong>reward</strong> <span class="math inline">R_{t+1}</span> and goes to state <span class="math inline">s_{t+1}</span>.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

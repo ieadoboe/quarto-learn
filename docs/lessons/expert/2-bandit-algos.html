@@ -277,6 +277,12 @@ window.Quarto = {
  <span class="menu-text">Bandit Algorithms</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/3-markov-decision-process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3-markov-decision-process</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -299,6 +305,7 @@ window.Quarto = {
   <li><a href="#analogy" id="toc-analogy" class="nav-link" data-scroll-target="#analogy">Analogy</a></li>
   <li><a href="#theory" id="toc-theory" class="nav-link" data-scroll-target="#theory">Theory</a></li>
   <li><a href="#upper-confidence-bound-ucb-action-selection" id="toc-upper-confidence-bound-ucb-action-selection" class="nav-link" data-scroll-target="#upper-confidence-bound-ucb-action-selection">Upper Confidence Bound (UCB) Action Selection</a></li>
+  <li><a href="#what-about-non-stationarity-in-bandit-problems" id="toc-what-about-non-stationarity-in-bandit-problems" class="nav-link" data-scroll-target="#what-about-non-stationarity-in-bandit-problems">What about Non-stationarity in Bandit problems?</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -468,6 +475,17 @@ P(A_t = a) = \frac{e^{H_t(a)}}{\sum_{b=1}^R e^{H_t(b)}}=\pi_t(a)
 <p>Rule: <span class="math inline">A_t = \arg\max_a{Q_t(a) + c\sqrt{\frac{\ln t}{N_t(a)}}}</span></p>
 <p>where <span class="math inline">Q_t(a)</span> is the action-value estimates as before and <span class="math inline">c</span> is a tunable constant.</p>
 <p>If <span class="math inline">N_t(a)=0</span>, we always select it.</p>
+</section>
+<section id="what-about-non-stationarity-in-bandit-problems" class="level3">
+<h3 class="anchored" data-anchor-id="what-about-non-stationarity-in-bandit-problems">What about Non-stationarity in Bandit problems?</h3>
+<p><span class="math inline">Q_n = \sum_{i=1}^{n-1}R_i</span> - Action-value estimate</p>
+<p><span class="math inline">Q_{n+1} = Q_n + \frac{1}{n}(R_n - Q_n)</span> - Incremental way of computing <span class="math inline">Q_n</span>.</p>
+<p>This lead to an interpretation of <span class="math inline">\frac{1}{n}</span> as A step size parameter that <u>goes to 0.</u></p>
+<p>Not good if the environment undergoes a change, as you will be very slow to adapt to this change.</p>
+<p>A single solution is to use a constant step size.</p>
+<p><span class="math inline">Q_{n+1} = Q_n + \alpha(R_n - Q_n)</span></p>
+<p><span class="math inline">\implies (1+alpha)Q_1 + ... + \sum_{i=1}^{n}\alpha(1-alpha)^{n-i}R_i</span></p>
+<p>where <span class="math inline">\alpha</span> is a constant step size. <span class="math inline">\alpha</span> quantifies the tradeoff between how much you remember and how much you forget. <span class="math inline">\alpha = 1</span> means we only pay attention to the last observed reward.</p>
 
 
 </section>

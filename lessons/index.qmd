@@ -18,6 +18,6 @@ The young programmer nodded, uncertain but eager to begin the journey.
 ###  13: Reinforcement Learning
 - [RL Introduction](expert/1-rl-fundamentals.qmd)
 - [Bandit Algorithms](expert/2-bandit-algos.qmd)
-
+- [Markov Decision Process](expert/3-markov-decision-process.qmd)
 
 ---
