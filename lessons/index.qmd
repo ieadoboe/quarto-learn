@@ -19,5 +19,6 @@ The young programmer nodded, uncertain but eager to begin the journey.
 - [RL Introduction](expert/1-rl-fundamentals.qmd)
 - [Bandit Algorithms](expert/2-bandit-algos.qmd)
 - [Markov Decision Process](expert/3-markov-decision-process.qmd)
+- [Episodes](expert/4-episodes.qmd)
 
 ---

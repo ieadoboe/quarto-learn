@@ -167,5 +167,16 @@
       "Cutting-Edge Techniques",
       "Markov Decision Process (MDP)"
     ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html",
+    "href": "lessons/expert/4-episodes.html",
+    "title": "4-episodes",
+    "section": "",
+    "text": "Episodes in Reinforcement Learning",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "4-episodes"
+    ]
   }
 ]
