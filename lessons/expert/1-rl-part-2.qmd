@@ -3,38 +3,41 @@ title: "Reinforcement Learning Expanded Introduction"
 format: html
 ---
 
-## What is Reinforcement Learning?
+## Reinforcement Learning on a more serious note...
 
-Reinforcement learning (RL) is a framework for learning optimal behavior through trial-and-error interaction with an environment. Unlike supervised learning (where we have correct answers) or unsupervised learning (where we find patterns), RL learns from rewards and penalties.
+Reinforcement learning (RL) is a framework for learning optimal behavior through **trial-and-error** interaction with an environment. Unlike supervised learning (where we have correct answers) or unsupervised learning (where we find patterns), RL learns from **rewards** and **penalties**.
 
-**Think of it like learning to drive:** You don't get a manual with every possible scenario - instead, you learn by trying actions (steering, braking) and experiencing consequences (smooth ride, honking horns, accidents). Over time, you develop a driving policy that maximizes good outcomes.
+**When learning to drive:** You don't get a manual with every possible scenario - instead, you learn by trying actions (steering, braking) and experiencing consequences (smooth ride, honking horns, accidents). Over time, you develop a driving policy that maximizes good outcomes.
 
 ## The RL Framework: Agent-Environment Interaction
 
-![RL Agent-Environment Loop](https://via.placeholder.com/500x300/4a90e2/ffffff?text=Agent-Environment+Interaction+Loop)
+![RL Agent-Environment Loop. Credit: Gymnasium Documentation](https://gymnasium.farama.org/_images/AE_loop.png){width=70%}
 
 *Figure 1: The fundamental RL loop where an agent takes actions in an environment and receives observations and rewards*
 
 ### Core Components
 
-**Agent**: The learner/decision-maker (you, the driver)  
-**Environment**: Everything outside the agent (road, other cars, traffic laws)  
-**State ($s_t$)**: The true state of the environment at time t (positions of all cars, traffic light status)  
-**Observation ($o_t$)**: What the agent actually perceives (what you see through your windshield)  
-**Action ($a_t$)**: Choice made by the agent (turn left, brake, accelerate)  
-**Reward ($r_t$)**: Feedback signal from environment (+1 for reaching destination, -100 for accident)  
+- **Agent**: The learner/decision-maker (you, the driver)  
+- **Environment**: Everything outside the agent (road, other cars, traffic laws)  
+- **State ($s_t$)**: The true state of the environment at time t (positions of all cars, traffic light status)  
+- **Observation ($o_t$)**: What the agent actually perceives (what you see through your windshield)  
+- **Action ($a_t$)**: Choice made by the agent (turn left, brake, accelerate)  
+- **Reward ($r_t$)**: Feedback signal from environment (+1 for reaching destination, -100 for accident)  
 
 ### The Markov Property: Why States Matter
 
-**Key assumption**: The future depends only on the current state, not the entire history.
+The Markov property states that the future state depends only on the current state, not on the sequence of events that led to the current state. This is a key assumption that makes the problem tractable (manageable).
 
 $$P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)$$
 
-**Driving analogy**: To predict what happens next, you only need to know current positions and speeds, not how cars got there. This makes the problem tractable - otherwise we'd need infinite memory.
+**Explanation**: The equation states that the probability of transitioning to state $s_{t+1}$ depends only on the current state $s_t$ and current action $a_t$, not on any previous states or actions. The left side shows the full history-dependent probability, while the right side shows it reduces to just the current state-action pair.
+
+**Driving analogy**: To predict what happens next, you only need to know current positions and speeds, not how cars got there. This makes the problem tractable, otherwise we'd need infinite memory.
 
 ## Policies and Value Functions
 
 ### Policy ($\pi$)
+
 A policy maps states to actions: $\pi(a|s) = P(A_t = a | S_t = s)$
 
 - **Deterministic policy**: $a = \pi(s)$ (always take same action in same state)
@@ -42,24 +45,38 @@ A policy maps states to actions: $\pi(a|s) = P(A_t = a | S_t = s)$
 
 ### Value Functions: Measuring Long-term Success
 
-The **state value function** measures expected cumulative discounted reward:
+The **state value function** measures expected cumulative discounted reward. $V^\pi(s)$ quantifies the expected total discounted reward an agent will accumulate starting from state $s$ and following policy $\pi$ forever. The discount factor $\gamma$ exponentially reduces the weight of future rewards - a reward $k$ steps in the future gets weighted by $\gamma^k$. The discount factor is a hyperparameter that controls how much we value future rewards compared to immediate rewards.
+
+The equation defines how we measure the "goodness" of being in a particular state under a specific policy.
+
+**Example**: When evaluating a job offer, the "value" of accepting the job isn't just your first paycheck - it's all future paychecks combined, but you care less about paychecks 10 years from now than next month's paycheck. The discount factor is like your personal "impatience rate."
 
 $$V^\pi(s) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s\right]$$
 
 Where:
+
 - $\gamma \in [0,1]$ is the **discount factor** (future rewards matter less)
+- k is the **time offset** - it represents how many time steps into the future we're looking from the current time t.
 - $R_{t+k+1}$ is the reward at time $t+k+1$
 
-**Why discounting?** 
+**Why discounting?**  
+
 1. Uncertainty increases with time
 2. Immediate rewards often preferred (bird in hand...)
 3. Mathematical convenience (prevents infinite sums)
 
 ### Action-Value Function (Q-function)
 
+This tells us: "How good is taking action $a$ in state $s$, then following policy $\pi$?"
+
+The action-value function (Q-function) measures the expected cumulative discounted reward from taking a specific action in a specific state, then following the policy thereafter.
+
+$Q^π(s,a)$ quantifies the total expected return when you take action $a$ in state $s$, then follow policy $\pi$ for all subsequent decisions. **It's conditioned on both the initial state AND the initial action**, *unlike the state value function which only conditions on the state.*
+
+**Evaluating a chess move**:  The Q-function answers: "If I make this specific move right now, then play optimally (according to my strategy) for the rest of the game, what's my expected final score?" It's not just asking "how good is this position?" but "how good is this specific move from this position?"
+
 $$Q^\pi(s,a) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s, A_t = a\right]$$
 
-This tells us: "How good is taking action $a$ in state $s$, then following policy $\pi$?"
 
 ## The Optimal Policy
 
@@ -67,7 +84,13 @@ We seek the policy that maximizes expected return:
 
 $$\pi^* = \arg\max_\pi \mathbb{E}_{s_0 \sim \rho}[V^\pi(s_0)]$$
 
-Where $\rho$ is the distribution over initial states.
+Where:
+- $\rho$ is the distribution over initial states.
+- $s_0$ is the initial state.
+- $\mathbb{E}_{s_0 \sim \rho}$ means "the expected value of the initial state under the distribution $\rho$".
+- $\pi$ is the policy.
+- $V^\pi(s_0)$ is the value of the initial state under policy $\pi$.
+- $\arg\max_\pi$ means "the policy that maximizes the expected return" (point us to the best (max/optimal) policy).
 
 **Bellman Optimality Equation:**
 $$V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]$$

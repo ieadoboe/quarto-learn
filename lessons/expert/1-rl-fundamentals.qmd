@@ -23,13 +23,13 @@ RL is like teaching a dog new tricks - but instead of treats, we use numerical r
 
 ### How to think of these key concepts
 
--   **Agent** - decision maker or learner. E.g. a robot trying to navigate a maze, the classic pacman game, or a self-driving car.
+![Pacman](https://www.cs.csubak.edu/~mcorral/cs2680/Final/images/pgame.jpg){width=70%}
 
-    ![Pacman](https://www.cs.csubak.edu/~mcorral/cs2680/Final/images/pgame.jpg)
+-   **Agent** - decision maker or learner. E.g. a robot trying to navigate a maze, the classic pacman game, or a self-driving car.
 
 -   **Environment** - Everything outside the agent. E.g. The maze, the game board, the road.
 
--   **State, $s_t$** - The agent's internal representation of a situation at a particular time, t. It's a "mental map" of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is facing and what it has learnt so far.
+-   **State, $s_t$** - The agent's internal representation of a situation at a particular time, $t$. It's a "mental map" of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is facing and what it has learnt so far.
 
 -   **Policy, $\pi$** - The strategy (or rule) that guides decision making (that is maps states to actions). **It is the decision making function.** E.g. if the robot is a wall in front, turn right or left.
 
@@ -75,11 +75,11 @@ Note that, this is one way of designing an optimal policy - **Maximum expected u
 
 ## Multi-Armed Bandit Problem
 
-When there are a finite number of possible actions, this is called a multi-armed bandit.
+When there are a finite number of possible actions, this is called a **multi-armed bandit**.
 
 Imagine you're in a Vegas casino with a row of slot machines (the "bandits" - they're called one-armed bandits because of the lever). Each machine has different odds of paying out, but you don't know which ones are better. You have limited money and time.
 
-Your challenge: figure out which machines are the best while still making money. This is the multi-armed bandit problem - **how do you balance exploring new options to find the best one, versus exploiting what you already know works?**
+**Your challenge:** figure out which machines are the best while still making money. This is the multi-armed bandit problem - **how do you balance exploring new options to find the best one, versus exploiting what you already know works?**
 
 ### Examine Scenario
 
@@ -98,6 +98,8 @@ Each morning, you face the bandit problem:
 If you only exploit, you might miss an even better coffee shop. If you only explore, you waste money on potentially bad coffee.
 
 ### Real-World Applications
+
+Here are some examples of reinforcement learning applications. [Neptune.AI](https://neptune.ai/blog/reinforcement-learning-applications) has a great list of examples with visualizations and links to papers that I found very interesting. You should check it out.
 
 1.  **Online Advertising:** Which ad version gets the most clicks? Companies test different versions while still showing profitable ones.
 2.  **Netflix Recommendations:** Which movies to suggest? Netflix balances showing you movies similar to what you liked (exploit) vs. new genres you might enjoy (explore).

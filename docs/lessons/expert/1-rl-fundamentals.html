@@ -357,16 +357,16 @@ window.Quarto = {
 </ul>
 <section id="how-to-think-of-these-key-concepts" class="level3">
 <h3 class="anchored" data-anchor-id="how-to-think-of-these-key-concepts">How to think of these key concepts</h3>
-<ul>
-<li><p><strong>Agent</strong> - decision maker or learner. E.g. a robot trying to navigate a maze, the classic pacman game, or a self-driving car.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://www.cs.csubak.edu/~mcorral/cs2680/Final/images/pgame.jpg" class="img-fluid figure-img"></p>
+<p><img src="https://www.cs.csubak.edu/~mcorral/cs2680/Final/images/pgame.jpg" class="img-fluid figure-img" style="width:70.0%"></p>
 <figcaption>Pacman</figcaption>
 </figure>
-</div></li>
+</div>
+<ul>
+<li><p><strong>Agent</strong> - decision maker or learner. E.g. a robot trying to navigate a maze, the classic pacman game, or a self-driving car.</p></li>
 <li><p><strong>Environment</strong> - Everything outside the agent. E.g. The maze, the game board, the road.</p></li>
-<li><p><strong>State, <span class="math inline">s_t</span></strong> - The agent’s internal representation of a situation at a particular time, t. It’s a “mental map” of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is facing and what it has learnt so far.</p></li>
+<li><p><strong>State, <span class="math inline">s_t</span></strong> - The agent’s internal representation of a situation at a particular time, <span class="math inline">t</span>. It’s a “mental map” of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is facing and what it has learnt so far.</p></li>
 <li><p><strong>Policy, <span class="math inline">\pi</span></strong> - The strategy (or rule) that guides decision making (that is maps states to actions). <strong>It is the decision making function.</strong> E.g. if the robot is a wall in front, turn right or left.</p></li>
 <li><p><strong>Action, <span class="math inline">a_t = \pi(s_t)</span></strong> - Choice made by the agent. E.g. Robot turning right or moving forward.</p></li>
 <li><p><strong>Observation</strong> - The information received from environment by an agent. E.g. Robot observes “I bumped into a wall” or “I found a clear path.”</p></li>
@@ -403,9 +403,9 @@ V_{\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \pi) \left[ \sum_{t=0}^T  R(s_
 </section>
 <section id="multi-armed-bandit-problem" class="level2">
 <h2 class="anchored" data-anchor-id="multi-armed-bandit-problem">Multi-Armed Bandit Problem</h2>
-<p>When there are a finite number of possible actions, this is called a multi-armed bandit.</p>
+<p>When there are a finite number of possible actions, this is called a <strong>multi-armed bandit</strong>.</p>
 <p>Imagine you’re in a Vegas casino with a row of slot machines (the “bandits” - they’re called one-armed bandits because of the lever). Each machine has different odds of paying out, but you don’t know which ones are better. You have limited money and time.</p>
-<p>Your challenge: figure out which machines are the best while still making money. This is the multi-armed bandit problem - <strong>how do you balance exploring new options to find the best one, versus exploiting what you already know works?</strong></p>
+<p><strong>Your challenge:</strong> figure out which machines are the best while still making money. This is the multi-armed bandit problem - <strong>how do you balance exploring new options to find the best one, versus exploiting what you already know works?</strong></p>
 <section id="examine-scenario" class="level3">
 <h3 class="anchored" data-anchor-id="examine-scenario">Examine Scenario</h3>
 <p>Let’s say you have 3 coffee shops near your office:</p>
@@ -424,6 +424,7 @@ V_{\pi}(s_0) = {E}_p(a_0, s_1, ..., a_T, s_T|s_0, \pi) \left[ \sum_{t=0}^T  R(s_
 </section>
 <section id="real-world-applications" class="level3">
 <h3 class="anchored" data-anchor-id="real-world-applications">Real-World Applications</h3>
+<p>Here are some examples of reinforcement learning applications. <a href="https://neptune.ai/blog/reinforcement-learning-applications">Neptune.AI</a> has a great list of examples with visualizations and links to papers that I found very interesting. You should check it out.</p>
 <ol type="1">
 <li><strong>Online Advertising:</strong> Which ad version gets the most clicks? Companies test different versions while still showing profitable ones.</li>
 <li><strong>Netflix Recommendations:</strong> Which movies to suggest? Netflix balances showing you movies similar to what you liked (exploit) vs.&nbsp;new genres you might enjoy (explore).</li>

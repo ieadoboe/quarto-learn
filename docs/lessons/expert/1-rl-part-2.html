@@ -308,7 +308,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-reinforcement-learning" id="toc-what-is-reinforcement-learning" class="nav-link active" data-scroll-target="#what-is-reinforcement-learning">What is Reinforcement Learning?</a></li>
+  <li><a href="#reinforcement-learning-on-a-more-serious-note" id="toc-reinforcement-learning-on-a-more-serious-note" class="nav-link active" data-scroll-target="#reinforcement-learning-on-a-more-serious-note">Reinforcement Learning on a more serious note…</a></li>
   <li><a href="#the-rl-framework-agent-environment-interaction" id="toc-the-rl-framework-agent-environment-interaction" class="nav-link" data-scroll-target="#the-rl-framework-agent-environment-interaction">The RL Framework: Agent-Environment Interaction</a>
   <ul class="collapse">
   <li><a href="#core-components" id="toc-core-components" class="nav-link" data-scroll-target="#core-components">Core Components</a></li>
@@ -362,34 +362,42 @@ window.Quarto = {
 </header>
 
 
-<section id="what-is-reinforcement-learning" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-reinforcement-learning">What is Reinforcement Learning?</h2>
-<p>Reinforcement learning (RL) is a framework for learning optimal behavior through trial-and-error interaction with an environment. Unlike supervised learning (where we have correct answers) or unsupervised learning (where we find patterns), RL learns from rewards and penalties.</p>
-<p><strong>Think of it like learning to drive:</strong> You don’t get a manual with every possible scenario - instead, you learn by trying actions (steering, braking) and experiencing consequences (smooth ride, honking horns, accidents). Over time, you develop a driving policy that maximizes good outcomes.</p>
+<section id="reinforcement-learning-on-a-more-serious-note" class="level2">
+<h2 class="anchored" data-anchor-id="reinforcement-learning-on-a-more-serious-note">Reinforcement Learning on a more serious note…</h2>
+<p>Reinforcement learning (RL) is a framework for learning optimal behavior through <strong>trial-and-error</strong> interaction with an environment. Unlike supervised learning (where we have correct answers) or unsupervised learning (where we find patterns), RL learns from <strong>rewards</strong> and <strong>penalties</strong>.</p>
+<p><strong>When learning to drive:</strong> You don’t get a manual with every possible scenario - instead, you learn by trying actions (steering, braking) and experiencing consequences (smooth ride, honking horns, accidents). Over time, you develop a driving policy that maximizes good outcomes.</p>
 </section>
 <section id="the-rl-framework-agent-environment-interaction" class="level2">
 <h2 class="anchored" data-anchor-id="the-rl-framework-agent-environment-interaction">The RL Framework: Agent-Environment Interaction</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://via.placeholder.com/500x300/4a90e2/ffffff?text=Agent-Environment+Interaction+Loop.png" class="img-fluid figure-img"></p>
-<figcaption>RL Agent-Environment Loop</figcaption>
+<p><img src="https://gymnasium.farama.org/_images/AE_loop.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>RL Agent-Environment Loop. Credit: Gymnasium Documentation</figcaption>
 </figure>
 </div>
 <p><em>Figure 1: The fundamental RL loop where an agent takes actions in an environment and receives observations and rewards</em></p>
 <section id="core-components" class="level3">
 <h3 class="anchored" data-anchor-id="core-components">Core Components</h3>
-<p><strong>Agent</strong>: The learner/decision-maker (you, the driver)<br>
-<strong>Environment</strong>: Everything outside the agent (road, other cars, traffic laws)<br>
-<strong>State (<span class="math inline">s_t</span>)</strong>: The true state of the environment at time t (positions of all cars, traffic light status)<br>
-<strong>Observation (<span class="math inline">o_t</span>)</strong>: What the agent actually perceives (what you see through your windshield)<br>
-<strong>Action (<span class="math inline">a_t</span>)</strong>: Choice made by the agent (turn left, brake, accelerate)<br>
-<strong>Reward (<span class="math inline">r_t</span>)</strong>: Feedback signal from environment (+1 for reaching destination, -100 for accident)</p>
+<ul>
+<li><strong>Agent</strong>: The learner/decision-maker (you, the driver)<br>
+</li>
+<li><strong>Environment</strong>: Everything outside the agent (road, other cars, traffic laws)<br>
+</li>
+<li><strong>State (<span class="math inline">s_t</span>)</strong>: The true state of the environment at time t (positions of all cars, traffic light status)<br>
+</li>
+<li><strong>Observation (<span class="math inline">o_t</span>)</strong>: What the agent actually perceives (what you see through your windshield)<br>
+</li>
+<li><strong>Action (<span class="math inline">a_t</span>)</strong>: Choice made by the agent (turn left, brake, accelerate)<br>
+</li>
+<li><strong>Reward (<span class="math inline">r_t</span>)</strong>: Feedback signal from environment (+1 for reaching destination, -100 for accident)</li>
+</ul>
 </section>
 <section id="the-markov-property-why-states-matter" class="level3">
 <h3 class="anchored" data-anchor-id="the-markov-property-why-states-matter">The Markov Property: Why States Matter</h3>
-<p><strong>Key assumption</strong>: The future depends only on the current state, not the entire history.</p>
+<p>The Markov property states that the future state depends only on the current state, not on the sequence of events that led to the current state. This is a key assumption that makes the problem tractable (manageable).</p>
 <p><span class="math display">P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)</span></p>
-<p><strong>Driving analogy</strong>: To predict what happens next, you only need to know current positions and speeds, not how cars got there. This makes the problem tractable - otherwise we’d need infinite memory.</p>
+<p><strong>Explanation</strong>: The equation states that the probability of transitioning to state <span class="math inline">s_{t+1}</span> depends only on the current state <span class="math inline">s_t</span> and current action <span class="math inline">a_t</span>, not on any previous states or actions. The left side shows the full history-dependent probability, while the right side shows it reduces to just the current state-action pair.</p>
+<p><strong>Driving analogy</strong>: To predict what happens next, you only need to know current positions and speeds, not how cars got there. This makes the problem tractable, otherwise we’d need infinite memory.</p>
 </section>
 </section>
 <section id="policies-and-value-functions" class="level2">
@@ -404,22 +412,37 @@ window.Quarto = {
 </section>
 <section id="value-functions-measuring-long-term-success" class="level3">
 <h3 class="anchored" data-anchor-id="value-functions-measuring-long-term-success">Value Functions: Measuring Long-term Success</h3>
-<p>The <strong>state value function</strong> measures expected cumulative discounted reward:</p>
+<p>The <strong>state value function</strong> measures expected cumulative discounted reward. <span class="math inline">V^\pi(s)</span> quantifies the expected total discounted reward an agent will accumulate starting from state <span class="math inline">s</span> and following policy <span class="math inline">\pi</span> forever. The discount factor <span class="math inline">\gamma</span> exponentially reduces the weight of future rewards - a reward <span class="math inline">k</span> steps in the future gets weighted by <span class="math inline">\gamma^k</span>. The discount factor is a hyperparameter that controls how much we value future rewards compared to immediate rewards.</p>
+<p>The equation defines how we measure the “goodness” of being in a particular state under a specific policy.</p>
+<p><strong>Example</strong>: When evaluating a job offer, the “value” of accepting the job isn’t just your first paycheck - it’s all future paychecks combined, but you care less about paychecks 10 years from now than next month’s paycheck. The discount factor is like your personal “impatience rate.”</p>
 <p><span class="math display">V^\pi(s) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s\right]</span></p>
-<p>Where: - <span class="math inline">\gamma \in [0,1]</span> is the <strong>discount factor</strong> (future rewards matter less) - <span class="math inline">R_{t+k+1}</span> is the reward at time <span class="math inline">t+k+1</span></p>
-<p><strong>Why discounting?</strong> 1. Uncertainty increases with time 2. Immediate rewards often preferred (bird in hand…) 3. Mathematical convenience (prevents infinite sums)</p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\gamma \in [0,1]</span> is the <strong>discount factor</strong> (future rewards matter less)</li>
+<li>k is the <strong>time offset</strong> - it represents how many time steps into the future we’re looking from the current time t.</li>
+<li><span class="math inline">R_{t+k+1}</span> is the reward at time <span class="math inline">t+k+1</span></li>
+</ul>
+<p><strong>Why discounting?</strong></p>
+<ol type="1">
+<li>Uncertainty increases with time</li>
+<li>Immediate rewards often preferred (bird in hand…)</li>
+<li>Mathematical convenience (prevents infinite sums)</li>
+</ol>
 </section>
 <section id="action-value-function-q-function" class="level3">
 <h3 class="anchored" data-anchor-id="action-value-function-q-function">Action-Value Function (Q-function)</h3>
-<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s, A_t = a\right]</span></p>
 <p>This tells us: “How good is taking action <span class="math inline">a</span> in state <span class="math inline">s</span>, then following policy <span class="math inline">\pi</span>?”</p>
+<p>The action-value function (Q-function) measures the expected cumulative discounted reward from taking a specific action in a specific state, then following the policy thereafter.</p>
+<p><span class="math inline">Q^π(s,a)</span> quantifies the total expected return when you take action <span class="math inline">a</span> in state <span class="math inline">s</span>, then follow policy <span class="math inline">\pi</span> for all subsequent decisions. <strong>It’s conditioned on both the initial state AND the initial action</strong>, <em>unlike the state value function which only conditions on the state.</em></p>
+<p><strong>Evaluating a chess move</strong>: The Q-function answers: “If I make this specific move right now, then play optimally (according to my strategy) for the rest of the game, what’s my expected final score?” It’s not just asking “how good is this position?” but “how good is this specific move from this position?”</p>
+<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s, A_t = a\right]</span></p>
 </section>
 </section>
 <section id="the-optimal-policy" class="level2">
 <h2 class="anchored" data-anchor-id="the-optimal-policy">The Optimal Policy</h2>
 <p>We seek the policy that maximizes expected return:</p>
 <p><span class="math display">\pi^* = \arg\max_\pi \mathbb{E}_{s_0 \sim \rho}[V^\pi(s_0)]</span></p>
-<p>Where <span class="math inline">\rho</span> is the distribution over initial states.</p>
+<p>Where: - <span class="math inline">\rho</span> is the distribution over initial states. - <span class="math inline">s_0</span> is the initial state. - <span class="math inline">\mathbb{E}_{s_0 \sim \rho}</span> means “the expected value of the initial state under the distribution <span class="math inline">\rho</span>”. - <span class="math inline">\pi</span> is the policy. - <span class="math inline">V^\pi(s_0)</span> is the value of the initial state under policy <span class="math inline">\pi</span>. - <span class="math inline">\arg\max_\pi</span> means “the policy that maximizes the expected return” (point us to the best (max/optimal) policy).</p>
 <p><strong>Bellman Optimality Equation:</strong> <span class="math display">V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
 <p>This recursive relationship is the foundation of many RL algorithms.</p>
 </section>
