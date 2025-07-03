@@ -23,11 +23,13 @@ RL is like teaching a dog new tricks - but instead of treats, we use numerical r
 
 ### How to think of these key concepts
 
--   **Agent** - decision maker or learner. E.g. a robot trying to navigate a maze.
+-   **Agent** - decision maker or learner. E.g. a robot trying to navigate a maze, the classic pacman game, or a self-driving car.
 
--   **Environment** - Everything outside the agent. E.g. The maze.
+    ![Pacman](https://www.cs.csubak.edu/~mcorral/cs2680/Final/images/pgame.jpg)
 
--   **State, $s_t$** - The agent's internal representation of a situation at a particular time, t. It's a "mental map" of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is face and what it has learnt so far.
+-   **Environment** - Everything outside the agent. E.g. The maze, the game board, the road.
+
+-   **State, $s_t$** - The agent's internal representation of a situation at a particular time, t. It's a "mental map" of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is facing and what it has learnt so far.
 
 -   **Policy, $\pi$** - The strategy (or rule) that guides decision making (that is maps states to actions). **It is the decision making function.** E.g. if the robot is a wall in front, turn right or left.
 

@@ -244,8 +244,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/2-bandit-algos.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Bandit Algorithms</span></a>
+  <a href="../../lessons/expert/10-actor-critic-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Actor-Critic Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/2-episodes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episodic vs Continuing Tasks</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -256,14 +262,38 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episodes in Reinforcement Learning</span></a>
+  <a href="../../lessons/expert/4-bandit-algos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bandit Algorithms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../lessons/expert/5-dynamic-programming.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Dynamic Programming in Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/6-monte-carlo-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Monte Carlo Methods in Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/7-temporal-difference-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Temporal Difference Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/8-function-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Function Approximation in Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/9-policy-gradient-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Policy Gradient Methods</span></a>
   </div>
 </li>
       </ul>
@@ -328,9 +358,15 @@ window.Quarto = {
 <section id="how-to-think-of-these-key-concepts" class="level3">
 <h3 class="anchored" data-anchor-id="how-to-think-of-these-key-concepts">How to think of these key concepts</h3>
 <ul>
-<li><p><strong>Agent</strong> - decision maker or learner. E.g. a robot trying to navigate a maze.</p></li>
-<li><p><strong>Environment</strong> - Everything outside the agent. E.g. The maze.</p></li>
-<li><p><strong>State, <span class="math inline">s_t</span></strong> - The agent’s internal representation of a situation at a particular time, t. It’s a “mental map” of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is face and what it has learnt so far.</p></li>
+<li><p><strong>Agent</strong> - decision maker or learner. E.g. a robot trying to navigate a maze, the classic pacman game, or a self-driving car.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.cs.csubak.edu/~mcorral/cs2680/Final/images/pgame.jpg" class="img-fluid figure-img"></p>
+<figcaption>Pacman</figcaption>
+</figure>
+</div></li>
+<li><p><strong>Environment</strong> - Everything outside the agent. E.g. The maze, the game board, the road.</p></li>
+<li><p><strong>State, <span class="math inline">s_t</span></strong> - The agent’s internal representation of a situation at a particular time, t. It’s a “mental map” of where it is and what the agent knows. E.g. The state might include the coordinates in the maze, what direction it is facing and what it has learnt so far.</p></li>
 <li><p><strong>Policy, <span class="math inline">\pi</span></strong> - The strategy (or rule) that guides decision making (that is maps states to actions). <strong>It is the decision making function.</strong> E.g. if the robot is a wall in front, turn right or left.</p></li>
 <li><p><strong>Action, <span class="math inline">a_t = \pi(s_t)</span></strong> - Choice made by the agent. E.g. Robot turning right or moving forward.</p></li>
 <li><p><strong>Observation</strong> - The information received from environment by an agent. E.g. Robot observes “I bumped into a wall” or “I found a clear path.”</p></li>
