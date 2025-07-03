@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Episodic vs Continuing Tasks – Not That Deep</title>
+<title>Dynamic Programming in Reinforcement Learning – Not That Deep</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -158,7 +193,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/4-episodes.html">Episodic vs Continuing Tasks</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/5-dynamic-programming.html">Dynamic Programming in Reinforcement Learning</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -256,13 +291,13 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episodic vs Continuing Tasks</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/5-dynamic-programming.html" class="sidebar-item-text sidebar-link">
+  <a href="../../lessons/expert/5-dynamic-programming.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Dynamic Programming in Reinforcement Learning</span></a>
   </div>
 </li>
@@ -290,57 +325,50 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#episodes-in-reinforcement-learning" id="toc-episodes-in-reinforcement-learning" class="nav-link active" data-scroll-target="#episodes-in-reinforcement-learning">Episodes in Reinforcement Learning</a></li>
-  <li><a href="#episodic-tasks" id="toc-episodic-tasks" class="nav-link" data-scroll-target="#episodic-tasks">Episodic Tasks</a>
+  <li><a href="#what-is-dynamic-programming" id="toc-what-is-dynamic-programming" class="nav-link active" data-scroll-target="#what-is-dynamic-programming">What is Dynamic Programming?</a></li>
+  <li><a href="#dynamic-programming-in-reinforcement-learning" id="toc-dynamic-programming-in-reinforcement-learning" class="nav-link" data-scroll-target="#dynamic-programming-in-reinforcement-learning">Dynamic Programming in Reinforcement Learning</a></li>
+  <li><a href="#the-two-fundamental-operations" id="toc-the-two-fundamental-operations" class="nav-link" data-scroll-target="#the-two-fundamental-operations">The Two Fundamental Operations</a>
   <ul class="collapse">
-  <li><a href="#examples-of-episodic-tasks" id="toc-examples-of-episodic-tasks" class="nav-link" data-scroll-target="#examples-of-episodic-tasks">Examples of Episodic Tasks</a></li>
-  <li><a href="#mathematical-formulation" id="toc-mathematical-formulation" class="nav-link" data-scroll-target="#mathematical-formulation">Mathematical Formulation</a></li>
+  <li><a href="#policy-evaluation-prediction" id="toc-policy-evaluation-prediction" class="nav-link" data-scroll-target="#policy-evaluation-prediction">1. Policy Evaluation (Prediction)</a></li>
+  <li><a href="#policy-improvement-control" id="toc-policy-improvement-control" class="nav-link" data-scroll-target="#policy-improvement-control">2. Policy Improvement (Control)</a></li>
   </ul></li>
-  <li><a href="#continuing-tasks" id="toc-continuing-tasks" class="nav-link" data-scroll-target="#continuing-tasks">Continuing Tasks</a>
+  <li><a href="#policy-evaluation-iterative" id="toc-policy-evaluation-iterative" class="nav-link" data-scroll-target="#policy-evaluation-iterative">Policy Evaluation (Iterative)</a>
   <ul class="collapse">
-  <li><a href="#examples-of-continuing-tasks" id="toc-examples-of-continuing-tasks" class="nav-link" data-scroll-target="#examples-of-continuing-tasks">Examples of Continuing Tasks</a></li>
-  <li><a href="#mathematical-formulation-1" id="toc-mathematical-formulation-1" class="nav-link" data-scroll-target="#mathematical-formulation-1">Mathematical Formulation</a></li>
+  <li><a href="#policy-evaluation-example" id="toc-policy-evaluation-example" class="nav-link" data-scroll-target="#policy-evaluation-example">Policy Evaluation Example</a></li>
   </ul></li>
-  <li><a href="#unified-treatment" id="toc-unified-treatment" class="nav-link" data-scroll-target="#unified-treatment">Unified Treatment</a></li>
-  <li><a href="#value-functions-for-episodes" id="toc-value-functions-for-episodes" class="nav-link" data-scroll-target="#value-functions-for-episodes">Value Functions for Episodes</a>
+  <li><a href="#policy-iteration" id="toc-policy-iteration" class="nav-link" data-scroll-target="#policy-iteration">Policy Iteration</a>
   <ul class="collapse">
-  <li><a href="#state-value-function" id="toc-state-value-function" class="nav-link" data-scroll-target="#state-value-function">State Value Function</a></li>
-  <li><a href="#action-value-function" id="toc-action-value-function" class="nav-link" data-scroll-target="#action-value-function">Action-Value Function</a></li>
+  <li><a href="#policy-iteration-example" id="toc-policy-iteration-example" class="nav-link" data-scroll-target="#policy-iteration-example">Policy Iteration Example</a></li>
   </ul></li>
-  <li><a href="#bellman-equations-revisited" id="toc-bellman-equations-revisited" class="nav-link" data-scroll-target="#bellman-equations-revisited">Bellman Equations Revisited</a>
+  <li><a href="#value-iteration" id="toc-value-iteration" class="nav-link" data-scroll-target="#value-iteration">Value Iteration</a>
   <ul class="collapse">
-  <li><a href="#bellman-equation-for-state-values" id="toc-bellman-equation-for-state-values" class="nav-link" data-scroll-target="#bellman-equation-for-state-values">Bellman Equation for State Values</a></li>
-  <li><a href="#bellman-equation-for-action-values" id="toc-bellman-equation-for-action-values" class="nav-link" data-scroll-target="#bellman-equation-for-action-values">Bellman Equation for Action Values</a></li>
+  <li><a href="#value-iteration-properties" id="toc-value-iteration-properties" class="nav-link" data-scroll-target="#value-iteration-properties">Value Iteration Properties</a></li>
   </ul></li>
-  <li><a href="#optimal-value-functions" id="toc-optimal-value-functions" class="nav-link" data-scroll-target="#optimal-value-functions">Optimal Value Functions</a>
+  <li><a href="#comparison-policy-iteration-vs-value-iteration" id="toc-comparison-policy-iteration-vs-value-iteration" class="nav-link" data-scroll-target="#comparison-policy-iteration-vs-value-iteration">Comparison: Policy Iteration vs Value Iteration</a></li>
+  <li><a href="#asynchronous-dynamic-programming" id="toc-asynchronous-dynamic-programming" class="nav-link" data-scroll-target="#asynchronous-dynamic-programming">Asynchronous Dynamic Programming</a>
   <ul class="collapse">
-  <li><a href="#optimal-state-value-function" id="toc-optimal-state-value-function" class="nav-link" data-scroll-target="#optimal-state-value-function">Optimal State-Value Function</a></li>
-  <li><a href="#optimal-action-value-function" id="toc-optimal-action-value-function" class="nav-link" data-scroll-target="#optimal-action-value-function">Optimal Action-Value Function</a></li>
-  <li><a href="#relationship-between-v-and-q" id="toc-relationship-between-v-and-q" class="nav-link" data-scroll-target="#relationship-between-v-and-q">Relationship Between <span class="math inline">V^*</span> and <span class="math inline">Q^*</span></a></li>
+  <li><a href="#asynchronous-value-iteration" id="toc-asynchronous-value-iteration" class="nav-link" data-scroll-target="#asynchronous-value-iteration">Asynchronous Value Iteration</a></li>
+  <li><a href="#prioritized-sweeping" id="toc-prioritized-sweeping" class="nav-link" data-scroll-target="#prioritized-sweeping">Prioritized Sweeping</a></li>
   </ul></li>
-  <li><a href="#bellman-optimality-equations" id="toc-bellman-optimality-equations" class="nav-link" data-scroll-target="#bellman-optimality-equations">Bellman Optimality Equations</a>
+  <li><a href="#generalized-policy-iteration-gpi" id="toc-generalized-policy-iteration-gpi" class="nav-link" data-scroll-target="#generalized-policy-iteration-gpi">Generalized Policy Iteration (GPI)</a></li>
+  <li><a href="#limitations-of-dynamic-programming" id="toc-limitations-of-dynamic-programming" class="nav-link" data-scroll-target="#limitations-of-dynamic-programming">Limitations of Dynamic Programming</a></li>
+  <li><a href="#extensions-and-variations" id="toc-extensions-and-variations" class="nav-link" data-scroll-target="#extensions-and-variations">Extensions and Variations</a>
   <ul class="collapse">
-  <li><a href="#for-v" id="toc-for-v" class="nav-link" data-scroll-target="#for-v">For <span class="math inline">V^*</span>:</a></li>
-  <li><a href="#for-q" id="toc-for-q" class="nav-link" data-scroll-target="#for-q">For <span class="math inline">Q^*</span>:</a></li>
+  <li><a href="#approximate-dynamic-programming" id="toc-approximate-dynamic-programming" class="nav-link" data-scroll-target="#approximate-dynamic-programming">Approximate Dynamic Programming</a></li>
+  <li><a href="#real-time-dynamic-programming" id="toc-real-time-dynamic-programming" class="nav-link" data-scroll-target="#real-time-dynamic-programming">Real-Time Dynamic Programming</a></li>
+  <li><a href="#parallel-dynamic-programming" id="toc-parallel-dynamic-programming" class="nav-link" data-scroll-target="#parallel-dynamic-programming">Parallel Dynamic Programming</a></li>
   </ul></li>
-  <li><a href="#optimal-policies" id="toc-optimal-policies" class="nav-link" data-scroll-target="#optimal-policies">Optimal Policies</a></li>
-  <li><a href="#solving-the-bellman-optimality-equations" id="toc-solving-the-bellman-optimality-equations" class="nav-link" data-scroll-target="#solving-the-bellman-optimality-equations">Solving the Bellman Optimality Equations</a></li>
-  <li><a href="#episode-length-considerations" id="toc-episode-length-considerations" class="nav-link" data-scroll-target="#episode-length-considerations">Episode Length Considerations</a>
-  <ul class="collapse">
-  <li><a href="#fixed-length-episodes" id="toc-fixed-length-episodes" class="nav-link" data-scroll-target="#fixed-length-episodes">Fixed-Length Episodes</a></li>
-  <li><a href="#variable-length-episodes" id="toc-variable-length-episodes" class="nav-link" data-scroll-target="#variable-length-episodes">Variable-Length Episodes</a></li>
-  <li><a href="#infinite-episodes" id="toc-infinite-episodes" class="nav-link" data-scroll-target="#infinite-episodes">Infinite Episodes</a></li>
-  </ul></li>
-  <li><a href="#practical-considerations" id="toc-practical-considerations" class="nav-link" data-scroll-target="#practical-considerations">Practical Considerations</a></li>
+  <li><a href="#code-example-value-iteration" id="toc-code-example-value-iteration" class="nav-link" data-scroll-target="#code-example-value-iteration">Code Example: Value Iteration</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/4-episodes.html">Episodic vs Continuing Tasks</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/5-dynamic-programming.html">Dynamic Programming in Reinforcement Learning</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Episodic vs Continuing Tasks</h1>
+<h1 class="title">Dynamic Programming in Reinforcement Learning</h1>
 </div>
 
 
@@ -357,201 +385,272 @@ window.Quarto = {
 </header>
 
 
-<section id="episodes-in-reinforcement-learning" class="level2">
-<h2 class="anchored" data-anchor-id="episodes-in-reinforcement-learning">Episodes in Reinforcement Learning</h2>
-<p>In reinforcement learning, we distinguish between two fundamental types of tasks based on whether they have natural ending points.</p>
+<section id="what-is-dynamic-programming" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-dynamic-programming">What is Dynamic Programming?</h2>
+<p>Dynamic Programming (DP) is a general approach to solving complex problems by breaking them down into simpler, overlapping subproblems. The key insight is to solve each subproblem exactly once, store the result, and reuse it whenever needed.</p>
+<p><strong>Classic example - Fibonacci sequence:</strong> - Naive approach: F(5) = F(4) + F(3), F(4) = F(3) + F(2), etc. - This recalculates F(3) multiple times → exponential complexity - DP approach: Calculate F(3) once, store it, reuse it → linear complexity</p>
 </section>
-<section id="episodic-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="episodic-tasks">Episodic Tasks</h2>
-<p><strong>Definition:</strong> Tasks that have well-defined starting and ending points, breaking the agent-environment interaction into distinct sequences called <strong>episodes</strong>.</p>
-<p><strong>Key characteristics:</strong> - Each episode starts in some initial state - Episode ends when agent reaches a <strong>terminal state</strong> - Agent gets reset after each episode - Episodes are independent of each other</p>
-<section id="examples-of-episodic-tasks" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-episodic-tasks">Examples of Episodic Tasks</h3>
+<section id="dynamic-programming-in-reinforcement-learning" class="level2">
+<h2 class="anchored" data-anchor-id="dynamic-programming-in-reinforcement-learning">Dynamic Programming in Reinforcement Learning</h2>
+<p>In RL, DP refers to algorithms that use the Bellman equations to compute optimal policies and value functions. These methods assume we have a <strong>perfect model</strong> of the environment (i.e., we know the MDP).</p>
+<p><strong>Key requirements for DP:</strong> 1. <strong>Optimal substructure:</strong> Optimal solution contains optimal sub-solutions 2. <strong>Overlapping subproblems:</strong> Same subproblems appear multiple times</p>
+<p>Both properties hold for MDPs!</p>
+</section>
+<section id="the-two-fundamental-operations" class="level2">
+<h2 class="anchored" data-anchor-id="the-two-fundamental-operations">The Two Fundamental Operations</h2>
+<p>All DP methods for RL are built on two core operations:</p>
+<section id="policy-evaluation-prediction" class="level3">
+<h3 class="anchored" data-anchor-id="policy-evaluation-prediction">1. Policy Evaluation (Prediction)</h3>
+<p><strong>Problem:</strong> Given a policy <span class="math inline">\pi</span>, compute the value function <span class="math inline">V^\pi</span></p>
+<p><strong>Bellman equation for <span class="math inline">V^\pi</span>:</strong> <span class="math display">V^\pi(s) = \sum_a \pi(a|s) \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^\pi(s')]</span></p>
+<p>This gives us a system of <span class="math inline">|\mathcal{S}|</span> linear equations in <span class="math inline">|\mathcal{S}|</span> unknowns.</p>
+</section>
+<section id="policy-improvement-control" class="level3">
+<h3 class="anchored" data-anchor-id="policy-improvement-control">2. Policy Improvement (Control)</h3>
+<p><strong>Problem:</strong> Given <span class="math inline">V^\pi</span>, find a better policy <span class="math inline">\pi'</span></p>
+<p><strong>Policy improvement theorem:</strong> If <span class="math inline">Q^\pi(s, \pi'(s)) \geq V^\pi(s)</span> for all <span class="math inline">s</span>, then <span class="math inline">\pi' \geq \pi</span>.</p>
+<p><strong>Greedy policy improvement:</strong> <span class="math display">\pi'(s) = \arg\max_a Q^\pi(s,a) = \arg\max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^\pi(s')]</span></p>
+</section>
+</section>
+<section id="policy-evaluation-iterative" class="level2">
+<h2 class="anchored" data-anchor-id="policy-evaluation-iterative">Policy Evaluation (Iterative)</h2>
+<p>Since solving the linear system directly can be expensive, we use iterative methods.</p>
+<p><strong>Algorithm:</strong></p>
+<pre><code>Initialize V₀(s) arbitrarily for all s ∈ S
+For k = 0, 1, 2, ... until convergence:
+    For each s ∈ S:
+        Vₖ₊₁(s) = Σₐ π(a|s) Σₛ' P(s'|s,a)[R(s,a,s') + γVₖ(s')]</code></pre>
+<p><strong>Convergence:</strong> <span class="math inline">V_k \to V^\pi</span> as <span class="math inline">k \to \infty</span> (guaranteed for finite MDPs)</p>
+<p><strong>Stopping condition:</strong> <span class="math inline">\max_s |V_{k+1}(s) - V_k(s)| &lt; \theta</span> for small <span class="math inline">\theta &gt; 0</span></p>
+<section id="policy-evaluation-example" class="level3">
+<h3 class="anchored" data-anchor-id="policy-evaluation-example">Policy Evaluation Example</h3>
+<p><strong>Grid World:</strong> 4×4 grid, uniform random policy, <span class="math inline">\gamma = 1</span></p>
+<pre><code>Initial: V₀(s) = 0 for all non-terminal states
+
+After 1 iteration:
+┌─────┬─────┬─────┬─────┐
+│  0  │ -1  │ -1  │ -1  │
+├─────┼─────┼─────┼─────┤
+│ -1  │ -1  │ -1  │ -1  │
+├─────┼─────┼─────┼─────┤
+│ -1  │ -1  │ -1  │ -1  │
+├─────┼─────┼─────┼─────┤
+│ -1  │ -1  │ -1  │  0  │
+└─────┴─────┴─────┴─────┘
+
+After convergence:
+┌─────┬─────┬─────┬─────┐
+│  0  │ -14 │ -20 │ -22 │
+├─────┼─────┼─────┼─────┤
+│-14  │ -18 │ -20 │ -20 │
+├─────┼─────┼─────┼─────┤
+│-20  │ -20 │ -18 │ -14 │
+├─────┼─────┼─────┼─────┤
+│-22  │ -20 │ -14 │  0  │
+└─────┴─────┴─────┴─────┘</code></pre>
+</section>
+</section>
+<section id="policy-iteration" class="level2">
+<h2 class="anchored" data-anchor-id="policy-iteration">Policy Iteration</h2>
+<p>Policy iteration alternates between policy evaluation and policy improvement.</p>
+<p><strong>Algorithm:</strong></p>
+<pre><code>1. Initialize π₀ arbitrarily
+2. Repeat:
+   a. Policy Evaluation: Solve Vᵖⁱ (exactly or approximately)
+   b. Policy Improvement: π' = greedy(Vᵖⁱ)
+   c. If π' = π, stop; otherwise π = π'</code></pre>
+<p><strong>Properties:</strong> - Each iteration gives a strictly better policy (unless already optimal) - Finite number of policies → guaranteed convergence - Each policy better than previous → monotonic improvement</p>
+<section id="policy-iteration-example" class="level3">
+<h3 class="anchored" data-anchor-id="policy-iteration-example">Policy Iteration Example</h3>
+<p><strong>Same 4×4 grid world:</strong></p>
+<p><strong>Initial policy:</strong> Random (equal probability for all actions)</p>
+<p><strong>After policy evaluation:</strong> Get value function shown above</p>
+<p><strong>Policy improvement:</strong> For each state, choose action that maximizes: <span class="math display">\sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^\pi(s')]</span></p>
+<p><strong>Result:</strong> Arrows pointing toward terminal states</p>
+<p><strong>After few iterations:</strong> Optimal policy found!</p>
+<pre><code>┌─────┬─────┬─────┬─────┐
+│  0  │  ←  │  ←  │  ↓  │
+├─────┼─────┼─────┼─────┤
+│  ↑  │  ←  │  ←  │  ↓  │
+├─────┼─────┼─────┼─────┤
+│  ↑  │  →  │  →  │  ↓  │
+├─────┼─────┼─────┼─────┤
+│  ↑  │  →  │  →  │  0  │
+└─────┴─────┴─────┴─────┘</code></pre>
+</section>
+</section>
+<section id="value-iteration" class="level2">
+<h2 class="anchored" data-anchor-id="value-iteration">Value Iteration</h2>
+<p>Value iteration combines policy evaluation and improvement into a single step.</p>
+<p><strong>Key insight:</strong> Don’t need to wait for policy evaluation to converge! One step of policy evaluation + policy improvement works.</p>
+<p><strong>Algorithm:</strong></p>
+<pre><code>Initialize V₀(s) arbitrarily for all s ∈ S
+For k = 0, 1, 2, ... until convergence:
+    For each s ∈ S:
+        Vₖ₊₁(s) = max_a Σₛ' P(s'|s,a)[R(s,a,s') + γVₖ(s')]</code></pre>
+<p><strong>This is just the Bellman optimality equation as an update rule!</strong></p>
+<p><strong>Convergence:</strong> <span class="math inline">V_k \to V^*</span> as <span class="math inline">k \to \infty</span></p>
+<p><strong>Extract policy:</strong> <span class="math inline">\pi(s) = \arg\max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
+<section id="value-iteration-properties" class="level3">
+<h3 class="anchored" data-anchor-id="value-iteration-properties">Value Iteration Properties</h3>
+<p><strong>Advantages:</strong> - Simpler than policy iteration (no explicit policy) - Often faster in practice - Each iteration guaranteed to improve</p>
+<p><strong>Disadvantages:</strong> - Requires computing max over all actions each iteration - May oscillate between near-optimal policies</p>
+</section>
+</section>
+<section id="comparison-policy-iteration-vs-value-iteration" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-policy-iteration-vs-value-iteration">Comparison: Policy Iteration vs Value Iteration</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Aspect</th>
+<th>Policy Iteration</th>
+<th>Value Iteration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Convergence</strong></td>
+<td>Finite steps</td>
+<td>Asymptotic</td>
+</tr>
+<tr class="even">
+<td><strong>Per iteration</strong></td>
+<td>More expensive</td>
+<td>Cheaper</td>
+</tr>
+<tr class="odd">
+<td><strong>Total time</strong></td>
+<td>Often faster</td>
+<td>Often slower</td>
+</tr>
+<tr class="even">
+<td><strong>Memory</strong></td>
+<td>Store policy + values</td>
+<td>Store only values</td>
+</tr>
+<tr class="odd">
+<td><strong>Use case</strong></td>
+<td>Small action spaces</td>
+<td>Large action spaces</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="asynchronous-dynamic-programming" class="level2">
+<h2 class="anchored" data-anchor-id="asynchronous-dynamic-programming">Asynchronous Dynamic Programming</h2>
+<p>Instead of updating all states simultaneously, update states individually:</p>
+<p><strong>Key insight:</strong> As long as all states continue to be updated, we still converge!</p>
+<section id="asynchronous-value-iteration" class="level3">
+<h3 class="anchored" data-anchor-id="asynchronous-value-iteration">Asynchronous Value Iteration</h3>
+<pre><code>Initialize V(s) arbitrarily for all s ∈ S
+Repeat forever:
+    Pick any state s
+    V(s) = max_a Σₛ' P(s'|s,a)[R(s,a,s') + γV(s')]</code></pre>
+<p><strong>Advantages:</strong> - More flexible computation - Can focus on important states - Better for parallel computation</p>
+</section>
+<section id="prioritized-sweeping" class="level3">
+<h3 class="anchored" data-anchor-id="prioritized-sweeping">Prioritized Sweeping</h3>
+<p>Update states in order of how much their values might change:</p>
+<pre><code>Priority queue of states based on |Bellman backup - current value|
+Repeat:
+    s = state with highest priority
+    Update V(s)
+    For each predecessor s' of s:
+        Compute priority for s'
+        Update priority queue</code></pre>
+</section>
+</section>
+<section id="generalized-policy-iteration-gpi" class="level2">
+<h2 class="anchored" data-anchor-id="generalized-policy-iteration-gpi">Generalized Policy Iteration (GPI)</h2>
+<p><strong>Key insight:</strong> Policy evaluation and improvement can be interleaved in many ways!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://via.placeholder.com/400x300/3498db/ffffff?text=Policy+Evaluation+%E2%86%94+Policy+Improvement.png" class="img-fluid figure-img"></p>
+<figcaption>GPI Diagram</figcaption>
+</figure>
+</div>
+<p><strong>Examples of GPI:</strong> - <strong>Policy Iteration:</strong> Complete evaluation, then improvement - <strong>Value Iteration:</strong> One step of evaluation, then improvement<br>
+- <strong>Asynchronous DP:</strong> Update individual states</p>
+<p><strong>Convergence theorem:</strong> Any GPI algorithm converges to optimal policy as long as both processes (evaluation and improvement) continue.</p>
+</section>
+<section id="limitations-of-dynamic-programming" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-of-dynamic-programming">Limitations of Dynamic Programming</h2>
 <ol type="1">
-<li><strong>Game Playing</strong>
-<ul>
-<li>Chess: Episode ends when game is won, lost, or drawn</li>
-<li>Pac-Man: Episode ends when all pellets eaten or player dies</li>
-<li>Each game is a separate episode</li>
-</ul></li>
-<li><strong>Maze Navigation</strong>
-<ul>
-<li>Episode starts at entrance</li>
-<li>Episode ends when agent reaches exit or hits maximum steps</li>
-<li>Agent is reset to start for next episode</li>
-</ul></li>
-<li><strong>Trading Simulation</strong>
-<ul>
-<li>Episode might represent one trading day</li>
-<li>Ends at market close, resets next day</li>
-</ul></li>
-<li><strong>Robot Task Learning</strong>
-<ul>
-<li>Episode = one attempt at picking up an object</li>
-<li>Ends when object is grasped or dropped</li>
-</ul></li>
+<li><strong>Perfect model required:</strong> Need to know <span class="math inline">P(s'|s,a)</span> and <span class="math inline">R(s,a,s')</span></li>
+<li><strong>Curse of dimensionality:</strong> Exponential in number of state variables</li>
+<li><strong>Discrete spaces:</strong> Hard to apply to continuous state/action spaces</li>
+<li><strong>Computational complexity:</strong> <span class="math inline">O(|\mathcal{S}|^2|\mathcal{A}|)</span> per iteration</li>
 </ol>
 </section>
-<section id="mathematical-formulation" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation">Mathematical Formulation</h3>
-<p>For episodic tasks, we modify our return calculation:</p>
-<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-t-1} R_T</span></p>
-<p>Where <span class="math inline">T</span> is the time step when the terminal state is reached.</p>
-<p><strong>Key insight:</strong> Since episodes end, we don’t need to worry about infinite sums!</p>
-</section>
-</section>
-<section id="continuing-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="continuing-tasks">Continuing Tasks</h2>
-<p><strong>Definition:</strong> Tasks that go on forever without natural breakpoints.</p>
-<p><strong>Key characteristics:</strong> - No terminal states - Agent-environment interaction continues indefinitely - Need discounting (<span class="math inline">\gamma &lt; 1</span>) to ensure finite returns</p>
-<section id="examples-of-continuing-tasks" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-continuing-tasks">Examples of Continuing Tasks</h3>
-<ol type="1">
-<li><strong>Process Control</strong>
+<section id="extensions-and-variations" class="level2">
+<h2 class="anchored" data-anchor-id="extensions-and-variations">Extensions and Variations</h2>
+<section id="approximate-dynamic-programming" class="level3">
+<h3 class="anchored" data-anchor-id="approximate-dynamic-programming">Approximate Dynamic Programming</h3>
 <ul>
-<li>Temperature control in a building</li>
-<li>Server load balancing</li>
-<li>Never “ends” - just keeps running</li>
-</ul></li>
-<li><strong>Portfolio Management</strong>
-<ul>
-<li>Continuous investment decisions</li>
-<li>Markets never truly “close” globally</li>
-</ul></li>
-<li><strong>Autonomous Driving</strong>
-<ul>
-<li>Car keeps driving until turned off</li>
-<li>No natural episode boundaries</li>
-</ul></li>
-</ol>
-</section>
-<section id="mathematical-formulation-1" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation-1">Mathematical Formulation</h3>
-<p>For continuing tasks:</p>
-<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}</span></p>
-<p><strong>Discounting is crucial:</strong> Without <span class="math inline">\gamma &lt; 1</span>, returns could be infinite!</p>
-</section>
-</section>
-<section id="unified-treatment" class="level2">
-<h2 class="anchored" data-anchor-id="unified-treatment">Unified Treatment</h2>
-<p>We can handle both episodic and continuing tasks with a unified notation by introducing the concept of <strong>absorption</strong>.</p>
-<p>For episodic tasks, we can think of terminal states as transitioning to a special absorbing state with zero reward: - <span class="math inline">P(\text{absorbing}|\text{terminal}, a) = 1</span> for all actions <span class="math inline">a</span> - <span class="math inline">R(\text{absorbing}, a) = 0</span> for all actions <span class="math inline">a</span></p>
-<p>This allows us to use the infinite sum formulation for both types of tasks.</p>
-</section>
-<section id="value-functions-for-episodes" class="level2">
-<h2 class="anchored" data-anchor-id="value-functions-for-episodes">Value Functions for Episodes</h2>
-<section id="state-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="state-value-function">State Value Function</h3>
-<p><span class="math display">V^\pi(s) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s\right]</span></p>
-<p>This works for both episodic and continuing tasks!</p>
-</section>
-<section id="action-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="action-value-function">Action-Value Function</h3>
-<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s, A_t = a\right]</span></p>
-</section>
-</section>
-<section id="bellman-equations-revisited" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-equations-revisited">Bellman Equations Revisited</h2>
-<p>Now let’s properly derive the Bellman equations, which are fundamental to understanding RL algorithms.</p>
-<section id="bellman-equation-for-state-values" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equation-for-state-values">Bellman Equation for State Values</h3>
-<p>Starting from the definition: <span class="math display">V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s]</span></p>
-<p><span class="math display">= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t = s]</span></p>
-<p><span class="math display">= \mathbb{E}_\pi[R_{t+1} | S_t = s] + \gamma \mathbb{E}_\pi[G_{t+1} | S_t = s]</span></p>
-<p>Using the law of total expectation: <span class="math display">= \sum_a \pi(a|s) \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]</span></p>
-<p><strong>This is the Bellman equation for <span class="math inline">V^\pi</span>!</strong></p>
-</section>
-<section id="bellman-equation-for-action-values" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equation-for-action-values">Bellman Equation for Action Values</h3>
-<p>Similarly, for <span class="math inline">Q^\pi(s,a)</span>:</p>
-<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi[G_t | S_t = s, A_t = a]</span></p>
-<p><span class="math display">= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \mathbb{E}_\pi[G_{t+1} | S_{t+1} = s']]</span></p>
-<p><span class="math display">= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]</span></p>
-<p><strong>Alternative form:</strong> <span class="math display">Q^\pi(s,a) = \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \sum_{a'} \pi(a'|s') Q^\pi(s',a')]</span></p>
-</section>
-</section>
-<section id="optimal-value-functions" class="level2">
-<h2 class="anchored" data-anchor-id="optimal-value-functions">Optimal Value Functions</h2>
-<section id="optimal-state-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-state-value-function">Optimal State-Value Function</h3>
-<p><span class="math display">V^*(s) = \max_\pi V^\pi(s)</span></p>
-<p>This represents the best possible expected return starting from state <span class="math inline">s</span>.</p>
-</section>
-<section id="optimal-action-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-action-value-function">Optimal Action-Value Function</h3>
-<p><span class="math display">Q^*(s,a) = \max_\pi Q^\pi(s,a)</span></p>
-<p>This represents the best possible expected return from taking action <span class="math inline">a</span> in state <span class="math inline">s</span>.</p>
-</section>
-<section id="relationship-between-v-and-q" class="level3">
-<h3 class="anchored" data-anchor-id="relationship-between-v-and-q">Relationship Between <span class="math inline">V^*</span> and <span class="math inline">Q^*</span></h3>
-<p><span class="math display">V^*(s) = \max_a Q^*(s,a)</span></p>
-<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
-</section>
-</section>
-<section id="bellman-optimality-equations" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-optimality-equations">Bellman Optimality Equations</h2>
-<p>These are the key equations that optimal value functions must satisfy:</p>
-<section id="for-v" class="level3">
-<h3 class="anchored" data-anchor-id="for-v">For <span class="math inline">V^*</span>:</h3>
-<p><span class="math display">V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
-</section>
-<section id="for-q" class="level3">
-<h3 class="anchored" data-anchor-id="for-q">For <span class="math inline">Q^*</span>:</h3>
-<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma \max_{a'} Q^*(s',a')]</span></p>
-<p><strong>Intuition:</strong> The value of a state under an optimal policy equals the value of the best action in that state. The value of the best action is the expected immediate reward plus the discounted value of the best possible future.</p>
-</section>
-</section>
-<section id="optimal-policies" class="level2">
-<h2 class="anchored" data-anchor-id="optimal-policies">Optimal Policies</h2>
-<p>An optimal policy <span class="math inline">\pi^*</span> satisfies: <span class="math display">\pi^*(s) = \arg\max_a Q^*(s,a)</span></p>
-<p><strong>Key properties:</strong> 1. <strong>Existence:</strong> Every finite MDP has at least one optimal policy 2. <strong>Deterministic:</strong> There exists an optimal deterministic policy 3. <strong>Uniqueness:</strong> <span class="math inline">V^*</span> and <span class="math inline">Q^*</span> are unique (but multiple optimal policies may exist)</p>
-</section>
-<section id="solving-the-bellman-optimality-equations" class="level2">
-<h2 class="anchored" data-anchor-id="solving-the-bellman-optimality-equations">Solving the Bellman Optimality Equations</h2>
-<p>The Bellman optimality equations are a system of nonlinear equations (due to the <span class="math inline">\max</span> operation). For finite MDPs with known dynamics, we can solve them using:</p>
-<ol type="1">
-<li><strong>Value Iteration:</strong> Iteratively apply Bellman optimality operator</li>
-<li><strong>Policy Iteration:</strong> Alternate between policy evaluation and improvement</li>
-<li><strong>Linear Programming:</strong> Formulate as an optimization problem</li>
-</ol>
-<p>These methods are covered in detail in the Dynamic Programming lesson.</p>
-</section>
-<section id="episode-length-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="episode-length-considerations">Episode Length Considerations</h2>
-<section id="fixed-length-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="fixed-length-episodes">Fixed-Length Episodes</h3>
-<ul>
-<li>All episodes have the same length <span class="math inline">T</span></li>
-<li>Simpler to analyze and implement</li>
-<li>Example: Chess with move limit</li>
+<li>Use function approximation for large state spaces</li>
+<li>Sample-based methods (Monte Carlo)</li>
+<li>Temporal difference methods</li>
 </ul>
 </section>
-<section id="variable-length-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="variable-length-episodes">Variable-Length Episodes</h3>
+<section id="real-time-dynamic-programming" class="level3">
+<h3 class="anchored" data-anchor-id="real-time-dynamic-programming">Real-Time Dynamic Programming</h3>
 <ul>
-<li>Episodes can end at different times</li>
-<li>More realistic for many applications</li>
-<li>Need to handle varying episode lengths in algorithms</li>
+<li>Focus computation on states agent actually visits</li>
+<li>Useful for large state spaces where most states never visited</li>
 </ul>
 </section>
-<section id="infinite-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="infinite-episodes">Infinite Episodes</h3>
+<section id="parallel-dynamic-programming" class="level3">
+<h3 class="anchored" data-anchor-id="parallel-dynamic-programming">Parallel Dynamic Programming</h3>
 <ul>
-<li>Continuing tasks</li>
-<li>Must use discounting or average reward</li>
-<li>More complex but more general</li>
+<li>Update multiple states simultaneously</li>
+<li>Distributed computation across multiple processors</li>
 </ul>
 </section>
 </section>
-<section id="practical-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="practical-considerations">Practical Considerations</h2>
+<section id="code-example-value-iteration" class="level2">
+<h2 class="anchored" data-anchor-id="code-example-value-iteration">Code Example: Value Iteration</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> value_iteration(P, R, gamma, theta<span class="op">=</span><span class="fl">1e-6</span>):</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">    P: transition probabilities [s, a, s'] </span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">    R: rewards [s, a, s']</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">    gamma: discount factor</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">    theta: convergence threshold</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    n_states, n_actions <span class="op">=</span> P.shape[:<span class="dv">2</span>]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> np.zeros(n_states)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        V_old <span class="op">=</span> V.copy()</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">range</span>(n_states):</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Compute Q-values for all actions</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>            Q <span class="op">=</span> np.<span class="bu">sum</span>(P[s] <span class="op">*</span> (R[s] <span class="op">+</span> gamma <span class="op">*</span> V), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Take max over actions</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>            V[s] <span class="op">=</span> np.<span class="bu">max</span>(Q)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check convergence</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.<span class="bu">max</span>(np.<span class="bu">abs</span>(V <span class="op">-</span> V_old)) <span class="op">&lt;</span> theta:</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract policy</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    policy <span class="op">=</span> np.zeros(n_states, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">range</span>(n_states):</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        Q <span class="op">=</span> np.<span class="bu">sum</span>(P[s] <span class="op">*</span> (R[s] <span class="op">+</span> gamma <span class="op">*</span> V), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        policy[s] <span class="op">=</span> np.argmax(Q)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> V, policy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
 <ol type="1">
-<li><strong>Episode Design:</strong> How you define episodes affects learning</li>
-<li><strong>Terminal State Rewards:</strong> Should terminal states give rewards?</li>
-<li><strong>Episode Length:</strong> Too short = not enough learning, too long = slow convergence</li>
-<li><strong>Reset Conditions:</strong> When should episodes end?</li>
+<li><strong>DP is the foundation:</strong> Most RL algorithms are variations of DP ideas</li>
+<li><strong>Two key operations:</strong> Policy evaluation + policy improvement</li>
+<li><strong>Many ways to combine them:</strong> Policy iteration, value iteration, asynchronous DP</li>
+<li><strong>Perfect model assumption:</strong> Major limitation in practice</li>
+<li><strong>Convergence guarantees:</strong> Strong theoretical foundation</li>
 </ol>
-<p>Understanding the distinction between episodic and continuing tasks is crucial for choosing appropriate RL algorithms and designing effective reward structures!</p>
+<p>Dynamic programming provides the theoretical backbone for understanding reinforcement learning. While requiring perfect knowledge of the environment limits its direct applicability, the core ideas underpin virtually all RL algorithms!</p>
 
 
 </section>

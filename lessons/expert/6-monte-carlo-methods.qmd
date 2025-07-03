@@ -1,0 +1,282 @@
+---
+title: "Monte Carlo Methods in Reinforcement Learning"
+format: html
+---
+
+## Introduction to Monte Carlo Methods
+
+Monte Carlo methods are a class of reinforcement learning algorithms that learn directly from episodes of experience without requiring a model of the environment. They are named after the famous casino, as they rely on random sampling and statistical averaging.
+
+**Key insight:** Instead of using mathematical models (like Dynamic Programming), we learn from actual experience by running episodes and averaging the results.
+
+## The Monte Carlo Approach
+
+**Basic idea:** To estimate the value of a state, simply average the returns observed after visiting that state.
+
+**Why this works:** By the Law of Large Numbers, the average of a large number of samples converges to the true expected value.
+
+$$V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s] \approx \frac{1}{N} \sum_{i=1}^N G_t^{(i)}$$
+
+Where $G_t^{(i)}$ is the return from the $i$-th visit to state $s$.
+
+## Key Assumptions
+
+1. **Episodic tasks:** Episodes must terminate (we need complete returns)
+2. **Finite episodes:** Each episode eventually ends
+3. **Stationary environment:** The environment doesn't change over time
+
+## Monte Carlo Prediction
+
+### First-Visit Monte Carlo
+
+**Algorithm:** For each state, average returns only from the first time that state is visited in each episode.
+
+```
+Initialize:
+    V(s) = 0 for all s ∈ S
+    Returns(s) = empty list for all s ∈ S
+
+For each episode:
+    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ
+    G = 0
+    For t = T-1, T-2, ..., 0:
+        G = γG + R_{t+1}
+        If S_t does not appear in S₀, S₁, ..., S_{t-1}:
+            Append G to Returns(S_t)
+            V(S_t) = average(Returns(S_t))
+```
+
+### Every-Visit Monte Carlo
+
+**Algorithm:** For each state, average returns from every visit to that state.
+
+```
+Initialize:
+    V(s) = 0 for all s ∈ S
+    Returns(s) = empty list for all s ∈ S
+
+For each episode:
+    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ
+    G = 0
+    For t = T-1, T-2, ..., 0:
+        G = γG + R_{t+1}
+        Append G to Returns(S_t)
+        V(S_t) = average(Returns(S_t))
+```
+
+### Convergence Properties
+
+**First-Visit MC:** Converges to $V^\pi(s)$ as the number of first visits to $s$ approaches infinity.
+
+**Every-Visit MC:** Also converges to $V^\pi(s)$ under the same conditions.
+
+**Practical difference:** Often minimal, but every-visit MC can converge faster for some problems.
+
+## Example: Blackjack
+
+**Perfect example for MC methods:**
+- Natural episodes (hands of blackjack)
+- Clear terminal states (win/lose/draw)
+- Reward only at the end of episode
+
+**State representation:** (player sum, dealer showing card, usable ace)
+
+**Results after 500,000 episodes:**
+- States visited frequently: accurate value estimates
+- States visited rarely: less accurate estimates
+- Natural exploration through random policy
+
+## Monte Carlo Control
+
+**Goal:** Find optimal policy using Monte Carlo methods.
+
+**Challenge:** We need to ensure adequate exploration of all state-action pairs.
+
+### Monte Carlo with Exploring Starts
+
+**Key idea:** Every state-action pair has a non-zero probability of being the starting pair of an episode.
+
+```
+Initialize:
+    Q(s,a) = 0 for all s ∈ S, a ∈ A
+    Returns(s,a) = empty list for all s ∈ S, a ∈ A
+    π(s) = arbitrary policy
+
+For each episode:
+    Choose random S₀ ∈ S and A₀ ∈ A (exploring starts)
+    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ
+    G = 0
+    For t = T-1, T-2, ..., 0:
+        G = γG + R_{t+1}
+        If (S_t, A_t) does not appear in (S₀,A₀), (S₁,A₁), ..., (S_{t-1},A_{t-1}):
+            Append G to Returns(S_t, A_t)
+            Q(S_t, A_t) = average(Returns(S_t, A_t))
+    
+    For each s in episode:
+        π(s) = argmax_a Q(s,a)
+```
+
+**Problem:** Exploring starts assumption is often unrealistic in practice.
+
+### On-Policy Monte Carlo Control
+
+**Without exploring starts:** Use $\epsilon$-greedy policies to ensure exploration.
+
+**$\epsilon$-greedy policy:**
+$$\pi(a|s) = \begin{cases}
+1 - \epsilon + \frac{\epsilon}{|\mathcal{A}(s)|} & \text{if } a = \arg\max_{a'} Q(s,a') \\
+\frac{\epsilon}{|\mathcal{A}(s)|} & \text{otherwise}
+\end{cases}$$
+
+```
+Initialize:
+    Q(s,a) = 0 for all s ∈ S, a ∈ A
+    Returns(s,a) = empty list for all s ∈ S, a ∈ A
+    π = ε-greedy policy derived from Q
+
+For each episode:
+    Generate episode using π: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ
+    G = 0
+    For t = T-1, T-2, ..., 0:
+        G = γG + R_{t+1}
+        If (S_t, A_t) not in (S₀,A₀), ..., (S_{t-1},A_{t-1}):
+            Append G to Returns(S_t, A_t)
+            Q(S_t, A_t) = average(Returns(S_t, A_t))
+            A* = argmax_a Q(S_t, a)
+            Update π to be ε-greedy w.r.t. Q
+```
+
+### Off-Policy Monte Carlo Control
+
+**Key insight:** Use one policy to generate episodes (behavior policy $b$) and another to evaluate/improve (target policy $\pi$).
+
+**Importance sampling:** Weight returns by the probability ratio between policies.
+
+$$\rho_{t:T-1} = \prod_{k=t}^{T-1} \frac{\pi(A_k|S_k)}{b(A_k|S_k)}$$
+
+**Weighted importance sampling:**
+$$V^\pi(s) = \frac{\sum_{t \in \mathcal{T}(s)} \rho_{t:T(t)-1} G_t}{\sum_{t \in \mathcal{T}(s)} \rho_{t:T(t)-1}}$$
+
+Where $\mathcal{T}(s)$ is the set of all time steps in which state $s$ is visited.
+
+## Advantages of Monte Carlo Methods
+
+1. **Model-free:** No need to know transition probabilities or rewards
+2. **Unbiased:** Estimates are unbiased (average of samples equals true value)
+3. **Simple:** Easy to understand and implement
+4. **Flexible:** Can handle any MDP structure
+5. **Statistically independent:** Value estimates for different states are independent
+
+## Disadvantages of Monte Carlo Methods
+
+1. **High variance:** Estimates can vary significantly between episodes
+2. **Slow convergence:** Need many episodes for accurate estimates
+3. **Episodic only:** Can't handle continuing tasks directly
+4. **Delayed learning:** Must wait until episode ends to update
+5. **Rare states:** States visited infrequently have poor estimates
+
+## Reducing Variance
+
+### Incremental Updates
+
+Instead of storing all returns, update estimates incrementally:
+
+$$V(S_t) \leftarrow V(S_t) + \alpha[G_t - V(S_t)]$$
+
+Where $\alpha$ is a step size parameter.
+
+### Baseline Methods
+
+Use a baseline to reduce variance:
+$$G_t - b(S_t)$$
+
+Where $b(S_t)$ is some baseline function.
+
+## Comparison with Dynamic Programming
+
+| Aspect | Monte Carlo | Dynamic Programming |
+|--------|-------------|---------------------|
+| **Model requirement** | Model-free | Requires model |
+| **Bootstrapping** | No | Yes |
+| **Bias** | Unbiased | Biased (initially) |
+| **Variance** | High | Low |
+| **Convergence** | Slow | Fast |
+| **Episodes** | Must complete | Can be continuous |
+
+## Code Example: Monte Carlo Policy Evaluation
+
+```python
+import numpy as np
+from collections import defaultdict
+
+def mc_policy_evaluation(env, policy, num_episodes=100000, gamma=1.0):
+    """
+    Monte Carlo policy evaluation using first-visit MC
+    """
+    # Initialize
+    V = defaultdict(float)
+    returns = defaultdict(list)
+    
+    for episode in range(num_episodes):
+        # Generate episode
+        states, actions, rewards = generate_episode(env, policy)
+        
+        # Calculate returns
+        G = 0
+        visited_states = set()
+        
+        # Work backwards through episode
+        for t in range(len(states) - 1, -1, -1):
+            G = gamma * G + rewards[t]
+            
+            # First-visit MC
+            if states[t] not in visited_states:
+                visited_states.add(states[t])
+                returns[states[t]].append(G)
+                V[states[t]] = np.mean(returns[states[t]])
+    
+    return dict(V)
+
+def generate_episode(env, policy):
+    """Generate a single episode following given policy"""
+    states, actions, rewards = [], [], []
+    state = env.reset()
+    
+    while True:
+        action = policy(state)
+        states.append(state)
+        actions.append(action)
+        
+        state, reward, done, _ = env.step(action)
+        rewards.append(reward)
+        
+        if done:
+            break
+    
+    return states, actions, rewards
+```
+
+## Applications
+
+1. **Game playing:** Learning to play games like Blackjack, Go
+2. **Financial modeling:** Portfolio optimization, risk assessment
+3. **Robotics:** Learning motor skills through trial and error
+4. **A/B testing:** Evaluating different strategies
+5. **Simulation optimization:** When analytic solutions are intractable
+
+## Historical Context
+
+- **Origin:** Developed in 1940s for nuclear weapons research
+- **RL application:** Introduced by Sutton and Barto in 1980s
+- **Key insight:** Learning from experience without models
+- **Modern relevance:** Foundation for many current RL algorithms
+
+## Key Takeaways
+
+1. **Experience-based learning:** MC methods learn from actual episodes
+2. **No model required:** Work directly with environment interactions
+3. **Unbiased estimates:** Sample averages converge to true values
+4. **High variance:** Need many samples for accurate estimates
+5. **Exploration crucial:** Must visit all states/actions sufficiently
+
+Monte Carlo methods provide a crucial bridge between dynamic programming (which requires models) and temporal difference learning (which learns from partial episodes). They demonstrate that we can learn optimal behavior purely from experience! 

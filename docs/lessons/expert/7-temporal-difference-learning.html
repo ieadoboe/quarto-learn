@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Episodic vs Continuing Tasks – Not That Deep</title>
+<title>Temporal Difference Learning – Not That Deep</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -158,7 +193,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/4-episodes.html">Episodic vs Continuing Tasks</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/7-temporal-difference-learning.html">Temporal Difference Learning</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -256,7 +291,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episodic vs Continuing Tasks</span></a>
   </div>
 </li>
@@ -274,7 +309,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/7-temporal-difference-learning.html" class="sidebar-item-text sidebar-link">
+  <a href="../../lessons/expert/7-temporal-difference-learning.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Temporal Difference Learning</span></a>
   </div>
 </li>
@@ -290,57 +325,48 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#episodes-in-reinforcement-learning" id="toc-episodes-in-reinforcement-learning" class="nav-link active" data-scroll-target="#episodes-in-reinforcement-learning">Episodes in Reinforcement Learning</a></li>
-  <li><a href="#episodic-tasks" id="toc-episodic-tasks" class="nav-link" data-scroll-target="#episodic-tasks">Episodic Tasks</a>
+  <li><a href="#introduction-to-temporal-difference-learning" id="toc-introduction-to-temporal-difference-learning" class="nav-link active" data-scroll-target="#introduction-to-temporal-difference-learning">Introduction to Temporal Difference Learning</a></li>
+  <li><a href="#the-td-learning-idea" id="toc-the-td-learning-idea" class="nav-link" data-scroll-target="#the-td-learning-idea">The TD Learning Idea</a></li>
+  <li><a href="#td0-algorithm" id="toc-td0-algorithm" class="nav-link" data-scroll-target="#td0-algorithm">TD(0) Algorithm</a></li>
+  <li><a href="#why-td-learning-works" id="toc-why-td-learning-works" class="nav-link" data-scroll-target="#why-td-learning-works">Why TD Learning Works</a>
   <ul class="collapse">
-  <li><a href="#examples-of-episodic-tasks" id="toc-examples-of-episodic-tasks" class="nav-link" data-scroll-target="#examples-of-episodic-tasks">Examples of Episodic Tasks</a></li>
-  <li><a href="#mathematical-formulation" id="toc-mathematical-formulation" class="nav-link" data-scroll-target="#mathematical-formulation">Mathematical Formulation</a></li>
+  <li><a href="#the-driving-example" id="toc-the-driving-example" class="nav-link" data-scroll-target="#the-driving-example">The Driving Example</a></li>
+  <li><a href="#mathematical-intuition" id="toc-mathematical-intuition" class="nav-link" data-scroll-target="#mathematical-intuition">Mathematical Intuition</a></li>
   </ul></li>
-  <li><a href="#continuing-tasks" id="toc-continuing-tasks" class="nav-link" data-scroll-target="#continuing-tasks">Continuing Tasks</a>
+  <li><a href="#td-vs.-monte-carlo-vs.-dynamic-programming" id="toc-td-vs.-monte-carlo-vs.-dynamic-programming" class="nav-link" data-scroll-target="#td-vs.-monte-carlo-vs.-dynamic-programming">TD vs.&nbsp;Monte Carlo vs.&nbsp;Dynamic Programming</a></li>
+  <li><a href="#sarsa-on-policy-td-control" id="toc-sarsa-on-policy-td-control" class="nav-link" data-scroll-target="#sarsa-on-policy-td-control">SARSA: On-Policy TD Control</a>
   <ul class="collapse">
-  <li><a href="#examples-of-continuing-tasks" id="toc-examples-of-continuing-tasks" class="nav-link" data-scroll-target="#examples-of-continuing-tasks">Examples of Continuing Tasks</a></li>
-  <li><a href="#mathematical-formulation-1" id="toc-mathematical-formulation-1" class="nav-link" data-scroll-target="#mathematical-formulation-1">Mathematical Formulation</a></li>
+  <li><a href="#sarsa-characteristics" id="toc-sarsa-characteristics" class="nav-link" data-scroll-target="#sarsa-characteristics">SARSA Characteristics</a></li>
   </ul></li>
-  <li><a href="#unified-treatment" id="toc-unified-treatment" class="nav-link" data-scroll-target="#unified-treatment">Unified Treatment</a></li>
-  <li><a href="#value-functions-for-episodes" id="toc-value-functions-for-episodes" class="nav-link" data-scroll-target="#value-functions-for-episodes">Value Functions for Episodes</a>
+  <li><a href="#q-learning-off-policy-td-control" id="toc-q-learning-off-policy-td-control" class="nav-link" data-scroll-target="#q-learning-off-policy-td-control">Q-Learning: Off-Policy TD Control</a>
   <ul class="collapse">
-  <li><a href="#state-value-function" id="toc-state-value-function" class="nav-link" data-scroll-target="#state-value-function">State Value Function</a></li>
-  <li><a href="#action-value-function" id="toc-action-value-function" class="nav-link" data-scroll-target="#action-value-function">Action-Value Function</a></li>
+  <li><a href="#q-learning-characteristics" id="toc-q-learning-characteristics" class="nav-link" data-scroll-target="#q-learning-characteristics">Q-Learning Characteristics</a></li>
   </ul></li>
-  <li><a href="#bellman-equations-revisited" id="toc-bellman-equations-revisited" class="nav-link" data-scroll-target="#bellman-equations-revisited">Bellman Equations Revisited</a>
+  <li><a href="#sarsa-vs.-q-learning-the-cliff-walking-problem" id="toc-sarsa-vs.-q-learning-the-cliff-walking-problem" class="nav-link" data-scroll-target="#sarsa-vs.-q-learning-the-cliff-walking-problem">SARSA vs.&nbsp;Q-Learning: The Cliff Walking Problem</a></li>
+  <li><a href="#expected-sarsa" id="toc-expected-sarsa" class="nav-link" data-scroll-target="#expected-sarsa">Expected SARSA</a></li>
+  <li><a href="#double-q-learning" id="toc-double-q-learning" class="nav-link" data-scroll-target="#double-q-learning">Double Q-Learning</a></li>
+  <li><a href="#n-step-td-methods" id="toc-n-step-td-methods" class="nav-link" data-scroll-target="#n-step-td-methods">n-Step TD Methods</a></li>
+  <li><a href="#eligibility-traces-tdλ" id="toc-eligibility-traces-tdλ" class="nav-link" data-scroll-target="#eligibility-traces-tdλ">Eligibility Traces: TD(λ)</a></li>
+  <li><a href="#convergence-properties" id="toc-convergence-properties" class="nav-link" data-scroll-target="#convergence-properties">Convergence Properties</a>
   <ul class="collapse">
-  <li><a href="#bellman-equation-for-state-values" id="toc-bellman-equation-for-state-values" class="nav-link" data-scroll-target="#bellman-equation-for-state-values">Bellman Equation for State Values</a></li>
-  <li><a href="#bellman-equation-for-action-values" id="toc-bellman-equation-for-action-values" class="nav-link" data-scroll-target="#bellman-equation-for-action-values">Bellman Equation for Action Values</a></li>
+  <li><a href="#under-tabular-representation" id="toc-under-tabular-representation" class="nav-link" data-scroll-target="#under-tabular-representation">Under Tabular Representation</a></li>
+  <li><a href="#step-size-requirements" id="toc-step-size-requirements" class="nav-link" data-scroll-target="#step-size-requirements">Step Size Requirements</a></li>
   </ul></li>
-  <li><a href="#optimal-value-functions" id="toc-optimal-value-functions" class="nav-link" data-scroll-target="#optimal-value-functions">Optimal Value Functions</a>
-  <ul class="collapse">
-  <li><a href="#optimal-state-value-function" id="toc-optimal-state-value-function" class="nav-link" data-scroll-target="#optimal-state-value-function">Optimal State-Value Function</a></li>
-  <li><a href="#optimal-action-value-function" id="toc-optimal-action-value-function" class="nav-link" data-scroll-target="#optimal-action-value-function">Optimal Action-Value Function</a></li>
-  <li><a href="#relationship-between-v-and-q" id="toc-relationship-between-v-and-q" class="nav-link" data-scroll-target="#relationship-between-v-and-q">Relationship Between <span class="math inline">V^*</span> and <span class="math inline">Q^*</span></a></li>
-  </ul></li>
-  <li><a href="#bellman-optimality-equations" id="toc-bellman-optimality-equations" class="nav-link" data-scroll-target="#bellman-optimality-equations">Bellman Optimality Equations</a>
-  <ul class="collapse">
-  <li><a href="#for-v" id="toc-for-v" class="nav-link" data-scroll-target="#for-v">For <span class="math inline">V^*</span>:</a></li>
-  <li><a href="#for-q" id="toc-for-q" class="nav-link" data-scroll-target="#for-q">For <span class="math inline">Q^*</span>:</a></li>
-  </ul></li>
-  <li><a href="#optimal-policies" id="toc-optimal-policies" class="nav-link" data-scroll-target="#optimal-policies">Optimal Policies</a></li>
-  <li><a href="#solving-the-bellman-optimality-equations" id="toc-solving-the-bellman-optimality-equations" class="nav-link" data-scroll-target="#solving-the-bellman-optimality-equations">Solving the Bellman Optimality Equations</a></li>
-  <li><a href="#episode-length-considerations" id="toc-episode-length-considerations" class="nav-link" data-scroll-target="#episode-length-considerations">Episode Length Considerations</a>
-  <ul class="collapse">
-  <li><a href="#fixed-length-episodes" id="toc-fixed-length-episodes" class="nav-link" data-scroll-target="#fixed-length-episodes">Fixed-Length Episodes</a></li>
-  <li><a href="#variable-length-episodes" id="toc-variable-length-episodes" class="nav-link" data-scroll-target="#variable-length-episodes">Variable-Length Episodes</a></li>
-  <li><a href="#infinite-episodes" id="toc-infinite-episodes" class="nav-link" data-scroll-target="#infinite-episodes">Infinite Episodes</a></li>
-  </ul></li>
-  <li><a href="#practical-considerations" id="toc-practical-considerations" class="nav-link" data-scroll-target="#practical-considerations">Practical Considerations</a></li>
+  <li><a href="#function-approximation" id="toc-function-approximation" class="nav-link" data-scroll-target="#function-approximation">Function Approximation</a></li>
+  <li><a href="#code-example-q-learning" id="toc-code-example-q-learning" class="nav-link" data-scroll-target="#code-example-q-learning">Code Example: Q-Learning</a></li>
+  <li><a href="#applications" id="toc-applications" class="nav-link" data-scroll-target="#applications">Applications</a></li>
+  <li><a href="#advantages-of-td-learning" id="toc-advantages-of-td-learning" class="nav-link" data-scroll-target="#advantages-of-td-learning">Advantages of TD Learning</a></li>
+  <li><a href="#disadvantages-of-td-learning" id="toc-disadvantages-of-td-learning" class="nav-link" data-scroll-target="#disadvantages-of-td-learning">Disadvantages of TD Learning</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/4-episodes.html">Episodic vs Continuing Tasks</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/7-temporal-difference-learning.html">Temporal Difference Learning</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Episodic vs Continuing Tasks</h1>
+<h1 class="title">Temporal Difference Learning</h1>
 </div>
 
 
@@ -357,201 +383,312 @@ window.Quarto = {
 </header>
 
 
-<section id="episodes-in-reinforcement-learning" class="level2">
-<h2 class="anchored" data-anchor-id="episodes-in-reinforcement-learning">Episodes in Reinforcement Learning</h2>
-<p>In reinforcement learning, we distinguish between two fundamental types of tasks based on whether they have natural ending points.</p>
-</section>
-<section id="episodic-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="episodic-tasks">Episodic Tasks</h2>
-<p><strong>Definition:</strong> Tasks that have well-defined starting and ending points, breaking the agent-environment interaction into distinct sequences called <strong>episodes</strong>.</p>
-<p><strong>Key characteristics:</strong> - Each episode starts in some initial state - Episode ends when agent reaches a <strong>terminal state</strong> - Agent gets reset after each episode - Episodes are independent of each other</p>
-<section id="examples-of-episodic-tasks" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-episodic-tasks">Examples of Episodic Tasks</h3>
-<ol type="1">
-<li><strong>Game Playing</strong>
+<section id="introduction-to-temporal-difference-learning" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-temporal-difference-learning">Introduction to Temporal Difference Learning</h2>
+<p>Temporal Difference (TD) learning is one of the most important ideas in reinforcement learning. It combines the best aspects of Monte Carlo methods and Dynamic Programming:</p>
 <ul>
-<li>Chess: Episode ends when game is won, lost, or drawn</li>
-<li>Pac-Man: Episode ends when all pellets eaten or player dies</li>
-<li>Each game is a separate episode</li>
-</ul></li>
-<li><strong>Maze Navigation</strong>
-<ul>
-<li>Episode starts at entrance</li>
-<li>Episode ends when agent reaches exit or hits maximum steps</li>
-<li>Agent is reset to start for next episode</li>
-</ul></li>
-<li><strong>Trading Simulation</strong>
-<ul>
-<li>Episode might represent one trading day</li>
-<li>Ends at market close, resets next day</li>
-</ul></li>
-<li><strong>Robot Task Learning</strong>
-<ul>
-<li>Episode = one attempt at picking up an object</li>
-<li>Ends when object is grasped or dropped</li>
-</ul></li>
-</ol>
-</section>
-<section id="mathematical-formulation" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation">Mathematical Formulation</h3>
-<p>For episodic tasks, we modify our return calculation:</p>
-<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-t-1} R_T</span></p>
-<p>Where <span class="math inline">T</span> is the time step when the terminal state is reached.</p>
-<p><strong>Key insight:</strong> Since episodes end, we don’t need to worry about infinite sums!</p>
-</section>
-</section>
-<section id="continuing-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="continuing-tasks">Continuing Tasks</h2>
-<p><strong>Definition:</strong> Tasks that go on forever without natural breakpoints.</p>
-<p><strong>Key characteristics:</strong> - No terminal states - Agent-environment interaction continues indefinitely - Need discounting (<span class="math inline">\gamma &lt; 1</span>) to ensure finite returns</p>
-<section id="examples-of-continuing-tasks" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-continuing-tasks">Examples of Continuing Tasks</h3>
-<ol type="1">
-<li><strong>Process Control</strong>
-<ul>
-<li>Temperature control in a building</li>
-<li>Server load balancing</li>
-<li>Never “ends” - just keeps running</li>
-</ul></li>
-<li><strong>Portfolio Management</strong>
-<ul>
-<li>Continuous investment decisions</li>
-<li>Markets never truly “close” globally</li>
-</ul></li>
-<li><strong>Autonomous Driving</strong>
-<ul>
-<li>Car keeps driving until turned off</li>
-<li>No natural episode boundaries</li>
-</ul></li>
-</ol>
-</section>
-<section id="mathematical-formulation-1" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation-1">Mathematical Formulation</h3>
-<p>For continuing tasks:</p>
-<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}</span></p>
-<p><strong>Discounting is crucial:</strong> Without <span class="math inline">\gamma &lt; 1</span>, returns could be infinite!</p>
-</section>
-</section>
-<section id="unified-treatment" class="level2">
-<h2 class="anchored" data-anchor-id="unified-treatment">Unified Treatment</h2>
-<p>We can handle both episodic and continuing tasks with a unified notation by introducing the concept of <strong>absorption</strong>.</p>
-<p>For episodic tasks, we can think of terminal states as transitioning to a special absorbing state with zero reward: - <span class="math inline">P(\text{absorbing}|\text{terminal}, a) = 1</span> for all actions <span class="math inline">a</span> - <span class="math inline">R(\text{absorbing}, a) = 0</span> for all actions <span class="math inline">a</span></p>
-<p>This allows us to use the infinite sum formulation for both types of tasks.</p>
-</section>
-<section id="value-functions-for-episodes" class="level2">
-<h2 class="anchored" data-anchor-id="value-functions-for-episodes">Value Functions for Episodes</h2>
-<section id="state-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="state-value-function">State Value Function</h3>
-<p><span class="math display">V^\pi(s) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s\right]</span></p>
-<p>This works for both episodic and continuing tasks!</p>
-</section>
-<section id="action-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="action-value-function">Action-Value Function</h3>
-<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s, A_t = a\right]</span></p>
-</section>
-</section>
-<section id="bellman-equations-revisited" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-equations-revisited">Bellman Equations Revisited</h2>
-<p>Now let’s properly derive the Bellman equations, which are fundamental to understanding RL algorithms.</p>
-<section id="bellman-equation-for-state-values" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equation-for-state-values">Bellman Equation for State Values</h3>
-<p>Starting from the definition: <span class="math display">V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s]</span></p>
-<p><span class="math display">= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t = s]</span></p>
-<p><span class="math display">= \mathbb{E}_\pi[R_{t+1} | S_t = s] + \gamma \mathbb{E}_\pi[G_{t+1} | S_t = s]</span></p>
-<p>Using the law of total expectation: <span class="math display">= \sum_a \pi(a|s) \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]</span></p>
-<p><strong>This is the Bellman equation for <span class="math inline">V^\pi</span>!</strong></p>
-</section>
-<section id="bellman-equation-for-action-values" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equation-for-action-values">Bellman Equation for Action Values</h3>
-<p>Similarly, for <span class="math inline">Q^\pi(s,a)</span>:</p>
-<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi[G_t | S_t = s, A_t = a]</span></p>
-<p><span class="math display">= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \mathbb{E}_\pi[G_{t+1} | S_{t+1} = s']]</span></p>
-<p><span class="math display">= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]</span></p>
-<p><strong>Alternative form:</strong> <span class="math display">Q^\pi(s,a) = \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \sum_{a'} \pi(a'|s') Q^\pi(s',a')]</span></p>
-</section>
-</section>
-<section id="optimal-value-functions" class="level2">
-<h2 class="anchored" data-anchor-id="optimal-value-functions">Optimal Value Functions</h2>
-<section id="optimal-state-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-state-value-function">Optimal State-Value Function</h3>
-<p><span class="math display">V^*(s) = \max_\pi V^\pi(s)</span></p>
-<p>This represents the best possible expected return starting from state <span class="math inline">s</span>.</p>
-</section>
-<section id="optimal-action-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-action-value-function">Optimal Action-Value Function</h3>
-<p><span class="math display">Q^*(s,a) = \max_\pi Q^\pi(s,a)</span></p>
-<p>This represents the best possible expected return from taking action <span class="math inline">a</span> in state <span class="math inline">s</span>.</p>
-</section>
-<section id="relationship-between-v-and-q" class="level3">
-<h3 class="anchored" data-anchor-id="relationship-between-v-and-q">Relationship Between <span class="math inline">V^*</span> and <span class="math inline">Q^*</span></h3>
-<p><span class="math display">V^*(s) = \max_a Q^*(s,a)</span></p>
-<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
-</section>
-</section>
-<section id="bellman-optimality-equations" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-optimality-equations">Bellman Optimality Equations</h2>
-<p>These are the key equations that optimal value functions must satisfy:</p>
-<section id="for-v" class="level3">
-<h3 class="anchored" data-anchor-id="for-v">For <span class="math inline">V^*</span>:</h3>
-<p><span class="math display">V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
-</section>
-<section id="for-q" class="level3">
-<h3 class="anchored" data-anchor-id="for-q">For <span class="math inline">Q^*</span>:</h3>
-<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma \max_{a'} Q^*(s',a')]</span></p>
-<p><strong>Intuition:</strong> The value of a state under an optimal policy equals the value of the best action in that state. The value of the best action is the expected immediate reward plus the discounted value of the best possible future.</p>
-</section>
-</section>
-<section id="optimal-policies" class="level2">
-<h2 class="anchored" data-anchor-id="optimal-policies">Optimal Policies</h2>
-<p>An optimal policy <span class="math inline">\pi^*</span> satisfies: <span class="math display">\pi^*(s) = \arg\max_a Q^*(s,a)</span></p>
-<p><strong>Key properties:</strong> 1. <strong>Existence:</strong> Every finite MDP has at least one optimal policy 2. <strong>Deterministic:</strong> There exists an optimal deterministic policy 3. <strong>Uniqueness:</strong> <span class="math inline">V^*</span> and <span class="math inline">Q^*</span> are unique (but multiple optimal policies may exist)</p>
-</section>
-<section id="solving-the-bellman-optimality-equations" class="level2">
-<h2 class="anchored" data-anchor-id="solving-the-bellman-optimality-equations">Solving the Bellman Optimality Equations</h2>
-<p>The Bellman optimality equations are a system of nonlinear equations (due to the <span class="math inline">\max</span> operation). For finite MDPs with known dynamics, we can solve them using:</p>
-<ol type="1">
-<li><strong>Value Iteration:</strong> Iteratively apply Bellman optimality operator</li>
-<li><strong>Policy Iteration:</strong> Alternate between policy evaluation and improvement</li>
-<li><strong>Linear Programming:</strong> Formulate as an optimization problem</li>
-</ol>
-<p>These methods are covered in detail in the Dynamic Programming lesson.</p>
-</section>
-<section id="episode-length-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="episode-length-considerations">Episode Length Considerations</h2>
-<section id="fixed-length-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="fixed-length-episodes">Fixed-Length Episodes</h3>
-<ul>
-<li>All episodes have the same length <span class="math inline">T</span></li>
-<li>Simpler to analyze and implement</li>
-<li>Example: Chess with move limit</li>
+<li><strong>Like Monte Carlo:</strong> Model-free, learns from experience</li>
+<li><strong>Like Dynamic Programming:</strong> Bootstraps from current estimates, doesn’t wait for episodes to end</li>
 </ul>
+<p><strong>Key insight:</strong> You can learn from incomplete episodes by using current estimates of future value.</p>
 </section>
-<section id="variable-length-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="variable-length-episodes">Variable-Length Episodes</h3>
-<ul>
-<li>Episodes can end at different times</li>
-<li>More realistic for many applications</li>
-<li>Need to handle varying episode lengths in algorithms</li>
-</ul>
+<section id="the-td-learning-idea" class="level2">
+<h2 class="anchored" data-anchor-id="the-td-learning-idea">The TD Learning Idea</h2>
+<p><strong>Traditional approach (MC):</strong> Wait until episode ends, then update: <span class="math display">V(S_t) \leftarrow V(S_t) + \alpha[G_t - V(S_t)]</span></p>
+<p><strong>TD approach:</strong> Update immediately after each step: <span class="math display">V(S_t) \leftarrow V(S_t) + \alpha[R_{t+1} + \gamma V(S_{t+1}) - V(S_t)]</span></p>
+<p><strong>TD Error:</strong> <span class="math inline">\delta_t = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)</span></p>
+<p>This is the difference between the estimated value and the “better” estimate using the immediate reward plus the discounted next-state value.</p>
 </section>
-<section id="infinite-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="infinite-episodes">Infinite Episodes</h3>
-<ul>
-<li>Continuing tasks</li>
-<li>Must use discounting or average reward</li>
-<li>More complex but more general</li>
-</ul>
+<section id="td0-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="td0-algorithm">TD(0) Algorithm</h2>
+<p>The simplest TD algorithm updates the value function after every step:</p>
+<pre><code>Initialize V(s) arbitrarily for all s ∈ S
+For each episode:
+    Initialize S
+    For each step of episode:
+        A = action given by policy for S
+        Take action A, observe R, S'
+        V(S) = V(S) + α[R + γV(S') - V(S)]
+        S = S'
+    Until S is terminal</code></pre>
+<p><strong>Key differences from MC:</strong> 1. <strong>Online learning:</strong> Updates happen during the episode 2. <strong>Bootstrapping:</strong> Uses current estimate V(S’) rather than actual return 3. <strong>Lower variance:</strong> Single-step updates reduce variance 4. <strong>Biased initially:</strong> Estimates are biased until V converges</p>
+</section>
+<section id="why-td-learning-works" class="level2">
+<h2 class="anchored" data-anchor-id="why-td-learning-works">Why TD Learning Works</h2>
+<section id="the-driving-example" class="level3">
+<h3 class="anchored" data-anchor-id="the-driving-example">The Driving Example</h3>
+<p><strong>Scenario:</strong> You’re driving to work and estimating arrival time.</p>
+<p><strong>States:</strong> Home → Highway → Office <strong>Value function:</strong> Estimated time to reach office</p>
+<p><strong>Monte Carlo approach:</strong> - Only update your estimate after you arrive at work - If you get stuck in traffic, you learn nothing until the end</p>
+<p><strong>TD approach:</strong> - Update your estimate when you reach the highway - If highway is clear, immediately revise your time estimate - Learn from partial experience</p>
+</section>
+<section id="mathematical-intuition" class="level3">
+<h3 class="anchored" data-anchor-id="mathematical-intuition">Mathematical Intuition</h3>
+<p><strong>MC target:</strong> <span class="math inline">G_t</span> (actual return) <strong>TD target:</strong> <span class="math inline">R_{t+1} + \gamma V(S_{t+1})</span> (bootstrap estimate)</p>
+<p>As <span class="math inline">V</span> converges to <span class="math inline">V^\pi</span>, the TD target approaches the MC target: <span class="math display">R_{t+1} + \gamma V^\pi(S_{t+1}) = \mathbb{E}[G_t | S_t, A_t]</span></p>
 </section>
 </section>
-<section id="practical-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="practical-considerations">Practical Considerations</h2>
+<section id="td-vs.-monte-carlo-vs.-dynamic-programming" class="level2">
+<h2 class="anchored" data-anchor-id="td-vs.-monte-carlo-vs.-dynamic-programming">TD vs.&nbsp;Monte Carlo vs.&nbsp;Dynamic Programming</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Aspect</th>
+<th>TD</th>
+<th>Monte Carlo</th>
+<th>Dynamic Programming</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Model required</strong></td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td><strong>Bootstrapping</strong></td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td><strong>Online/Offline</strong></td>
+<td>Online</td>
+<td>Offline</td>
+<td>Offline</td>
+</tr>
+<tr class="even">
+<td><strong>Episode completion</strong></td>
+<td>Not required</td>
+<td>Required</td>
+<td>Not applicable</td>
+</tr>
+<tr class="odd">
+<td><strong>Variance</strong></td>
+<td>Low</td>
+<td>High</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>Bias</strong></td>
+<td>Initially biased</td>
+<td>Unbiased</td>
+<td>Unbiased</td>
+</tr>
+<tr class="odd">
+<td><strong>Convergence</strong></td>
+<td>Fast</td>
+<td>Slow</td>
+<td>Fast</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sarsa-on-policy-td-control" class="level2">
+<h2 class="anchored" data-anchor-id="sarsa-on-policy-td-control">SARSA: On-Policy TD Control</h2>
+<p><strong>SARSA</strong> = State-Action-Reward-State-Action</p>
+<p><strong>Key idea:</strong> Update action-value function Q(s,a) using TD learning.</p>
+<p><strong>Update rule:</strong> <span class="math display">Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]</span></p>
+<p><strong>Algorithm:</strong></p>
+<pre><code>Initialize Q(s,a) arbitrarily for all s ∈ S, a ∈ A
+For each episode:
+    Initialize S
+    Choose A from S using policy derived from Q (e.g., ε-greedy)
+    For each step of episode:
+        Take action A, observe R, S'
+        Choose A' from S' using policy derived from Q
+        Q(S,A) = Q(S,A) + α[R + γQ(S',A') - Q(S,A)]
+        S = S'; A = A'
+    Until S is terminal</code></pre>
+<p><strong>On-policy:</strong> The policy being evaluated and improved is the same as the policy being used to generate behavior.</p>
+<section id="sarsa-characteristics" class="level3">
+<h3 class="anchored" data-anchor-id="sarsa-characteristics">SARSA Characteristics</h3>
 <ol type="1">
-<li><strong>Episode Design:</strong> How you define episodes affects learning</li>
-<li><strong>Terminal State Rewards:</strong> Should terminal states give rewards?</li>
-<li><strong>Episode Length:</strong> Too short = not enough learning, too long = slow convergence</li>
-<li><strong>Reset Conditions:</strong> When should episodes end?</li>
+<li><strong>Conservative:</strong> Learns the value of the policy it’s actually following</li>
+<li><strong>Safe:</strong> Takes exploration into account when learning</li>
+<li><strong>Converges:</strong> Guaranteed to converge to optimal policy under certain conditions</li>
 </ol>
-<p>Understanding the distinction between episodic and continuing tasks is crucial for choosing appropriate RL algorithms and designing effective reward structures!</p>
+</section>
+</section>
+<section id="q-learning-off-policy-td-control" class="level2">
+<h2 class="anchored" data-anchor-id="q-learning-off-policy-td-control">Q-Learning: Off-Policy TD Control</h2>
+<p><strong>Q-learning</strong> learns the optimal action-value function regardless of the policy being followed.</p>
+<p><strong>Update rule:</strong> <span class="math display">Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma \max_{a'} Q(S_{t+1}, a') - Q(S_t, A_t)]</span></p>
+<p><strong>Algorithm:</strong></p>
+<pre><code>Initialize Q(s,a) arbitrarily for all s ∈ S, a ∈ A
+For each episode:
+    Initialize S
+    For each step of episode:
+        Choose A from S using policy derived from Q (e.g., ε-greedy)
+        Take action A, observe R, S'
+        Q(S,A) = Q(S,A) + α[R + γ max_a Q(S',a) - Q(S,A)]
+        S = S'
+    Until S is terminal</code></pre>
+<p><strong>Off-policy:</strong> The policy being learned (greedy w.r.t. Q) is different from the policy generating behavior (ε-greedy).</p>
+<section id="q-learning-characteristics" class="level3">
+<h3 class="anchored" data-anchor-id="q-learning-characteristics">Q-Learning Characteristics</h3>
+<ol type="1">
+<li><strong>Aggressive:</strong> Learns optimal policy even while exploring</li>
+<li><strong>Robust:</strong> Can learn from suboptimal behavior</li>
+<li><strong>Converges:</strong> Guaranteed to converge to Q* under certain conditions</li>
+</ol>
+</section>
+</section>
+<section id="sarsa-vs.-q-learning-the-cliff-walking-problem" class="level2">
+<h2 class="anchored" data-anchor-id="sarsa-vs.-q-learning-the-cliff-walking-problem">SARSA vs.&nbsp;Q-Learning: The Cliff Walking Problem</h2>
+<p><strong>Setup:</strong> Agent must navigate from start to goal, avoiding a cliff.</p>
+<p><strong>Reward structure:</strong> - Normal steps: -1 - Cliff: -100 (return to start) - Goal: 0</p>
+<p><strong>SARSA behavior:</strong> - Learns a “safe” path away from cliff - Takes exploration into account - Finds suboptimal but safe policy</p>
+<p><strong>Q-learning behavior:</strong> - Learns optimal path close to cliff - Ignores exploration in learning - Finds optimal policy</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://via.placeholder.com/500x300/e74c3c/ffffff?text=SARSA+vs+Q-Learning+Cliff+Walking.png" class="img-fluid figure-img"></p>
+<figcaption>Cliff Walking Comparison</figcaption>
+</figure>
+</div>
+</section>
+<section id="expected-sarsa" class="level2">
+<h2 class="anchored" data-anchor-id="expected-sarsa">Expected SARSA</h2>
+<p><strong>Idea:</strong> Instead of sampling the next action, use the expected value over all possible actions.</p>
+<p><strong>Update rule:</strong> <span class="math display">Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma \mathbb{E}_\pi[Q(S_{t+1}, A_{t+1})] - Q(S_t, A_t)]</span></p>
+<p><strong>For ε-greedy policy:</strong> <span class="math display">\mathbb{E}_\pi[Q(S_{t+1}, A_{t+1})] = \frac{\epsilon}{|\mathcal{A}|} \sum_a Q(S_{t+1}, a) + (1-\epsilon) \max_a Q(S_{t+1}, a)</span></p>
+<p><strong>Advantages:</strong> - Reduces variance compared to SARSA - More stable learning - Can be used in both on-policy and off-policy settings</p>
+</section>
+<section id="double-q-learning" class="level2">
+<h2 class="anchored" data-anchor-id="double-q-learning">Double Q-Learning</h2>
+<p><strong>Problem:</strong> Q-learning can overestimate action values due to the max operation.</p>
+<p><strong>Solution:</strong> Use two Q-functions and update them alternately.</p>
+<p><strong>Algorithm:</strong></p>
+<pre><code>Initialize Q₁(s,a) and Q₂(s,a) arbitrarily for all s ∈ S, a ∈ A
+For each episode:
+    Initialize S
+    For each step of episode:
+        Choose A using policy derived from Q₁ + Q₂
+        Take action A, observe R, S'
+        With probability 0.5:
+            Q₁(S,A) = Q₁(S,A) + α[R + γQ₂(S', argmax_a Q₁(S',a)) - Q₁(S,A)]
+        Else:
+            Q₂(S,A) = Q₂(S,A) + α[R + γQ₁(S', argmax_a Q₂(S',a)) - Q₂(S,A)]
+        S = S'
+    Until S is terminal</code></pre>
+</section>
+<section id="n-step-td-methods" class="level2">
+<h2 class="anchored" data-anchor-id="n-step-td-methods">n-Step TD Methods</h2>
+<p><strong>Idea:</strong> Look ahead n steps instead of just one.</p>
+<p><strong>n-step return:</strong> <span class="math display">G_t^{(n)} = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{n-1} R_{t+n} + \gamma^n V(S_{t+n})</span></p>
+<p><strong>n-step TD update:</strong> <span class="math display">V(S_t) \leftarrow V(S_t) + \alpha[G_t^{(n)} - V(S_t)]</span></p>
+<p><strong>Special cases:</strong> - n=1: TD(0) - n=∞: Monte Carlo</p>
+<p><strong>Trade-off:</strong> Higher n reduces bias but increases variance.</p>
+</section>
+<section id="eligibility-traces-tdλ" class="level2">
+<h2 class="anchored" data-anchor-id="eligibility-traces-tdλ">Eligibility Traces: TD(λ)</h2>
+<p><strong>Problem:</strong> n-step methods require storing n steps of experience.</p>
+<p><strong>Solution:</strong> Use eligibility traces to give credit to recently visited states.</p>
+<p><strong>Eligibility trace:</strong> <span class="math inline">e_t(s) = \gamma \lambda e_{t-1}(s) + \mathbf{1}(S_t = s)</span></p>
+<p><strong>TD(λ) update:</strong> <span class="math display">V(s) \leftarrow V(s) + \alpha \delta_t e_t(s)</span></p>
+<p>for all states s, where <span class="math inline">\delta_t</span> is the TD error.</p>
+<p><strong>Interpretation:</strong> States are updated proportionally to how recently and frequently they were visited.</p>
+</section>
+<section id="convergence-properties" class="level2">
+<h2 class="anchored" data-anchor-id="convergence-properties">Convergence Properties</h2>
+<section id="under-tabular-representation" class="level3">
+<h3 class="anchored" data-anchor-id="under-tabular-representation">Under Tabular Representation</h3>
+<p><strong>TD(0) and SARSA:</strong> - Converge to true value function under decreasing step sizes - Require that all states continue to be visited</p>
+<p><strong>Q-learning:</strong> - Converges to optimal Q-function Q* - Requires that all state-action pairs continue to be visited</p>
+</section>
+<section id="step-size-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="step-size-requirements">Step Size Requirements</h3>
+<p>For convergence, step sizes must satisfy: <span class="math display">\sum_{t=1}^{\infty} \alpha_t = \infty \quad \text{and} \quad \sum_{t=1}^{\infty} \alpha_t^2 &lt; \infty</span></p>
+<p><strong>Example:</strong> <span class="math inline">\alpha_t = \frac{1}{t}</span> satisfies these conditions.</p>
+</section>
+</section>
+<section id="function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="function-approximation">Function Approximation</h2>
+<p><strong>Problem:</strong> Tabular methods don’t scale to large state spaces.</p>
+<p><strong>Solution:</strong> Approximate value functions using function approximation.</p>
+<p><strong>Linear function approximation:</strong> <span class="math display">V(s) \approx \mathbf{w}^T \mathbf{x}(s)</span></p>
+<p><strong>TD update with function approximation:</strong> <span class="math display">\mathbf{w}_{t+1} = \mathbf{w}_t + \alpha \delta_t \nabla_{\mathbf{w}} V(S_t)</span></p>
+<p><strong>Challenges:</strong> - Convergence no longer guaranteed - Stability issues with nonlinear function approximation - Leads to deep reinforcement learning</p>
+</section>
+<section id="code-example-q-learning" class="level2">
+<h2 class="anchored" data-anchor-id="code-example-q-learning">Code Example: Q-Learning</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> QLearning:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, num_states, num_actions, alpha<span class="op">=</span><span class="fl">0.1</span>, gamma<span class="op">=</span><span class="fl">0.95</span>, epsilon<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Q <span class="op">=</span> np.zeros((num_states, num_actions))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.alpha <span class="op">=</span> alpha</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gamma <span class="op">=</span> gamma</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.epsilon <span class="op">=</span> epsilon</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_actions <span class="op">=</span> num_actions</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> choose_action(<span class="va">self</span>, state):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> random.random() <span class="op">&lt;</span> <span class="va">self</span>.epsilon:</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> random.randint(<span class="dv">0</span>, <span class="va">self</span>.num_actions <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> np.argmax(<span class="va">self</span>.Q[state])</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> update(<span class="va">self</span>, state, action, reward, next_state, done):</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> done:</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            target <span class="op">=</span> reward</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            target <span class="op">=</span> reward <span class="op">+</span> <span class="va">self</span>.gamma <span class="op">*</span> np.<span class="bu">max</span>(<span class="va">self</span>.Q[next_state])</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        td_error <span class="op">=</span> target <span class="op">-</span> <span class="va">self</span>.Q[state, action]</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Q[state, action] <span class="op">+=</span> <span class="va">self</span>.alpha <span class="op">*</span> td_error</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> train(<span class="va">self</span>, env, num_episodes<span class="op">=</span><span class="dv">1000</span>):</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> episode <span class="kw">in</span> <span class="bu">range</span>(num_episodes):</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>            state <span class="op">=</span> env.reset()</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>            done <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> <span class="kw">not</span> done:</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>                action <span class="op">=</span> <span class="va">self</span>.choose_action(state)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>                next_state, reward, done, _ <span class="op">=</span> env.step(action)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.update(state, action, reward, next_state, done)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>                state <span class="op">=</span> next_state</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="applications" class="level2">
+<h2 class="anchored" data-anchor-id="applications">Applications</h2>
+<ol type="1">
+<li><strong>Game playing:</strong> Learning to play Atari games, board games</li>
+<li><strong>Robotics:</strong> Learning motor control, navigation</li>
+<li><strong>Autonomous driving:</strong> Traffic light control, path planning</li>
+<li><strong>Finance:</strong> Algorithmic trading, portfolio management</li>
+<li><strong>Healthcare:</strong> Treatment recommendation, drug discovery</li>
+</ol>
+</section>
+<section id="advantages-of-td-learning" class="level2">
+<h2 class="anchored" data-anchor-id="advantages-of-td-learning">Advantages of TD Learning</h2>
+<ol type="1">
+<li><strong>Online learning:</strong> Can learn during episodes</li>
+<li><strong>Model-free:</strong> No need for environment model</li>
+<li><strong>Efficient:</strong> Lower variance than Monte Carlo</li>
+<li><strong>Flexible:</strong> Works with continuing tasks</li>
+<li><strong>Bootstrapping:</strong> Can learn from partial experience</li>
+</ol>
+</section>
+<section id="disadvantages-of-td-learning" class="level2">
+<h2 class="anchored" data-anchor-id="disadvantages-of-td-learning">Disadvantages of TD Learning</h2>
+<ol type="1">
+<li><strong>Initially biased:</strong> Estimates are biased until convergence</li>
+<li><strong>Hyperparameter sensitive:</strong> Requires tuning of step size</li>
+<li><strong>Exploration required:</strong> Need adequate exploration for convergence</li>
+<li><strong>Function approximation challenges:</strong> Convergence issues with approximation</li>
+</ol>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
+<ol type="1">
+<li><strong>TD learning is fundamental:</strong> Combines best of MC and DP</li>
+<li><strong>Bootstrapping is powerful:</strong> Can learn from incomplete episodes</li>
+<li><strong>On-policy vs.&nbsp;off-policy:</strong> SARSA vs.&nbsp;Q-learning serve different purposes</li>
+<li><strong>Exploration matters:</strong> Both algorithms need adequate exploration</li>
+<li><strong>Foundation for modern RL:</strong> TD methods underpin most current algorithms</li>
+</ol>
+<p>Temporal difference learning represents a breakthrough in reinforcement learning, enabling agents to learn continuously from experience without requiring models or complete episodes. It forms the foundation for many modern RL algorithms!</p>
 
 
 </section>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Episodic vs Continuing Tasks – Not That Deep</title>
+<title>Reinforcement Learning Expanded Introduction – Not That Deep</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -158,7 +158,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/4-episodes.html">Episodic vs Continuing Tasks</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-part-2.html">Reinforcement Learning Expanded Introduction</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -238,7 +238,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/1-rl-part-2.html" class="sidebar-item-text sidebar-link">
+  <a href="../../lessons/expert/1-rl-part-2.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Reinforcement Learning Expanded Introduction</span></a>
   </div>
 </li>
@@ -256,26 +256,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Episodic vs Continuing Tasks</span></a>
+  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episodes in Reinforcement Learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../lessons/expert/5-dynamic-programming.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Dynamic Programming in Reinforcement Learning</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/6-monte-carlo-methods.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Monte Carlo Methods in Reinforcement Learning</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/7-temporal-difference-learning.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Temporal Difference Learning</span></a>
   </div>
 </li>
       </ul>
@@ -290,57 +278,44 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#episodes-in-reinforcement-learning" id="toc-episodes-in-reinforcement-learning" class="nav-link active" data-scroll-target="#episodes-in-reinforcement-learning">Episodes in Reinforcement Learning</a></li>
-  <li><a href="#episodic-tasks" id="toc-episodic-tasks" class="nav-link" data-scroll-target="#episodic-tasks">Episodic Tasks</a>
+  <li><a href="#what-is-reinforcement-learning" id="toc-what-is-reinforcement-learning" class="nav-link active" data-scroll-target="#what-is-reinforcement-learning">What is Reinforcement Learning?</a></li>
+  <li><a href="#the-rl-framework-agent-environment-interaction" id="toc-the-rl-framework-agent-environment-interaction" class="nav-link" data-scroll-target="#the-rl-framework-agent-environment-interaction">The RL Framework: Agent-Environment Interaction</a>
   <ul class="collapse">
-  <li><a href="#examples-of-episodic-tasks" id="toc-examples-of-episodic-tasks" class="nav-link" data-scroll-target="#examples-of-episodic-tasks">Examples of Episodic Tasks</a></li>
-  <li><a href="#mathematical-formulation" id="toc-mathematical-formulation" class="nav-link" data-scroll-target="#mathematical-formulation">Mathematical Formulation</a></li>
+  <li><a href="#core-components" id="toc-core-components" class="nav-link" data-scroll-target="#core-components">Core Components</a></li>
+  <li><a href="#the-markov-property-why-states-matter" id="toc-the-markov-property-why-states-matter" class="nav-link" data-scroll-target="#the-markov-property-why-states-matter">The Markov Property: Why States Matter</a></li>
   </ul></li>
-  <li><a href="#continuing-tasks" id="toc-continuing-tasks" class="nav-link" data-scroll-target="#continuing-tasks">Continuing Tasks</a>
+  <li><a href="#policies-and-value-functions" id="toc-policies-and-value-functions" class="nav-link" data-scroll-target="#policies-and-value-functions">Policies and Value Functions</a>
   <ul class="collapse">
-  <li><a href="#examples-of-continuing-tasks" id="toc-examples-of-continuing-tasks" class="nav-link" data-scroll-target="#examples-of-continuing-tasks">Examples of Continuing Tasks</a></li>
-  <li><a href="#mathematical-formulation-1" id="toc-mathematical-formulation-1" class="nav-link" data-scroll-target="#mathematical-formulation-1">Mathematical Formulation</a></li>
+  <li><a href="#policy-pi" id="toc-policy-pi" class="nav-link" data-scroll-target="#policy-pi">Policy (<span class="math inline">\pi</span>)</a></li>
+  <li><a href="#value-functions-measuring-long-term-success" id="toc-value-functions-measuring-long-term-success" class="nav-link" data-scroll-target="#value-functions-measuring-long-term-success">Value Functions: Measuring Long-term Success</a></li>
+  <li><a href="#action-value-function-q-function" id="toc-action-value-function-q-function" class="nav-link" data-scroll-target="#action-value-function-q-function">Action-Value Function (Q-function)</a></li>
   </ul></li>
-  <li><a href="#unified-treatment" id="toc-unified-treatment" class="nav-link" data-scroll-target="#unified-treatment">Unified Treatment</a></li>
-  <li><a href="#value-functions-for-episodes" id="toc-value-functions-for-episodes" class="nav-link" data-scroll-target="#value-functions-for-episodes">Value Functions for Episodes</a>
+  <li><a href="#the-optimal-policy" id="toc-the-optimal-policy" class="nav-link" data-scroll-target="#the-optimal-policy">The Optimal Policy</a></li>
+  <li><a href="#exploration-vs.-exploitation-the-central-dilemma" id="toc-exploration-vs.-exploitation-the-central-dilemma" class="nav-link" data-scroll-target="#exploration-vs.-exploitation-the-central-dilemma">Exploration vs.&nbsp;Exploitation: The Central Dilemma</a>
   <ul class="collapse">
-  <li><a href="#state-value-function" id="toc-state-value-function" class="nav-link" data-scroll-target="#state-value-function">State Value Function</a></li>
-  <li><a href="#action-value-function" id="toc-action-value-function" class="nav-link" data-scroll-target="#action-value-function">Action-Value Function</a></li>
+  <li><a href="#epsilon-greedy-strategy" id="toc-epsilon-greedy-strategy" class="nav-link" data-scroll-target="#epsilon-greedy-strategy">Epsilon-Greedy Strategy</a></li>
   </ul></li>
-  <li><a href="#bellman-equations-revisited" id="toc-bellman-equations-revisited" class="nav-link" data-scroll-target="#bellman-equations-revisited">Bellman Equations Revisited</a>
+  <li><a href="#multi-armed-bandits-rl-without-states" id="toc-multi-armed-bandits-rl-without-states" class="nav-link" data-scroll-target="#multi-armed-bandits-rl-without-states">Multi-Armed Bandits: RL Without States</a>
   <ul class="collapse">
-  <li><a href="#bellman-equation-for-state-values" id="toc-bellman-equation-for-state-values" class="nav-link" data-scroll-target="#bellman-equation-for-state-values">Bellman Equation for State Values</a></li>
-  <li><a href="#bellman-equation-for-action-values" id="toc-bellman-equation-for-action-values" class="nav-link" data-scroll-target="#bellman-equation-for-action-values">Bellman Equation for Action Values</a></li>
+  <li><a href="#upper-confidence-bound-ucb" id="toc-upper-confidence-bound-ucb" class="nav-link" data-scroll-target="#upper-confidence-bound-ucb">Upper Confidence Bound (UCB)</a></li>
   </ul></li>
-  <li><a href="#optimal-value-functions" id="toc-optimal-value-functions" class="nav-link" data-scroll-target="#optimal-value-functions">Optimal Value Functions</a>
+  <li><a href="#learning-approaches" id="toc-learning-approaches" class="nav-link" data-scroll-target="#learning-approaches">Learning Approaches</a>
   <ul class="collapse">
-  <li><a href="#optimal-state-value-function" id="toc-optimal-state-value-function" class="nav-link" data-scroll-target="#optimal-state-value-function">Optimal State-Value Function</a></li>
-  <li><a href="#optimal-action-value-function" id="toc-optimal-action-value-function" class="nav-link" data-scroll-target="#optimal-action-value-function">Optimal Action-Value Function</a></li>
-  <li><a href="#relationship-between-v-and-q" id="toc-relationship-between-v-and-q" class="nav-link" data-scroll-target="#relationship-between-v-and-q">Relationship Between <span class="math inline">V^*</span> and <span class="math inline">Q^*</span></a></li>
+  <li><a href="#model-based-vs.-model-free" id="toc-model-based-vs.-model-free" class="nav-link" data-scroll-target="#model-based-vs.-model-free">Model-Based vs.&nbsp;Model-Free</a></li>
+  <li><a href="#temporal-difference-learning" id="toc-temporal-difference-learning" class="nav-link" data-scroll-target="#temporal-difference-learning">Temporal Difference Learning</a></li>
   </ul></li>
-  <li><a href="#bellman-optimality-equations" id="toc-bellman-optimality-equations" class="nav-link" data-scroll-target="#bellman-optimality-equations">Bellman Optimality Equations</a>
-  <ul class="collapse">
-  <li><a href="#for-v" id="toc-for-v" class="nav-link" data-scroll-target="#for-v">For <span class="math inline">V^*</span>:</a></li>
-  <li><a href="#for-q" id="toc-for-q" class="nav-link" data-scroll-target="#for-q">For <span class="math inline">Q^*</span>:</a></li>
-  </ul></li>
-  <li><a href="#optimal-policies" id="toc-optimal-policies" class="nav-link" data-scroll-target="#optimal-policies">Optimal Policies</a></li>
-  <li><a href="#solving-the-bellman-optimality-equations" id="toc-solving-the-bellman-optimality-equations" class="nav-link" data-scroll-target="#solving-the-bellman-optimality-equations">Solving the Bellman Optimality Equations</a></li>
-  <li><a href="#episode-length-considerations" id="toc-episode-length-considerations" class="nav-link" data-scroll-target="#episode-length-considerations">Episode Length Considerations</a>
-  <ul class="collapse">
-  <li><a href="#fixed-length-episodes" id="toc-fixed-length-episodes" class="nav-link" data-scroll-target="#fixed-length-episodes">Fixed-Length Episodes</a></li>
-  <li><a href="#variable-length-episodes" id="toc-variable-length-episodes" class="nav-link" data-scroll-target="#variable-length-episodes">Variable-Length Episodes</a></li>
-  <li><a href="#infinite-episodes" id="toc-infinite-episodes" class="nav-link" data-scroll-target="#infinite-episodes">Infinite Episodes</a></li>
-  </ul></li>
-  <li><a href="#practical-considerations" id="toc-practical-considerations" class="nav-link" data-scroll-target="#practical-considerations">Practical Considerations</a></li>
+  <li><a href="#common-pitfalls-and-misconceptions" id="toc-common-pitfalls-and-misconceptions" class="nav-link" data-scroll-target="#common-pitfalls-and-misconceptions">Common Pitfalls and Misconceptions</a></li>
+  <li><a href="#real-world-applications" id="toc-real-world-applications" class="nav-link" data-scroll-target="#real-world-applications">Real-World Applications</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/4-episodes.html">Episodic vs Continuing Tasks</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-part-2.html">Reinforcement Learning Expanded Introduction</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Episodic vs Continuing Tasks</h1>
+<h1 class="title">Reinforcement Learning Expanded Introduction</h1>
 </div>
 
 
@@ -357,201 +332,150 @@ window.Quarto = {
 </header>
 
 
-<section id="episodes-in-reinforcement-learning" class="level2">
-<h2 class="anchored" data-anchor-id="episodes-in-reinforcement-learning">Episodes in Reinforcement Learning</h2>
-<p>In reinforcement learning, we distinguish between two fundamental types of tasks based on whether they have natural ending points.</p>
+<section id="what-is-reinforcement-learning" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-reinforcement-learning">What is Reinforcement Learning?</h2>
+<p>Reinforcement learning (RL) is a framework for learning optimal behavior through trial-and-error interaction with an environment. Unlike supervised learning (where we have correct answers) or unsupervised learning (where we find patterns), RL learns from rewards and penalties.</p>
+<p><strong>Think of it like learning to drive:</strong> You don’t get a manual with every possible scenario - instead, you learn by trying actions (steering, braking) and experiencing consequences (smooth ride, honking horns, accidents). Over time, you develop a driving policy that maximizes good outcomes.</p>
 </section>
-<section id="episodic-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="episodic-tasks">Episodic Tasks</h2>
-<p><strong>Definition:</strong> Tasks that have well-defined starting and ending points, breaking the agent-environment interaction into distinct sequences called <strong>episodes</strong>.</p>
-<p><strong>Key characteristics:</strong> - Each episode starts in some initial state - Episode ends when agent reaches a <strong>terminal state</strong> - Agent gets reset after each episode - Episodes are independent of each other</p>
-<section id="examples-of-episodic-tasks" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-episodic-tasks">Examples of Episodic Tasks</h3>
-<ol type="1">
-<li><strong>Game Playing</strong>
+<section id="the-rl-framework-agent-environment-interaction" class="level2">
+<h2 class="anchored" data-anchor-id="the-rl-framework-agent-environment-interaction">The RL Framework: Agent-Environment Interaction</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://via.placeholder.com/500x300/4a90e2/ffffff?text=Agent-Environment+Interaction+Loop.png" class="img-fluid figure-img"></p>
+<figcaption>RL Agent-Environment Loop</figcaption>
+</figure>
+</div>
+<p><em>Figure 1: The fundamental RL loop where an agent takes actions in an environment and receives observations and rewards</em></p>
+<section id="core-components" class="level3">
+<h3 class="anchored" data-anchor-id="core-components">Core Components</h3>
+<p><strong>Agent</strong>: The learner/decision-maker (you, the driver)<br>
+<strong>Environment</strong>: Everything outside the agent (road, other cars, traffic laws)<br>
+<strong>State (<span class="math inline">s_t</span>)</strong>: The true state of the environment at time t (positions of all cars, traffic light status)<br>
+<strong>Observation (<span class="math inline">o_t</span>)</strong>: What the agent actually perceives (what you see through your windshield)<br>
+<strong>Action (<span class="math inline">a_t</span>)</strong>: Choice made by the agent (turn left, brake, accelerate)<br>
+<strong>Reward (<span class="math inline">r_t</span>)</strong>: Feedback signal from environment (+1 for reaching destination, -100 for accident)</p>
+</section>
+<section id="the-markov-property-why-states-matter" class="level3">
+<h3 class="anchored" data-anchor-id="the-markov-property-why-states-matter">The Markov Property: Why States Matter</h3>
+<p><strong>Key assumption</strong>: The future depends only on the current state, not the entire history.</p>
+<p><span class="math display">P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)</span></p>
+<p><strong>Driving analogy</strong>: To predict what happens next, you only need to know current positions and speeds, not how cars got there. This makes the problem tractable - otherwise we’d need infinite memory.</p>
+</section>
+</section>
+<section id="policies-and-value-functions" class="level2">
+<h2 class="anchored" data-anchor-id="policies-and-value-functions">Policies and Value Functions</h2>
+<section id="policy-pi" class="level3">
+<h3 class="anchored" data-anchor-id="policy-pi">Policy (<span class="math inline">\pi</span>)</h3>
+<p>A policy maps states to actions: <span class="math inline">\pi(a|s) = P(A_t = a | S_t = s)</span></p>
 <ul>
-<li>Chess: Episode ends when game is won, lost, or drawn</li>
-<li>Pac-Man: Episode ends when all pellets eaten or player dies</li>
-<li>Each game is a separate episode</li>
-</ul></li>
-<li><strong>Maze Navigation</strong>
-<ul>
-<li>Episode starts at entrance</li>
-<li>Episode ends when agent reaches exit or hits maximum steps</li>
-<li>Agent is reset to start for next episode</li>
-</ul></li>
-<li><strong>Trading Simulation</strong>
-<ul>
-<li>Episode might represent one trading day</li>
-<li>Ends at market close, resets next day</li>
-</ul></li>
-<li><strong>Robot Task Learning</strong>
-<ul>
-<li>Episode = one attempt at picking up an object</li>
-<li>Ends when object is grasped or dropped</li>
-</ul></li>
-</ol>
+<li><strong>Deterministic policy</strong>: <span class="math inline">a = \pi(s)</span> (always take same action in same state)</li>
+<li><strong>Stochastic policy</strong>: <span class="math inline">\pi(a|s)</span> (probability distribution over actions)</li>
+</ul>
 </section>
-<section id="mathematical-formulation" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation">Mathematical Formulation</h3>
-<p>For episodic tasks, we modify our return calculation:</p>
-<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-t-1} R_T</span></p>
-<p>Where <span class="math inline">T</span> is the time step when the terminal state is reached.</p>
-<p><strong>Key insight:</strong> Since episodes end, we don’t need to worry about infinite sums!</p>
-</section>
-</section>
-<section id="continuing-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="continuing-tasks">Continuing Tasks</h2>
-<p><strong>Definition:</strong> Tasks that go on forever without natural breakpoints.</p>
-<p><strong>Key characteristics:</strong> - No terminal states - Agent-environment interaction continues indefinitely - Need discounting (<span class="math inline">\gamma &lt; 1</span>) to ensure finite returns</p>
-<section id="examples-of-continuing-tasks" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-continuing-tasks">Examples of Continuing Tasks</h3>
-<ol type="1">
-<li><strong>Process Control</strong>
-<ul>
-<li>Temperature control in a building</li>
-<li>Server load balancing</li>
-<li>Never “ends” - just keeps running</li>
-</ul></li>
-<li><strong>Portfolio Management</strong>
-<ul>
-<li>Continuous investment decisions</li>
-<li>Markets never truly “close” globally</li>
-</ul></li>
-<li><strong>Autonomous Driving</strong>
-<ul>
-<li>Car keeps driving until turned off</li>
-<li>No natural episode boundaries</li>
-</ul></li>
-</ol>
-</section>
-<section id="mathematical-formulation-1" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation-1">Mathematical Formulation</h3>
-<p>For continuing tasks:</p>
-<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}</span></p>
-<p><strong>Discounting is crucial:</strong> Without <span class="math inline">\gamma &lt; 1</span>, returns could be infinite!</p>
-</section>
-</section>
-<section id="unified-treatment" class="level2">
-<h2 class="anchored" data-anchor-id="unified-treatment">Unified Treatment</h2>
-<p>We can handle both episodic and continuing tasks with a unified notation by introducing the concept of <strong>absorption</strong>.</p>
-<p>For episodic tasks, we can think of terminal states as transitioning to a special absorbing state with zero reward: - <span class="math inline">P(\text{absorbing}|\text{terminal}, a) = 1</span> for all actions <span class="math inline">a</span> - <span class="math inline">R(\text{absorbing}, a) = 0</span> for all actions <span class="math inline">a</span></p>
-<p>This allows us to use the infinite sum formulation for both types of tasks.</p>
-</section>
-<section id="value-functions-for-episodes" class="level2">
-<h2 class="anchored" data-anchor-id="value-functions-for-episodes">Value Functions for Episodes</h2>
-<section id="state-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="state-value-function">State Value Function</h3>
+<section id="value-functions-measuring-long-term-success" class="level3">
+<h3 class="anchored" data-anchor-id="value-functions-measuring-long-term-success">Value Functions: Measuring Long-term Success</h3>
+<p>The <strong>state value function</strong> measures expected cumulative discounted reward:</p>
 <p><span class="math display">V^\pi(s) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s\right]</span></p>
-<p>This works for both episodic and continuing tasks!</p>
+<p>Where: - <span class="math inline">\gamma \in [0,1]</span> is the <strong>discount factor</strong> (future rewards matter less) - <span class="math inline">R_{t+k+1}</span> is the reward at time <span class="math inline">t+k+1</span></p>
+<p><strong>Why discounting?</strong> 1. Uncertainty increases with time 2. Immediate rewards often preferred (bird in hand…) 3. Mathematical convenience (prevents infinite sums)</p>
 </section>
-<section id="action-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="action-value-function">Action-Value Function</h3>
+<section id="action-value-function-q-function" class="level3">
+<h3 class="anchored" data-anchor-id="action-value-function-q-function">Action-Value Function (Q-function)</h3>
 <p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s, A_t = a\right]</span></p>
+<p>This tells us: “How good is taking action <span class="math inline">a</span> in state <span class="math inline">s</span>, then following policy <span class="math inline">\pi</span>?”</p>
 </section>
 </section>
-<section id="bellman-equations-revisited" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-equations-revisited">Bellman Equations Revisited</h2>
-<p>Now let’s properly derive the Bellman equations, which are fundamental to understanding RL algorithms.</p>
-<section id="bellman-equation-for-state-values" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equation-for-state-values">Bellman Equation for State Values</h3>
-<p>Starting from the definition: <span class="math display">V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s]</span></p>
-<p><span class="math display">= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t = s]</span></p>
-<p><span class="math display">= \mathbb{E}_\pi[R_{t+1} | S_t = s] + \gamma \mathbb{E}_\pi[G_{t+1} | S_t = s]</span></p>
-<p>Using the law of total expectation: <span class="math display">= \sum_a \pi(a|s) \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]</span></p>
-<p><strong>This is the Bellman equation for <span class="math inline">V^\pi</span>!</strong></p>
+<section id="the-optimal-policy" class="level2">
+<h2 class="anchored" data-anchor-id="the-optimal-policy">The Optimal Policy</h2>
+<p>We seek the policy that maximizes expected return:</p>
+<p><span class="math display">\pi^* = \arg\max_\pi \mathbb{E}_{s_0 \sim \rho}[V^\pi(s_0)]</span></p>
+<p>Where <span class="math inline">\rho</span> is the distribution over initial states.</p>
+<p><strong>Bellman Optimality Equation:</strong> <span class="math display">V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
+<p>This recursive relationship is the foundation of many RL algorithms.</p>
 </section>
-<section id="bellman-equation-for-action-values" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equation-for-action-values">Bellman Equation for Action Values</h3>
-<p>Similarly, for <span class="math inline">Q^\pi(s,a)</span>:</p>
-<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi[G_t | S_t = s, A_t = a]</span></p>
-<p><span class="math display">= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \mathbb{E}_\pi[G_{t+1} | S_{t+1} = s']]</span></p>
-<p><span class="math display">= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]</span></p>
-<p><strong>Alternative form:</strong> <span class="math display">Q^\pi(s,a) = \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \sum_{a'} \pi(a'|s') Q^\pi(s',a')]</span></p>
-</section>
-</section>
-<section id="optimal-value-functions" class="level2">
-<h2 class="anchored" data-anchor-id="optimal-value-functions">Optimal Value Functions</h2>
-<section id="optimal-state-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-state-value-function">Optimal State-Value Function</h3>
-<p><span class="math display">V^*(s) = \max_\pi V^\pi(s)</span></p>
-<p>This represents the best possible expected return starting from state <span class="math inline">s</span>.</p>
-</section>
-<section id="optimal-action-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-action-value-function">Optimal Action-Value Function</h3>
-<p><span class="math display">Q^*(s,a) = \max_\pi Q^\pi(s,a)</span></p>
-<p>This represents the best possible expected return from taking action <span class="math inline">a</span> in state <span class="math inline">s</span>.</p>
-</section>
-<section id="relationship-between-v-and-q" class="level3">
-<h3 class="anchored" data-anchor-id="relationship-between-v-and-q">Relationship Between <span class="math inline">V^*</span> and <span class="math inline">Q^*</span></h3>
-<p><span class="math display">V^*(s) = \max_a Q^*(s,a)</span></p>
-<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
+<section id="exploration-vs.-exploitation-the-central-dilemma" class="level2">
+<h2 class="anchored" data-anchor-id="exploration-vs.-exploitation-the-central-dilemma">Exploration vs.&nbsp;Exploitation: The Central Dilemma</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://via.placeholder.com/500x250/e74c3c/ffffff?text=Exploration+vs+Exploitation+Trade-off.png" class="img-fluid figure-img"></p>
+<figcaption>Exploration vs Exploitation Trade-off</figcaption>
+</figure>
+</div>
+<p><em>Figure 2: The exploration-exploitation dilemma - balancing trying new actions vs.&nbsp;using known good actions</em></p>
+<p><strong>The dilemma</strong>: Should you:<br>
+- <strong>Exploit</strong>: Use current knowledge to maximize immediate reward<br>
+- <strong>Explore</strong>: Try new actions to potentially find better options</p>
+<p><strong>Restaurant analogy</strong>: You know one good restaurant (exploit) but there might be amazing places you haven’t tried (explore). Pure exploitation means you might miss the best restaurant in town. Pure exploration means constantly eating at mediocre new places.</p>
+<section id="epsilon-greedy-strategy" class="level3">
+<h3 class="anchored" data-anchor-id="epsilon-greedy-strategy">Epsilon-Greedy Strategy</h3>
+<ul>
+<li>With probability <span class="math inline">1-\epsilon</span>: choose best known action (exploit)</li>
+<li>With probability <span class="math inline">\epsilon</span>: choose random action (explore)</li>
+</ul>
 </section>
 </section>
-<section id="bellman-optimality-equations" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-optimality-equations">Bellman Optimality Equations</h2>
-<p>These are the key equations that optimal value functions must satisfy:</p>
-<section id="for-v" class="level3">
-<h3 class="anchored" data-anchor-id="for-v">For <span class="math inline">V^*</span>:</h3>
-<p><span class="math display">V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
+<section id="multi-armed-bandits-rl-without-states" class="level2">
+<h2 class="anchored" data-anchor-id="multi-armed-bandits-rl-without-states">Multi-Armed Bandits: RL Without States</h2>
+<p>Bandits are a special case where: - No state transitions (each action is independent) - No temporal dependencies - Pure exploration vs.&nbsp;exploitation problem</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://via.placeholder.com/400x200/9b59b6/ffffff?text=Multi-Armed+Bandit+Problem.png" class="img-fluid figure-img"></p>
+<figcaption>Multi-Armed Bandit</figcaption>
+</figure>
+</div>
+<p><em>Figure 3: Multi-armed bandit - multiple slot machines with unknown payout rates</em></p>
+<p><strong>Key difference from full RL</strong>: In bandits, your choice of slot machine doesn’t affect which machines are available next. In full RL, your actions change the state and future options.</p>
+<section id="upper-confidence-bound-ucb" class="level3">
+<h3 class="anchored" data-anchor-id="upper-confidence-bound-ucb">Upper Confidence Bound (UCB)</h3>
+<p>Choose action that maximizes: <span class="math display">\hat{\mu}_a + \sqrt{\frac{2\ln t}{n_a}}</span></p>
+<p>Where: - <span class="math inline">\hat{\mu}_a</span> = estimated mean reward for action <span class="math inline">a</span> - <span class="math inline">n_a</span> = number of times action <span class="math inline">a</span> was chosen - <span class="math inline">t</span> = total number of rounds</p>
+<p>The square root term represents uncertainty - actions tried less often get exploration bonus.</p>
 </section>
-<section id="for-q" class="level3">
-<h3 class="anchored" data-anchor-id="for-q">For <span class="math inline">Q^*</span>:</h3>
-<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma \max_{a'} Q^*(s',a')]</span></p>
-<p><strong>Intuition:</strong> The value of a state under an optimal policy equals the value of the best action in that state. The value of the best action is the expected immediate reward plus the discounted value of the best possible future.</p>
+</section>
+<section id="learning-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="learning-approaches">Learning Approaches</h2>
+<section id="model-based-vs.-model-free" class="level3">
+<h3 class="anchored" data-anchor-id="model-based-vs.-model-free">Model-Based vs.&nbsp;Model-Free</h3>
+<p><strong>Model-Based</strong>: Learn environment dynamics <span class="math inline">P(s'|s,a)</span> and <span class="math inline">R(s,a)</span>, then plan - Like studying road maps before driving - Can be sample efficient but computationally expensive</p>
+<p><strong>Model-Free</strong>: Learn policy/values directly from experience - Like learning to drive just by practicing - Less sample efficient but often more practical</p>
+</section>
+<section id="temporal-difference-learning" class="level3">
+<h3 class="anchored" data-anchor-id="temporal-difference-learning">Temporal Difference Learning</h3>
+<p><strong>Key insight</strong>: We don’t need to wait until episode ends to learn!</p>
+<p><strong>TD Error</strong>: <span class="math inline">\delta_t = r_{t+1} + \gamma V(s_{t+1}) - V(s_t)</span></p>
+<p><strong>Q-Learning Update</strong>: <span class="math display">Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha[r_{t+1} + \gamma \max_a Q(s_{t+1}, a) - Q(s_t, a_t)]</span></p>
+<p>This lets us learn from every single step, not just complete episodes.</p>
 </section>
 </section>
-<section id="optimal-policies" class="level2">
-<h2 class="anchored" data-anchor-id="optimal-policies">Optimal Policies</h2>
-<p>An optimal policy <span class="math inline">\pi^*</span> satisfies: <span class="math display">\pi^*(s) = \arg\max_a Q^*(s,a)</span></p>
-<p><strong>Key properties:</strong> 1. <strong>Existence:</strong> Every finite MDP has at least one optimal policy 2. <strong>Deterministic:</strong> There exists an optimal deterministic policy 3. <strong>Uniqueness:</strong> <span class="math inline">V^*</span> and <span class="math inline">Q^*</span> are unique (but multiple optimal policies may exist)</p>
-</section>
-<section id="solving-the-bellman-optimality-equations" class="level2">
-<h2 class="anchored" data-anchor-id="solving-the-bellman-optimality-equations">Solving the Bellman Optimality Equations</h2>
-<p>The Bellman optimality equations are a system of nonlinear equations (due to the <span class="math inline">\max</span> operation). For finite MDPs with known dynamics, we can solve them using:</p>
+<section id="common-pitfalls-and-misconceptions" class="level2">
+<h2 class="anchored" data-anchor-id="common-pitfalls-and-misconceptions">Common Pitfalls and Misconceptions</h2>
 <ol type="1">
-<li><strong>Value Iteration:</strong> Iteratively apply Bellman optimality operator</li>
-<li><strong>Policy Iteration:</strong> Alternate between policy evaluation and improvement</li>
-<li><strong>Linear Programming:</strong> Formulate as an optimization problem</li>
+<li><strong>State vs.&nbsp;Observation confusion</strong>: The agent rarely sees the full state</li>
+<li><strong>Assuming deterministic environments</strong>: Most real environments have randomness</li>
+<li><strong>Ignoring exploration</strong>: Greedy policies often get stuck in local optima</li>
+<li><strong>Reward hacking</strong>: Agents optimize exactly what you specify, not what you intend</li>
 </ol>
-<p>These methods are covered in detail in the Dynamic Programming lesson.</p>
 </section>
-<section id="episode-length-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="episode-length-considerations">Episode Length Considerations</h2>
-<section id="fixed-length-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="fixed-length-episodes">Fixed-Length Episodes</h3>
+<section id="real-world-applications" class="level2">
+<h2 class="anchored" data-anchor-id="real-world-applications">Real-World Applications</h2>
 <ul>
-<li>All episodes have the same length <span class="math inline">T</span></li>
-<li>Simpler to analyze and implement</li>
-<li>Example: Chess with move limit</li>
+<li><strong>Autonomous driving</strong>: States = traffic situations, Actions = steering/speed control</li>
+<li><strong>Game playing</strong>: AlphaGo, StarCraft II agents</li>
+<li><strong>Recommendation systems</strong>: States = user preferences, Actions = what to recommend</li>
+<li><strong>Resource allocation</strong>: Cloud computing, power grid management</li>
+<li><strong>Robotics</strong>: Learning motor skills, manipulation</li>
 </ul>
 </section>
-<section id="variable-length-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="variable-length-episodes">Variable-Length Episodes</h3>
-<ul>
-<li>Episodes can end at different times</li>
-<li>More realistic for many applications</li>
-<li>Need to handle varying episode lengths in algorithms</li>
-</ul>
-</section>
-<section id="infinite-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="infinite-episodes">Infinite Episodes</h3>
-<ul>
-<li>Continuing tasks</li>
-<li>Must use discounting or average reward</li>
-<li>More complex but more general</li>
-</ul>
-</section>
-</section>
-<section id="practical-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="practical-considerations">Practical Considerations</h2>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
 <ol type="1">
-<li><strong>Episode Design:</strong> How you define episodes affects learning</li>
-<li><strong>Terminal State Rewards:</strong> Should terminal states give rewards?</li>
-<li><strong>Episode Length:</strong> Too short = not enough learning, too long = slow convergence</li>
-<li><strong>Reset Conditions:</strong> When should episodes end?</li>
+<li>RL solves sequential decision problems through trial-and-error</li>
+<li>The Markov property makes problems tractable</li>
+<li>Balancing exploration and exploitation is crucial</li>
+<li>Value functions capture long-term consequences of actions</li>
+<li>We can learn incrementally without complete episodes</li>
 </ol>
-<p>Understanding the distinction between episodic and continuing tasks is crucial for choosing appropriate RL algorithms and designing effective reward structures!</p>
+<p>The power of RL lies in learning optimal behavior without being explicitly told what to do - just by experiencing consequences and optimizing for long-term success.</p>
 
 
 </section>

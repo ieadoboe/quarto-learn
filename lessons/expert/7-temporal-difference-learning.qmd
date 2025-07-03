@@ -1,0 +1,589 @@
+---
+title: "Temporal Difference Learning"
+format: html
+---
+
+## Introduction to Temporal Difference Learning
+
+Temporal Difference (TD) learning is one of the most important ideas in reinforcement learning. It combines the best aspects of Monte Carlo methods and Dynamic Programming:
+
+- **Like Monte Carlo:** Model-free, learns from experience
+- **Like Dynamic Programming:** Bootstraps from current estimates, doesn't wait for episodes to end
+
+**Key insight:** You can learn from incomplete episodes by using current estimates of future value.
+
+## The TD Learning Idea
+
+**Traditional approach (MC):** Wait until episode ends, then update:
+$$V(S_t) \leftarrow V(S_t) + \alpha[G_t - V(S_t)]$$
+
+**TD approach:** Update immediately after each step:
+$$V(S_t) \leftarrow V(S_t) + \alpha[R_{t+1} + \gamma V(S_{t+1}) - V(S_t)]$$
+
+**TD Error:** $\delta_t = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)$
+
+This is the difference between the estimated value and the "better" estimate using the immediate reward plus the discounted next-state value.
+
+## TD(0) Algorithm
+
+The simplest TD algorithm updates the value function after every step:
+
+```
+Initialize V(s) arbitrarily for all s ∈ S
+For each episode:
+    Initialize S
+    For each step of episode:
+        A = action given by policy for S
+        Take action A, observe R, S'
+        V(S) = V(S) + α[R + γV(S') - V(S)]
+        S = S'
+    Until S is terminal
+```
+
+**Key differences from MC:**
+1. **Online learning:** Updates happen during the episode
+2. **Bootstrapping:** Uses current estimate V(S') rather than actual return
+3. **Lower variance:** Single-step updates reduce variance
+4. **Biased initially:** Estimates are biased until V converges
+
+## Why TD Learning Works
+
+### The Driving Example
+
+**Scenario:** You're driving to work and estimating arrival time.
+
+**States:** Home → Highway → Office
+**Value function:** Estimated time to reach office
+
+**Monte Carlo approach:** 
+- Only update your estimate after you arrive at work
+- If you get stuck in traffic, you learn nothing until the end
+
+**TD approach:**
+- Update your estimate when you reach the highway
+- If highway is clear, immediately revise your time estimate
+- Learn from partial experience
+
+### Mathematical Intuition
+
+**MC target:** $G_t$ (actual return)
+**TD target:** $R_{t+1} + \gamma V(S_{t+1})$ (bootstrap estimate)
+
+As $V$ converges to $V^\pi$, the TD target approaches the MC target:
+$$R_{t+1} + \gamma V^\pi(S_{t+1}) = \mathbb{E}[G_t | S_t, A_t]$$
+
+## TD vs. Monte Carlo vs. Dynamic Programming
+
+| Aspect | TD | Monte Carlo | Dynamic Programming |
+|--------|----|-----------|--------------------|
+| **Model required** | No | No | Yes |
+| **Bootstrapping** | Yes | No | Yes |
+| **Online/Offline** | Online | Offline | Offline |
+| **Episode completion** | Not required | Required | Not applicable |
+| **Variance** | Low | High | Low |
+| **Bias** | Initially biased | Unbiased | Unbiased |
+| **Convergence** | Fast | Slow | Fast |
+
+## SARSA: On-Policy TD Control
+
+**SARSA** = State-Action-Reward-State-Action
+
+**Key idea:** Update action-value function Q(s,a) using TD learning.
+
+**Update rule:**
+$$Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]$$
+
+**Algorithm:**
+```
+Initialize Q(s,a) arbitrarily for all s ∈ S, a ∈ A
+For each episode:
+    Initialize S
+    Choose A from S using policy derived from Q (e.g., ε-greedy)
+    For each step of episode:
+        Take action A, observe R, S'
+        Choose A' from S' using policy derived from Q
+        Q(S,A) = Q(S,A) + α[R + γQ(S',A') - Q(S,A)]
+        S = S'; A = A'
+    Until S is terminal
+```
+
+**On-policy:** The policy being evaluated and improved is the same as the policy being used to generate behavior.
+
+### SARSA Characteristics
+
+1. **Conservative:** Learns the value of the policy it's actually following
+2. **Safe:** Takes exploration into account when learning
+3. **Converges:** Guaranteed to converge to optimal policy under certain conditions
+
+## Q-Learning: Off-Policy TD Control
+
+**Q-learning** learns the optimal action-value function regardless of the policy being followed.
+
+**Update rule:**
+$$Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma \max_{a'} Q(S_{t+1}, a') - Q(S_t, A_t)]$$
+
+**Algorithm:**
+```
+Initialize Q(s,a) arbitrarily for all s ∈ S, a ∈ A
+For each episode:
+    Initialize S
+    For each step of episode:
+        Choose A from S using policy derived from Q (e.g., ε-greedy)
+        Take action A, observe R, S'
+        Q(S,A) = Q(S,A) + α[R + γ max_a Q(S',a) - Q(S,A)]
+        S = S'
+    Until S is terminal
+```
+
+**Off-policy:** The policy being learned (greedy w.r.t. Q) is different from the policy generating behavior (ε-greedy).
+
+### Q-Learning Characteristics
+
+1. **Aggressive:** Learns optimal policy even while exploring
+2. **Robust:** Can learn from suboptimal behavior
+3. **Converges:** Guaranteed to converge to Q* under certain conditions
+
+## SARSA vs. Q-Learning: The Cliff Walking Problem
+
+**Setup:** Agent must navigate from start to goal, avoiding a cliff.
+
+**Reward structure:**
+- Normal steps: -1
+- Cliff: -100 (return to start)
+- Goal: 0
+
+**SARSA behavior:**
+- Learns a "safe" path away from cliff
+- Takes exploration into account
+- Finds suboptimal but safe policy
+
+**Q-learning behavior:**
+- Learns optimal path close to cliff
+- Ignores exploration in learning
+- Finds optimal policy
+
+![Cliff Walking Comparison](https://via.placeholder.com/500x300/e74c3c/ffffff?text=SARSA+vs+Q-Learning+Cliff+Walking)
+
+## Expected SARSA
+
+**Idea:** Instead of sampling the next action, use the expected value over all possible actions.
+
+**Update rule:**
+$$Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma \mathbb{E}_\pi[Q(S_{t+1}, A_{t+1})] - Q(S_t, A_t)]$$
+
+**For ε-greedy policy:**
+$$\mathbb{E}_\pi[Q(S_{t+1}, A_{t+1})] = \frac{\epsilon}{|\mathcal{A}|} \sum_a Q(S_{t+1}, a) + (1-\epsilon) \max_a Q(S_{t+1}, a)$$
+
+**Advantages:**
+- Reduces variance compared to SARSA
+- More stable learning
+- Can be used in both on-policy and off-policy settings
+
+## Double Q-Learning
+
+**Problem:** Q-learning can overestimate action values due to the max operation.
+
+**Solution:** Use two Q-functions and update them alternately.
+
+**Algorithm:**
+```
+Initialize Q₁(s,a) and Q₂(s,a) arbitrarily for all s ∈ S, a ∈ A
+For each episode:
+    Initialize S
+    For each step of episode:
+        Choose A using policy derived from Q₁ + Q₂
+        Take action A, observe R, S'
+        With probability 0.5:
+            Q₁(S,A) = Q₁(S,A) + α[R + γQ₂(S', argmax_a Q₁(S',a)) - Q₁(S,A)]
+        Else:
+            Q₂(S,A) = Q₂(S,A) + α[R + γQ₁(S', argmax_a Q₂(S',a)) - Q₂(S,A)]
+        S = S'
+    Until S is terminal
+```
+
+## n-Step TD Methods
+
+**Idea:** Look ahead n steps instead of just one.
+
+**n-step return:**
+$$G_t^{(n)} = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{n-1} R_{t+n} + \gamma^n V(S_{t+n})$$
+
+**n-step TD update:**
+$$V(S_t) \leftarrow V(S_t) + \alpha[G_t^{(n)} - V(S_t)]$$
+
+**Special cases:**
+- n=1: TD(0) 
+- n=∞: Monte Carlo
+
+**Trade-off:** Higher n reduces bias but increases variance.
+
+## Eligibility Traces: TD(λ)
+
+**Problem:** n-step methods require storing n steps of experience.
+
+**Solution:** Use eligibility traces to give credit to recently visited states.
+
+**Eligibility trace:** $e_t(s) = \gamma \lambda e_{t-1}(s) + \mathbf{1}(S_t = s)$
+
+**TD(λ) update:**
+$$V(s) \leftarrow V(s) + \alpha \delta_t e_t(s)$$
+
+for all states s, where $\delta_t$ is the TD error.
+
+**Interpretation:** States are updated proportionally to how recently and frequently they were visited.
+
+## Convergence Properties
+
+### Under Tabular Representation
+
+**TD(0) and SARSA:**
+- Converge to true value function under decreasing step sizes
+- Require that all states continue to be visited
+
+**Q-learning:**
+- Converges to optimal Q-function Q*
+- Requires that all state-action pairs continue to be visited
+
+### Step Size Requirements
+
+For convergence, step sizes must satisfy:
+$$\sum_{t=1}^{\infty} \alpha_t = \infty \quad \text{and} \quad \sum_{t=1}^{\infty} \alpha_t^2 < \infty$$
+
+**Example:** $\alpha_t = \frac{1}{t}$ satisfies these conditions.
+
+## Function Approximation
+
+**Problem:** Tabular methods don't scale to large state spaces.
+
+**Solution:** Approximate value functions using function approximation.
+
+**Linear function approximation:**
+$$V(s) \approx \mathbf{w}^T \mathbf{x}(s)$$
+
+**TD update with function approximation:**
+$$\mathbf{w}_{t+1} = \mathbf{w}_t + \alpha \delta_t \nabla_{\mathbf{w}} V(S_t)$$
+
+**Challenges:**
+- Convergence no longer guaranteed
+- Stability issues with nonlinear function approximation
+- Leads to deep reinforcement learning
+
+## Interactive Example: Q-Learning on GridWorld
+
+```{python}
+#| label: q-learning-gridworld
+#| fig-cap: "Q-Learning vs SARSA on GridWorld Environment"
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+import random
+
+class GridWorld:
+    """Simple GridWorld environment"""
+    def __init__(self, size=5):
+        self.size = size
+        self.start = (0, 0)
+        self.goal = (size-1, size-1)
+        self.obstacles = [(1, 1), (2, 1), (3, 1)]  # Some obstacles
+        self.actions = ['up', 'down', 'left', 'right']
+        self.action_effects = {
+            'up': (-1, 0), 'down': (1, 0), 
+            'left': (0, -1), 'right': (0, 1)
+        }
+        self.reset()
+    
+    def reset(self):
+        self.state = self.start
+        return self.state_to_index(self.state)
+    
+    def state_to_index(self, state):
+        """Convert (row, col) to single index"""
+        return state[0] * self.size + state[1]
+    
+    def index_to_state(self, index):
+        """Convert single index to (row, col)"""
+        return (index // self.size, index % self.size)
+    
+    def step(self, action):
+        row, col = self.state
+        dr, dc = self.action_effects[self.actions[action]]
+        new_row, new_col = row + dr, col + dc
+        
+        # Check boundaries
+        new_row = max(0, min(self.size - 1, new_row))
+        new_col = max(0, min(self.size - 1, new_col))
+        
+        # Check obstacles
+        if (new_row, new_col) in self.obstacles:
+            new_row, new_col = row, col  # Stay in place
+        
+        self.state = (new_row, new_col)
+        
+        # Rewards
+        if self.state == self.goal:
+            reward = 10
+            done = True
+        elif self.state in self.obstacles:
+            reward = -10
+            done = False
+        else:
+            reward = -1  # Step penalty
+            done = False
+        
+        return self.state_to_index(self.state), reward, done, {}
+
+class QLearningAgent:
+    def __init__(self, num_states, num_actions, alpha=0.1, gamma=0.95, epsilon=0.1):
+        self.Q = np.zeros((num_states, num_actions))
+        self.alpha = alpha
+        self.gamma = gamma
+        self.epsilon = epsilon
+        self.num_actions = num_actions
+    
+    def choose_action(self, state):
+        if random.random() < self.epsilon:
+            return random.randint(0, self.num_actions - 1)
+        else:
+            return np.argmax(self.Q[state])
+    
+    def update(self, state, action, reward, next_state, done):
+        if done:
+            target = reward
+        else:
+            target = reward + self.gamma * np.max(self.Q[next_state])
+        
+        td_error = target - self.Q[state, action]
+        self.Q[state, action] += self.alpha * td_error
+        return abs(td_error)
+
+class SARSAAgent:
+    def __init__(self, num_states, num_actions, alpha=0.1, gamma=0.95, epsilon=0.1):
+        self.Q = np.zeros((num_states, num_actions))
+        self.alpha = alpha
+        self.gamma = gamma
+        self.epsilon = epsilon
+        self.num_actions = num_actions
+    
+    def choose_action(self, state):
+        if random.random() < self.epsilon:
+            return random.randint(0, self.num_actions - 1)
+        else:
+            return np.argmax(self.Q[state])
+    
+    def update(self, state, action, reward, next_state, next_action, done):
+        if done:
+            target = reward
+        else:
+            target = reward + self.gamma * self.Q[next_state, next_action]
+        
+        td_error = target - self.Q[state, action]
+        self.Q[state, action] += self.alpha * td_error
+        return abs(td_error)
+
+def train_agent(agent, env, num_episodes=500, agent_type='Q-Learning'):
+    """Train agent and track performance"""
+    episode_rewards = []
+    episode_lengths = []
+    td_errors = []
+    
+    for episode in range(num_episodes):
+        state = env.reset()
+        episode_reward = 0
+        episode_length = 0
+        episode_td_errors = []
+        
+        if agent_type == 'SARSA':
+            action = agent.choose_action(state)
+        
+        done = False
+        while not done and episode_length < 200:  # Max episode length
+            if agent_type == 'Q-Learning':
+                action = agent.choose_action(state)
+                next_state, reward, done, _ = env.step(action)
+                td_error = agent.update(state, action, reward, next_state, done)
+                state = next_state
+            else:  # SARSA
+                next_state, reward, done, _ = env.step(action)
+                next_action = agent.choose_action(next_state)
+                td_error = agent.update(state, action, reward, next_state, next_action, done)
+                state, action = next_state, next_action
+            
+            episode_reward += reward
+            episode_length += 1
+            episode_td_errors.append(td_error)
+        
+        episode_rewards.append(episode_reward)
+        episode_lengths.append(episode_length)
+        td_errors.append(np.mean(episode_td_errors))
+    
+    return episode_rewards, episode_lengths, td_errors
+
+def visualize_policy(agent, env):
+    """Visualize the learned policy"""
+    policy_grid = np.zeros((env.size, env.size))
+    value_grid = np.zeros((env.size, env.size))
+    
+    for i in range(env.size):
+        for j in range(env.size):
+            state_idx = env.state_to_index((i, j))
+            if (i, j) == env.goal:
+                policy_grid[i, j] = -1  # Goal
+                value_grid[i, j] = np.max(agent.Q[state_idx])
+            elif (i, j) in env.obstacles:
+                policy_grid[i, j] = -2  # Obstacle
+                value_grid[i, j] = np.min(agent.Q[state_idx])
+            else:
+                policy_grid[i, j] = np.argmax(agent.Q[state_idx])
+                value_grid[i, j] = np.max(agent.Q[state_idx])
+    
+    return policy_grid, value_grid
+
+# Run experiments
+np.random.seed(42)
+random.seed(42)
+
+# Train Q-Learning agent
+env_q = GridWorld(size=5)
+q_agent = QLearningAgent(num_states=25, num_actions=4, alpha=0.1, gamma=0.95, epsilon=0.1)
+q_rewards, q_lengths, q_td_errors = train_agent(q_agent, env_q, num_episodes=500, agent_type='Q-Learning')
+
+# Train SARSA agent
+env_s = GridWorld(size=5)
+sarsa_agent = SARSAAgent(num_states=25, num_actions=4, alpha=0.1, gamma=0.95, epsilon=0.1)
+sarsa_rewards, sarsa_lengths, sarsa_td_errors = train_agent(sarsa_agent, env_s, num_episodes=500, agent_type='SARSA')
+
+# Create visualizations
+fig = plt.figure(figsize=(18, 12))
+
+# Learning curves
+ax1 = plt.subplot(2, 3, 1)
+window = 50
+q_smooth = np.convolve(q_rewards, np.ones(window)/window, mode='valid')
+sarsa_smooth = np.convolve(sarsa_rewards, np.ones(window)/window, mode='valid')
+
+plt.plot(range(window-1, len(q_rewards)), q_smooth, label='Q-Learning', linewidth=2)
+plt.plot(range(window-1, len(sarsa_rewards)), sarsa_smooth, label='SARSA', linewidth=2)
+plt.xlabel('Episodes')
+plt.ylabel('Average Reward')
+plt.title('Learning Progress (50-episode moving average)')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Episode lengths
+ax2 = plt.subplot(2, 3, 2)
+q_length_smooth = np.convolve(q_lengths, np.ones(window)/window, mode='valid')
+sarsa_length_smooth = np.convolve(sarsa_lengths, np.ones(window)/window, mode='valid')
+
+plt.plot(range(window-1, len(q_lengths)), q_length_smooth, label='Q-Learning', linewidth=2)
+plt.plot(range(window-1, len(sarsa_lengths)), sarsa_length_smooth, label='SARSA', linewidth=2)
+plt.xlabel('Episodes')
+plt.ylabel('Episode Length')
+plt.title('Episode Length vs Training')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Q-Learning policy visualization
+ax3 = plt.subplot(2, 3, 4)
+q_policy, q_values = visualize_policy(q_agent, env_q)
+
+# Create arrow visualization
+arrows = ['↑', '↓', '←', '→']
+for i in range(env_q.size):
+    for j in range(env_q.size):
+        if (i, j) == env_q.goal:
+            plt.text(j, i, 'G', ha='center', va='center', fontsize=12, fontweight='bold')
+        elif (i, j) in env_q.obstacles:
+            plt.text(j, i, 'X', ha='center', va='center', fontsize=12, fontweight='bold')
+        else:
+            action = int(q_policy[i, j])
+            plt.text(j, i, arrows[action], ha='center', va='center', fontsize=14)
+
+plt.xlim(-0.5, env_q.size-0.5)
+plt.ylim(-0.5, env_q.size-0.5)
+plt.gca().invert_yaxis()
+plt.title('Q-Learning Policy')
+plt.grid(True)
+
+# SARSA policy visualization
+ax4 = plt.subplot(2, 3, 5)
+sarsa_policy, sarsa_values = visualize_policy(sarsa_agent, env_s)
+
+for i in range(env_s.size):
+    for j in range(env_s.size):
+        if (i, j) == env_s.goal:
+            plt.text(j, i, 'G', ha='center', va='center', fontsize=12, fontweight='bold')
+        elif (i, j) in env_s.obstacles:
+            plt.text(j, i, 'X', ha='center', va='center', fontsize=12, fontweight='bold')
+        else:
+            action = int(sarsa_policy[i, j])
+            plt.text(j, i, arrows[action], ha='center', va='center', fontsize=14)
+
+plt.xlim(-0.5, env_s.size-0.5)
+plt.ylim(-0.5, env_s.size-0.5)
+plt.gca().invert_yaxis()
+plt.title('SARSA Policy')
+plt.grid(True)
+
+# Value function comparison
+ax5 = plt.subplot(2, 3, 3)
+im = plt.imshow(q_values, cmap='viridis')
+plt.colorbar(im, shrink=0.8)
+plt.title('Q-Learning Value Function')
+
+ax6 = plt.subplot(2, 3, 6)
+im = plt.imshow(sarsa_values, cmap='viridis')
+plt.colorbar(im, shrink=0.8)
+plt.title('SARSA Value Function')
+
+plt.tight_layout()
+plt.show()
+
+print("\nFinal Performance Comparison:")
+print("-" * 40)
+print(f"Q-Learning - Last 50 episodes:")
+print(f"  Average reward: {np.mean(q_rewards[-50:]):.2f}")
+print(f"  Average length: {np.mean(q_lengths[-50:]):.1f}")
+
+print(f"\nSARSA - Last 50 episodes:")
+print(f"  Average reward: {np.mean(sarsa_rewards[-50:]):.2f}")
+print(f"  Average length: {np.mean(sarsa_lengths[-50:]):.1f}")
+
+print(f"\nKey Insights:")
+print(f"• Q-Learning learns the optimal policy faster")
+print(f"• SARSA is more conservative, considering exploration during learning")
+print(f"• Both converge to good policies, but through different paths")
+```
+
+## Applications
+
+1. **Game playing:** Learning to play Atari games, board games
+2. **Robotics:** Learning motor control, navigation
+3. **Autonomous driving:** Traffic light control, path planning
+4. **Finance:** Algorithmic trading, portfolio management
+5. **Healthcare:** Treatment recommendation, drug discovery
+
+## Advantages of TD Learning
+
+1. **Online learning:** Can learn during episodes
+2. **Model-free:** No need for environment model
+3. **Efficient:** Lower variance than Monte Carlo
+4. **Flexible:** Works with continuing tasks
+5. **Bootstrapping:** Can learn from partial experience
+
+## Disadvantages of TD Learning
+
+1. **Initially biased:** Estimates are biased until convergence
+2. **Hyperparameter sensitive:** Requires tuning of step size
+3. **Exploration required:** Need adequate exploration for convergence
+4. **Function approximation challenges:** Convergence issues with approximation
+
+## Key Takeaways
+
+1. **TD learning is fundamental:** Combines best of MC and DP
+2. **Bootstrapping is powerful:** Can learn from incomplete episodes
+3. **On-policy vs. off-policy:** SARSA vs. Q-learning serve different purposes
+4. **Exploration matters:** Both algorithms need adequate exploration
+5. **Foundation for modern RL:** TD methods underpin most current algorithms
+
+Temporal difference learning represents a breakthrough in reinforcement learning, enabling agents to learn continuously from experience without requiring models or complete episodes. It forms the foundation for many modern RL algorithms! 

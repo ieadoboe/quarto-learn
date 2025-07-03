@@ -1,0 +1,209 @@
+---
+title: "Episodic vs Continuing Tasks"
+format: html
+---
+
+## Episodes in Reinforcement Learning
+
+In reinforcement learning, we distinguish between two fundamental types of tasks based on whether they have natural ending points.
+
+## Episodic Tasks
+
+**Definition:** Tasks that have well-defined starting and ending points, breaking the agent-environment interaction into distinct sequences called **episodes**.
+
+**Key characteristics:**
+- Each episode starts in some initial state
+- Episode ends when agent reaches a **terminal state**
+- Agent gets reset after each episode
+- Episodes are independent of each other
+
+### Examples of Episodic Tasks
+
+1. **Game Playing**
+   - Chess: Episode ends when game is won, lost, or drawn
+   - Pac-Man: Episode ends when all pellets eaten or player dies
+   - Each game is a separate episode
+
+2. **Maze Navigation**
+   - Episode starts at entrance
+   - Episode ends when agent reaches exit or hits maximum steps
+   - Agent is reset to start for next episode
+
+3. **Trading Simulation**
+   - Episode might represent one trading day
+   - Ends at market close, resets next day
+
+4. **Robot Task Learning**
+   - Episode = one attempt at picking up an object
+   - Ends when object is grasped or dropped
+
+### Mathematical Formulation
+
+For episodic tasks, we modify our return calculation:
+
+$$G_t = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-t-1} R_T$$
+
+Where $T$ is the time step when the terminal state is reached.
+
+**Key insight:** Since episodes end, we don't need to worry about infinite sums!
+
+## Continuing Tasks
+
+**Definition:** Tasks that go on forever without natural breakpoints.
+
+**Key characteristics:**
+- No terminal states
+- Agent-environment interaction continues indefinitely
+- Need discounting ($\gamma < 1$) to ensure finite returns
+
+### Examples of Continuing Tasks
+
+1. **Process Control**
+   - Temperature control in a building
+   - Server load balancing
+   - Never "ends" - just keeps running
+
+2. **Portfolio Management**
+   - Continuous investment decisions
+   - Markets never truly "close" globally
+
+3. **Autonomous Driving**
+   - Car keeps driving until turned off
+   - No natural episode boundaries
+
+### Mathematical Formulation
+
+For continuing tasks:
+
+$$G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}$$
+
+**Discounting is crucial:** Without $\gamma < 1$, returns could be infinite!
+
+## Unified Treatment
+
+We can handle both episodic and continuing tasks with a unified notation by introducing the concept of **absorption**.
+
+For episodic tasks, we can think of terminal states as transitioning to a special absorbing state with zero reward:
+- $P(\text{absorbing}|\text{terminal}, a) = 1$ for all actions $a$
+- $R(\text{absorbing}, a) = 0$ for all actions $a$
+
+This allows us to use the infinite sum formulation for both types of tasks.
+
+## Value Functions for Episodes
+
+### State Value Function
+$$V^\pi(s) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s\right]$$
+
+This works for both episodic and continuing tasks!
+
+### Action-Value Function
+$$Q^\pi(s,a) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s, A_t = a\right]$$
+
+## Bellman Equations Revisited
+
+Now let's properly derive the Bellman equations, which are fundamental to understanding RL algorithms.
+
+### Bellman Equation for State Values
+
+Starting from the definition:
+$$V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s]$$
+
+$$= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t = s]$$
+
+$$= \mathbb{E}_\pi[R_{t+1} | S_t = s] + \gamma \mathbb{E}_\pi[G_{t+1} | S_t = s]$$
+
+Using the law of total expectation:
+$$= \sum_a \pi(a|s) \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]$$
+
+**This is the Bellman equation for $V^\pi$!**
+
+### Bellman Equation for Action Values
+
+Similarly, for $Q^\pi(s,a)$:
+
+$$Q^\pi(s,a) = \mathbb{E}_\pi[G_t | S_t = s, A_t = a]$$
+
+$$= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \mathbb{E}_\pi[G_{t+1} | S_{t+1} = s']]$$
+
+$$= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]$$
+
+**Alternative form:**
+$$Q^\pi(s,a) = \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \sum_{a'} \pi(a'|s') Q^\pi(s',a')]$$
+
+## Optimal Value Functions
+
+### Optimal State-Value Function
+$$V^*(s) = \max_\pi V^\pi(s)$$
+
+This represents the best possible expected return starting from state $s$.
+
+### Optimal Action-Value Function  
+$$Q^*(s,a) = \max_\pi Q^\pi(s,a)$$
+
+This represents the best possible expected return from taking action $a$ in state $s$.
+
+### Relationship Between $V^*$ and $Q^*$
+$$V^*(s) = \max_a Q^*(s,a)$$
+
+$$Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]$$
+
+## Bellman Optimality Equations
+
+These are the key equations that optimal value functions must satisfy:
+
+### For $V^*$:
+$$V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]$$
+
+### For $Q^*$:
+$$Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma \max_{a'} Q^*(s',a')]$$
+
+**Intuition:** The value of a state under an optimal policy equals the value of the best action in that state. The value of the best action is the expected immediate reward plus the discounted value of the best possible future.
+
+## Optimal Policies
+
+An optimal policy $\pi^*$ satisfies:
+$$\pi^*(s) = \arg\max_a Q^*(s,a)$$
+
+**Key properties:**
+1. **Existence:** Every finite MDP has at least one optimal policy
+2. **Deterministic:** There exists an optimal deterministic policy
+3. **Uniqueness:** $V^*$ and $Q^*$ are unique (but multiple optimal policies may exist)
+
+## Solving the Bellman Optimality Equations
+
+The Bellman optimality equations are a system of nonlinear equations (due to the $\max$ operation). For finite MDPs with known dynamics, we can solve them using:
+
+1. **Value Iteration:** Iteratively apply Bellman optimality operator
+2. **Policy Iteration:** Alternate between policy evaluation and improvement
+3. **Linear Programming:** Formulate as an optimization problem
+
+These methods are covered in detail in the Dynamic Programming lesson.
+
+## Episode Length Considerations
+
+### Fixed-Length Episodes
+- All episodes have the same length $T$
+- Simpler to analyze and implement
+- Example: Chess with move limit
+
+### Variable-Length Episodes  
+- Episodes can end at different times
+- More realistic for many applications
+- Need to handle varying episode lengths in algorithms
+
+### Infinite Episodes
+- Continuing tasks
+- Must use discounting or average reward
+- More complex but more general
+
+## Practical Considerations
+
+1. **Episode Design:** How you define episodes affects learning
+2. **Terminal State Rewards:** Should terminal states give rewards?
+3. **Episode Length:** Too short = not enough learning, too long = slow convergence
+4. **Reset Conditions:** When should episodes end?
+
+Understanding the distinction between episodic and continuing tasks is crucial for choosing appropriate RL algorithms and designing effective reward structures!
+
+
+

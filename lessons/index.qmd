@@ -15,10 +15,23 @@ The young programmer nodded, uncertain but eager to begin the journey.
 
 ## Cutting-Edge Techniques (Expert Level)
 
-###  13: Reinforcement Learning
-- [RL Introduction](expert/1-rl-fundamentals.qmd)
-- [Bandit Algorithms](expert/2-bandit-algos.qmd)
-- [Markov Decision Process](expert/3-markov-decision-process.qmd)
-- [Episodes](expert/4-episodes.qmd)
+### **Part I: Foundation Concepts**
+- [1. RL Introduction](expert/1-rl-fundamentals.qmd) - What is reinforcement learning? Basic agent-environment interaction
+- [2. RL Deep Dive](expert/1-rl-part-2.qmd) - Policies, value functions, exploration vs exploitation
+- [3. Episodic vs Continuing Tasks](expert/2-episodes.qmd) - Types of RL problems and mathematical formulation
+
+### **Part II: Mathematical Framework**  
+- [4. Markov Decision Processes](expert/3-markov-decision-process.qmd) - The mathematical foundation of RL
+- [5. Multi-Armed Bandits](expert/4-bandit-algos.qmd) - RL without states (special case)
+- [6. Dynamic Programming](expert/5-dynamic-programming.qmd) - Optimal solutions with perfect knowledge
+
+### **Part III: Learning from Experience**
+- [7. Monte Carlo Methods](expert/6-monte-carlo-methods.qmd) - Learning from complete episodes (model-free)
+- [8. Temporal Difference Learning](expert/7-temporal-difference-learning.qmd) - Learning from partial episodes (SARSA, Q-learning)
+
+### **Part IV: Scaling and Advanced Methods**
+- [9. Function Approximation](expert/8-function-approximation.qmd) - Handling large state spaces with neural networks
+- [10. Policy Gradient Methods](expert/9-policy-gradient-methods.qmd) - Direct policy optimization (REINFORCE, PPO)
+- [11. Actor-Critic Methods](expert/10-actor-critic-methods.qmd) - Combining value and policy approaches (A3C, SAC)
 
 ---

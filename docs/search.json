@@ -122,7 +122,7 @@
     "href": "lessons/index.html#cutting-edge-techniques-expert-level",
     "title": "Deep Learning - The Gradient’s Journey",
     "section": "Cutting-Edge Techniques (Expert Level)",
-    "text": "Cutting-Edge Techniques (Expert Level)\n\n13: Reinforcement Learning\n\nRL Introduction\nBandit Algorithms\nMarkov Decision Process"
+    "text": "Cutting-Edge Techniques (Expert Level)\n\n13: Reinforcement Learning\n\nRL Introduction\nBandit Algorithms\nMarkov Decision Process\nEpisodes\nDyanamic Programming"
   },
   {
     "objectID": "lessons/expert/2-bandit-algos.html",
@@ -162,7 +162,7 @@
     "href": "lessons/expert/3-markov-decision-process.html",
     "title": "Markov Decision Process (MDP)",
     "section": "",
-    "text": "We choose an action given a state that we are in. We think of an agent with an environment in discrete time. t=0,1,2,...\nKey Idea: At time t, the agent gets to observe the state s_t (s_t=s) and on the basis of that chooses an action A_t t A(s) set of allowable actions.\nThen the agent gets a reward R_{t+1} and goes to state s_{t+1}.",
+    "text": "A Markov Decision Process (MDP) provides a mathematical framework for modeling sequential decision-making problems where outcomes are partly random and partly controlled by the agent.\nThink of it like chess, but with dice: In regular chess, the outcome of each move is deterministic. In an MDP, when you move your piece, there’s some randomness in where it actually ends up - but you still have control over which piece to move.",
     "crumbs": [
       "Cutting-Edge Techniques",
       "Markov Decision Process (MDP)"
@@ -171,12 +171,1057 @@
   {
     "objectID": "lessons/expert/4-episodes.html",
     "href": "lessons/expert/4-episodes.html",
-    "title": "4-episodes",
+    "title": "Episodic vs Continuing Tasks",
     "section": "",
-    "text": "Episodes in Reinforcement Learning",
+    "text": "In reinforcement learning, we distinguish between two fundamental types of tasks based on whether they have natural ending points.",
     "crumbs": [
       "Cutting-Edge Techniques",
-      "4-episodes"
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#the-rl-framework-agent-environment-interaction",
+    "href": "lessons/expert/1-rl-fundamentals.html#the-rl-framework-agent-environment-interaction",
+    "title": "Reinforcement Learning Introduction",
+    "section": "The RL Framework: Agent-Environment Interaction",
+    "text": "The RL Framework: Agent-Environment Interaction\n\n\n\nRL Agent-Environment Loop\n\n\nFigure 1: The fundamental RL loop where an agent takes actions in an environment and receives observations and rewards\n\nCore Components\nAgent: The learner/decision-maker (you, the driver)\nEnvironment: Everything outside the agent (road, other cars, traffic laws)\nState (s_t): The true state of the environment at time t (positions of all cars, traffic light status)\nObservation (o_t): What the agent actually perceives (what you see through your windshield)\nAction (a_t): Choice made by the agent (turn left, brake, accelerate)\nReward (r_t): Feedback signal from environment (+1 for reaching destination, -100 for accident)\n\n\nThe Markov Property: Why States Matter\nKey assumption: The future depends only on the current state, not the entire history.\nP(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)\nDriving analogy: To predict what happens next, you only need to know current positions and speeds, not how cars got there. This makes the problem tractable - otherwise we’d need infinite memory.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#policies-and-value-functions",
+    "href": "lessons/expert/1-rl-fundamentals.html#policies-and-value-functions",
+    "title": "Reinforcement Learning Introduction",
+    "section": "Policies and Value Functions",
+    "text": "Policies and Value Functions\n\nPolicy (\\pi)\nA policy maps states to actions: \\pi(a|s) = P(A_t = a | S_t = s)\n\nDeterministic policy: a = \\pi(s) (always take same action in same state)\nStochastic policy: \\pi(a|s) (probability distribution over actions)\n\n\n\nValue Functions: Measuring Long-term Success\nThe state value function measures expected cumulative discounted reward:\nV^\\pi(s) = \\mathbb{E}_\\pi\\left[\\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1} \\mid S_t = s\\right]\nWhere: - \\gamma \\in [0,1] is the discount factor (future rewards matter less) - R_{t+k+1} is the reward at time t+k+1\nWhy discounting? 1. Uncertainty increases with time 2. Immediate rewards often preferred (bird in hand…) 3. Mathematical convenience (prevents infinite sums)\n\n\nAction-Value Function (Q-function)\nQ^\\pi(s,a) = \\mathbb{E}_\\pi\\left[\\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1} \\mid S_t = s, A_t = a\\right]\nThis tells us: “How good is taking action a in state s, then following policy \\pi?”",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#the-optimal-policy",
+    "href": "lessons/expert/1-rl-fundamentals.html#the-optimal-policy",
+    "title": "Reinforcement Learning Introduction",
+    "section": "The Optimal Policy",
+    "text": "The Optimal Policy\nWe seek the policy that maximizes expected return:\n\\pi^* = \\arg\\max_\\pi \\mathbb{E}_{s_0 \\sim \\rho}[V^\\pi(s_0)]\nWhere \\rho is the distribution over initial states.\nBellman Optimality Equation: V^*(s) = \\max_a \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^*(s')]\nThis recursive relationship is the foundation of many RL algorithms.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#exploration-vs.-exploitation-the-central-dilemma",
+    "href": "lessons/expert/1-rl-fundamentals.html#exploration-vs.-exploitation-the-central-dilemma",
+    "title": "Reinforcement Learning Introduction",
+    "section": "Exploration vs. Exploitation: The Central Dilemma",
+    "text": "Exploration vs. Exploitation: The Central Dilemma\n\n\n\nExploration vs Exploitation Trade-off\n\n\nFigure 2: The exploration-exploitation dilemma - balancing trying new actions vs. using known good actions\nThe dilemma: Should you:\n- Exploit: Use current knowledge to maximize immediate reward\n- Explore: Try new actions to potentially find better options\nRestaurant analogy: You know one good restaurant (exploit) but there might be amazing places you haven’t tried (explore). Pure exploitation means you might miss the best restaurant in town. Pure exploration means constantly eating at mediocre new places.\n\nEpsilon-Greedy Strategy\n\nWith probability 1-\\epsilon: choose best known action (exploit)\nWith probability \\epsilon: choose random action (explore)",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#multi-armed-bandits-rl-without-states",
+    "href": "lessons/expert/1-rl-fundamentals.html#multi-armed-bandits-rl-without-states",
+    "title": "Reinforcement Learning Introduction",
+    "section": "Multi-Armed Bandits: RL Without States",
+    "text": "Multi-Armed Bandits: RL Without States\nBandits are a special case where: - No state transitions (each action is independent) - No temporal dependencies - Pure exploration vs. exploitation problem\n\n\n\nMulti-Armed Bandit\n\n\nFigure 3: Multi-armed bandit - multiple slot machines with unknown payout rates\nKey difference from full RL: In bandits, your choice of slot machine doesn’t affect which machines are available next. In full RL, your actions change the state and future options.\n\nUpper Confidence Bound (UCB)\nChoose action that maximizes: \\hat{\\mu}_a + \\sqrt{\\frac{2\\ln t}{n_a}}\nWhere: - \\hat{\\mu}_a = estimated mean reward for action a - n_a = number of times action a was chosen - t = total number of rounds\nThe square root term represents uncertainty - actions tried less often get exploration bonus.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#learning-approaches",
+    "href": "lessons/expert/1-rl-fundamentals.html#learning-approaches",
+    "title": "Reinforcement Learning Introduction",
+    "section": "Learning Approaches",
+    "text": "Learning Approaches\n\nModel-Based vs. Model-Free\nModel-Based: Learn environment dynamics P(s'|s,a) and R(s,a), then plan - Like studying road maps before driving - Can be sample efficient but computationally expensive\nModel-Free: Learn policy/values directly from experience - Like learning to drive just by practicing - Less sample efficient but often more practical\n\n\nTemporal Difference Learning\nKey insight: We don’t need to wait until episode ends to learn!\nTD Error: \\delta_t = r_{t+1} + \\gamma V(s_{t+1}) - V(s_t)\nQ-Learning Update: Q(s_t, a_t) \\leftarrow Q(s_t, a_t) + \\alpha[r_{t+1} + \\gamma \\max_a Q(s_{t+1}, a) - Q(s_t, a_t)]\nThis lets us learn from every single step, not just complete episodes.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#common-pitfalls-and-misconceptions",
+    "href": "lessons/expert/1-rl-fundamentals.html#common-pitfalls-and-misconceptions",
+    "title": "Reinforcement Learning Introduction",
+    "section": "Common Pitfalls and Misconceptions",
+    "text": "Common Pitfalls and Misconceptions\n\nState vs. Observation confusion: The agent rarely sees the full state\nAssuming deterministic environments: Most real environments have randomness\nIgnoring exploration: Greedy policies often get stuck in local optima\nReward hacking: Agents optimize exactly what you specify, not what you intend",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#real-world-applications",
+    "href": "lessons/expert/1-rl-fundamentals.html#real-world-applications",
+    "title": "Reinforcement Learning Introduction",
+    "section": "Real-World Applications",
+    "text": "Real-World Applications\n\nAutonomous driving: States = traffic situations, Actions = steering/speed control\nGame playing: AlphaGo, StarCraft II agents\nRecommendation systems: States = user preferences, Actions = what to recommend\nResource allocation: Cloud computing, power grid management\nRobotics: Learning motor skills, manipulation",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-fundamentals.html#key-takeaways",
+    "href": "lessons/expert/1-rl-fundamentals.html#key-takeaways",
+    "title": "Reinforcement Learning Introduction",
+    "section": "Key Takeaways",
+    "text": "Key Takeaways\n\nRL solves sequential decision problems through trial-and-error\nThe Markov property makes problems tractable\nBalancing exploration and exploitation is crucial\nValue functions capture long-term consequences of actions\nWe can learn incrementally without complete episodes\n\nThe power of RL lies in learning optimal behavior without being explicitly told what to do - just by experiencing consequences and optimizing for long-term success.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html",
+    "href": "lessons/expert/5-dynamic-programming.html",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "",
+    "text": "Dynamic Programming (DP) is a general approach to solving complex problems by breaking them down into simpler, overlapping subproblems. The key insight is to solve each subproblem exactly once, store the result, and reuse it whenever needed.\nClassic example - Fibonacci sequence: - Naive approach: F(5) = F(4) + F(3), F(4) = F(3) + F(2), etc. - This recalculates F(3) multiple times → exponential complexity - DP approach: Calculate F(3) once, store it, reuse it → linear complexity",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#dynamic-programming",
+    "href": "lessons/expert/5-dynamic-programming.html#dynamic-programming",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "",
+    "text": "In general, many complex problems can be broken down into smaller, overlapping subproblems. Dynamic programming (DP) solves each subproblem exactly once, stores the result, and reuses that stored answer whenever the same subproblem appears again.\nIn reinforcement learning, dynamic programming are approaches to computing optimal policies in the MDP “known world” setting. We will continue to assume everything in our world is finite (\\text{states }S, \\text{actions }A, \\text{rewards }R).\nBack to the Bellman Optimality equation\n\nV_*(s) = \\max_a \\sum_{s_1^1r} p(s_1^1 r(s, a)[r + v^*(s^1)])\n\n\nWe want a way to find v^*(s) for all s\\in S. How do we do this iteratively?",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html",
+    "href": "lessons/expert/1-rl-part-2.html",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "",
+    "text": "Reinforcement learning (RL) is a framework for learning optimal behavior through trial-and-error interaction with an environment. Unlike supervised learning (where we have correct answers) or unsupervised learning (where we find patterns), RL learns from rewards and penalties.\nThink of it like learning to drive: You don’t get a manual with every possible scenario - instead, you learn by trying actions (steering, braking) and experiencing consequences (smooth ride, honking horns, accidents). Over time, you develop a driving policy that maximizes good outcomes.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#what-is-reinforcement-learning",
+    "href": "lessons/expert/1-rl-part-2.html#what-is-reinforcement-learning",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "",
+    "text": "Reinforcement learning (RL) is a framework for learning optimal behavior through trial-and-error interaction with an environment. Unlike supervised learning (where we have correct answers) or unsupervised learning (where we find patterns), RL learns from rewards and penalties.\nThink of it like learning to drive: You don’t get a manual with every possible scenario - instead, you learn by trying actions (steering, braking) and experiencing consequences (smooth ride, honking horns, accidents). Over time, you develop a driving policy that maximizes good outcomes.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#the-rl-framework-agent-environment-interaction",
+    "href": "lessons/expert/1-rl-part-2.html#the-rl-framework-agent-environment-interaction",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "The RL Framework: Agent-Environment Interaction",
+    "text": "The RL Framework: Agent-Environment Interaction\n\n\n\nRL Agent-Environment Loop\n\n\nFigure 1: The fundamental RL loop where an agent takes actions in an environment and receives observations and rewards\n\nCore Components\nAgent: The learner/decision-maker (you, the driver)\nEnvironment: Everything outside the agent (road, other cars, traffic laws)\nState (s_t): The true state of the environment at time t (positions of all cars, traffic light status)\nObservation (o_t): What the agent actually perceives (what you see through your windshield)\nAction (a_t): Choice made by the agent (turn left, brake, accelerate)\nReward (r_t): Feedback signal from environment (+1 for reaching destination, -100 for accident)\n\n\nThe Markov Property: Why States Matter\nKey assumption: The future depends only on the current state, not the entire history.\nP(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)\nDriving analogy: To predict what happens next, you only need to know current positions and speeds, not how cars got there. This makes the problem tractable - otherwise we’d need infinite memory.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#policies-and-value-functions",
+    "href": "lessons/expert/1-rl-part-2.html#policies-and-value-functions",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "Policies and Value Functions",
+    "text": "Policies and Value Functions\n\nPolicy (\\pi)\nA policy maps states to actions: \\pi(a|s) = P(A_t = a | S_t = s)\n\nDeterministic policy: a = \\pi(s) (always take same action in same state)\nStochastic policy: \\pi(a|s) (probability distribution over actions)\n\n\n\nValue Functions: Measuring Long-term Success\nThe state value function measures expected cumulative discounted reward:\nV^\\pi(s) = \\mathbb{E}_\\pi\\left[\\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1} \\mid S_t = s\\right]\nWhere: - \\gamma \\in [0,1] is the discount factor (future rewards matter less) - R_{t+k+1} is the reward at time t+k+1\nWhy discounting? 1. Uncertainty increases with time 2. Immediate rewards often preferred (bird in hand…) 3. Mathematical convenience (prevents infinite sums)\n\n\nAction-Value Function (Q-function)\nQ^\\pi(s,a) = \\mathbb{E}_\\pi\\left[\\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1} \\mid S_t = s, A_t = a\\right]\nThis tells us: “How good is taking action a in state s, then following policy \\pi?”",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#the-optimal-policy",
+    "href": "lessons/expert/1-rl-part-2.html#the-optimal-policy",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "The Optimal Policy",
+    "text": "The Optimal Policy\nWe seek the policy that maximizes expected return:\n\\pi^* = \\arg\\max_\\pi \\mathbb{E}_{s_0 \\sim \\rho}[V^\\pi(s_0)]\nWhere \\rho is the distribution over initial states.\nBellman Optimality Equation: V^*(s) = \\max_a \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^*(s')]\nThis recursive relationship is the foundation of many RL algorithms.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#exploration-vs.-exploitation-the-central-dilemma",
+    "href": "lessons/expert/1-rl-part-2.html#exploration-vs.-exploitation-the-central-dilemma",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "Exploration vs. Exploitation: The Central Dilemma",
+    "text": "Exploration vs. Exploitation: The Central Dilemma\n\n\n\nExploration vs Exploitation Trade-off\n\n\nFigure 2: The exploration-exploitation dilemma - balancing trying new actions vs. using known good actions\nThe dilemma: Should you:\n- Exploit: Use current knowledge to maximize immediate reward\n- Explore: Try new actions to potentially find better options\nRestaurant analogy: You know one good restaurant (exploit) but there might be amazing places you haven’t tried (explore). Pure exploitation means you might miss the best restaurant in town. Pure exploration means constantly eating at mediocre new places.\n\nEpsilon-Greedy Strategy\n\nWith probability 1-\\epsilon: choose best known action (exploit)\nWith probability \\epsilon: choose random action (explore)",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#multi-armed-bandits-rl-without-states",
+    "href": "lessons/expert/1-rl-part-2.html#multi-armed-bandits-rl-without-states",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "Multi-Armed Bandits: RL Without States",
+    "text": "Multi-Armed Bandits: RL Without States\nBandits are a special case where: - No state transitions (each action is independent) - No temporal dependencies - Pure exploration vs. exploitation problem\n\n\n\nMulti-Armed Bandit\n\n\nFigure 3: Multi-armed bandit - multiple slot machines with unknown payout rates\nKey difference from full RL: In bandits, your choice of slot machine doesn’t affect which machines are available next. In full RL, your actions change the state and future options.\n\nUpper Confidence Bound (UCB)\nChoose action that maximizes: \\hat{\\mu}_a + \\sqrt{\\frac{2\\ln t}{n_a}}\nWhere: - \\hat{\\mu}_a = estimated mean reward for action a - n_a = number of times action a was chosen - t = total number of rounds\nThe square root term represents uncertainty - actions tried less often get exploration bonus.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#learning-approaches",
+    "href": "lessons/expert/1-rl-part-2.html#learning-approaches",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "Learning Approaches",
+    "text": "Learning Approaches\n\nModel-Based vs. Model-Free\nModel-Based: Learn environment dynamics P(s'|s,a) and R(s,a), then plan - Like studying road maps before driving - Can be sample efficient but computationally expensive\nModel-Free: Learn policy/values directly from experience - Like learning to drive just by practicing - Less sample efficient but often more practical\n\n\nTemporal Difference Learning\nKey insight: We don’t need to wait until episode ends to learn!\nTD Error: \\delta_t = r_{t+1} + \\gamma V(s_{t+1}) - V(s_t)\nQ-Learning Update: Q(s_t, a_t) \\leftarrow Q(s_t, a_t) + \\alpha[r_{t+1} + \\gamma \\max_a Q(s_{t+1}, a) - Q(s_t, a_t)]\nThis lets us learn from every single step, not just complete episodes.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#common-pitfalls-and-misconceptions",
+    "href": "lessons/expert/1-rl-part-2.html#common-pitfalls-and-misconceptions",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "Common Pitfalls and Misconceptions",
+    "text": "Common Pitfalls and Misconceptions\n\nState vs. Observation confusion: The agent rarely sees the full state\nAssuming deterministic environments: Most real environments have randomness\nIgnoring exploration: Greedy policies often get stuck in local optima\nReward hacking: Agents optimize exactly what you specify, not what you intend",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#real-world-applications",
+    "href": "lessons/expert/1-rl-part-2.html#real-world-applications",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "Real-World Applications",
+    "text": "Real-World Applications\n\nAutonomous driving: States = traffic situations, Actions = steering/speed control\nGame playing: AlphaGo, StarCraft II agents\nRecommendation systems: States = user preferences, Actions = what to recommend\nResource allocation: Cloud computing, power grid management\nRobotics: Learning motor skills, manipulation",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#key-takeaways",
+    "href": "lessons/expert/1-rl-part-2.html#key-takeaways",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "Key Takeaways",
+    "text": "Key Takeaways\n\nRL solves sequential decision problems through trial-and-error\nThe Markov property makes problems tractable\nBalancing exploration and exploitation is crucial\nValue functions capture long-term consequences of actions\nWe can learn incrementally without complete episodes\n\nThe power of RL lies in learning optimal behavior without being explicitly told what to do - just by experiencing consequences and optimizing for long-term success.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html",
+    "href": "lessons/expert/7-temporal-difference-learning.html",
+    "title": "Temporal Difference Learning",
+    "section": "",
+    "text": "Temporal Difference (TD) learning is one of the most important ideas in reinforcement learning. It combines the best aspects of Monte Carlo methods and Dynamic Programming:\n\nLike Monte Carlo: Model-free, learns from experience\nLike Dynamic Programming: Bootstraps from current estimates, doesn’t wait for episodes to end\n\nKey insight: You can learn from incomplete episodes by using current estimates of future value.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#introduction-to-temporal-difference-learning",
+    "href": "lessons/expert/7-temporal-difference-learning.html#introduction-to-temporal-difference-learning",
+    "title": "Temporal Difference Learning",
+    "section": "",
+    "text": "Temporal Difference (TD) learning is one of the most important ideas in reinforcement learning. It combines the best aspects of Monte Carlo methods and Dynamic Programming:\n\nLike Monte Carlo: Model-free, learns from experience\nLike Dynamic Programming: Bootstraps from current estimates, doesn’t wait for episodes to end\n\nKey insight: You can learn from incomplete episodes by using current estimates of future value.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#the-td-learning-idea",
+    "href": "lessons/expert/7-temporal-difference-learning.html#the-td-learning-idea",
+    "title": "Temporal Difference Learning",
+    "section": "The TD Learning Idea",
+    "text": "The TD Learning Idea\nTraditional approach (MC): Wait until episode ends, then update: V(S_t) \\leftarrow V(S_t) + \\alpha[G_t - V(S_t)]\nTD approach: Update immediately after each step: V(S_t) \\leftarrow V(S_t) + \\alpha[R_{t+1} + \\gamma V(S_{t+1}) - V(S_t)]\nTD Error: \\delta_t = R_{t+1} + \\gamma V(S_{t+1}) - V(S_t)\nThis is the difference between the estimated value and the “better” estimate using the immediate reward plus the discounted next-state value.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#td0-algorithm",
+    "href": "lessons/expert/7-temporal-difference-learning.html#td0-algorithm",
+    "title": "Temporal Difference Learning",
+    "section": "TD(0) Algorithm",
+    "text": "TD(0) Algorithm\nThe simplest TD algorithm updates the value function after every step:\nInitialize V(s) arbitrarily for all s ∈ S\nFor each episode:\n    Initialize S\n    For each step of episode:\n        A = action given by policy for S\n        Take action A, observe R, S'\n        V(S) = V(S) + α[R + γV(S') - V(S)]\n        S = S'\n    Until S is terminal\nKey differences from MC: 1. Online learning: Updates happen during the episode 2. Bootstrapping: Uses current estimate V(S’) rather than actual return 3. Lower variance: Single-step updates reduce variance 4. Biased initially: Estimates are biased until V converges",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#why-td-learning-works",
+    "href": "lessons/expert/7-temporal-difference-learning.html#why-td-learning-works",
+    "title": "Temporal Difference Learning",
+    "section": "Why TD Learning Works",
+    "text": "Why TD Learning Works\n\nThe Driving Example\nScenario: You’re driving to work and estimating arrival time.\nStates: Home → Highway → Office Value function: Estimated time to reach office\nMonte Carlo approach: - Only update your estimate after you arrive at work - If you get stuck in traffic, you learn nothing until the end\nTD approach: - Update your estimate when you reach the highway - If highway is clear, immediately revise your time estimate - Learn from partial experience\n\n\nMathematical Intuition\nMC target: G_t (actual return) TD target: R_{t+1} + \\gamma V(S_{t+1}) (bootstrap estimate)\nAs V converges to V^\\pi, the TD target approaches the MC target: R_{t+1} + \\gamma V^\\pi(S_{t+1}) = \\mathbb{E}[G_t | S_t, A_t]",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#td-vs.-monte-carlo-vs.-dynamic-programming",
+    "href": "lessons/expert/7-temporal-difference-learning.html#td-vs.-monte-carlo-vs.-dynamic-programming",
+    "title": "Temporal Difference Learning",
+    "section": "TD vs. Monte Carlo vs. Dynamic Programming",
+    "text": "TD vs. Monte Carlo vs. Dynamic Programming\n\n\n\nAspect\nTD\nMonte Carlo\nDynamic Programming\n\n\n\n\nModel required\nNo\nNo\nYes\n\n\nBootstrapping\nYes\nNo\nYes\n\n\nOnline/Offline\nOnline\nOffline\nOffline\n\n\nEpisode completion\nNot required\nRequired\nNot applicable\n\n\nVariance\nLow\nHigh\nLow\n\n\nBias\nInitially biased\nUnbiased\nUnbiased\n\n\nConvergence\nFast\nSlow\nFast",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#sarsa-on-policy-td-control",
+    "href": "lessons/expert/7-temporal-difference-learning.html#sarsa-on-policy-td-control",
+    "title": "Temporal Difference Learning",
+    "section": "SARSA: On-Policy TD Control",
+    "text": "SARSA: On-Policy TD Control\nSARSA = State-Action-Reward-State-Action\nKey idea: Update action-value function Q(s,a) using TD learning.\nUpdate rule: Q(S_t, A_t) \\leftarrow Q(S_t, A_t) + \\alpha[R_{t+1} + \\gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]\nAlgorithm:\nInitialize Q(s,a) arbitrarily for all s ∈ S, a ∈ A\nFor each episode:\n    Initialize S\n    Choose A from S using policy derived from Q (e.g., ε-greedy)\n    For each step of episode:\n        Take action A, observe R, S'\n        Choose A' from S' using policy derived from Q\n        Q(S,A) = Q(S,A) + α[R + γQ(S',A') - Q(S,A)]\n        S = S'; A = A'\n    Until S is terminal\nOn-policy: The policy being evaluated and improved is the same as the policy being used to generate behavior.\n\nSARSA Characteristics\n\nConservative: Learns the value of the policy it’s actually following\nSafe: Takes exploration into account when learning\nConverges: Guaranteed to converge to optimal policy under certain conditions",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#q-learning-off-policy-td-control",
+    "href": "lessons/expert/7-temporal-difference-learning.html#q-learning-off-policy-td-control",
+    "title": "Temporal Difference Learning",
+    "section": "Q-Learning: Off-Policy TD Control",
+    "text": "Q-Learning: Off-Policy TD Control\nQ-learning learns the optimal action-value function regardless of the policy being followed.\nUpdate rule: Q(S_t, A_t) \\leftarrow Q(S_t, A_t) + \\alpha[R_{t+1} + \\gamma \\max_{a'} Q(S_{t+1}, a') - Q(S_t, A_t)]\nAlgorithm:\nInitialize Q(s,a) arbitrarily for all s ∈ S, a ∈ A\nFor each episode:\n    Initialize S\n    For each step of episode:\n        Choose A from S using policy derived from Q (e.g., ε-greedy)\n        Take action A, observe R, S'\n        Q(S,A) = Q(S,A) + α[R + γ max_a Q(S',a) - Q(S,A)]\n        S = S'\n    Until S is terminal\nOff-policy: The policy being learned (greedy w.r.t. Q) is different from the policy generating behavior (ε-greedy).\n\nQ-Learning Characteristics\n\nAggressive: Learns optimal policy even while exploring\nRobust: Can learn from suboptimal behavior\nConverges: Guaranteed to converge to Q* under certain conditions",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#sarsa-vs.-q-learning-the-cliff-walking-problem",
+    "href": "lessons/expert/7-temporal-difference-learning.html#sarsa-vs.-q-learning-the-cliff-walking-problem",
+    "title": "Temporal Difference Learning",
+    "section": "SARSA vs. Q-Learning: The Cliff Walking Problem",
+    "text": "SARSA vs. Q-Learning: The Cliff Walking Problem\nSetup: Agent must navigate from start to goal, avoiding a cliff.\nReward structure: - Normal steps: -1 - Cliff: -100 (return to start) - Goal: 0\nSARSA behavior: - Learns a “safe” path away from cliff - Takes exploration into account - Finds suboptimal but safe policy\nQ-learning behavior: - Learns optimal path close to cliff - Ignores exploration in learning - Finds optimal policy\n\n\n\nCliff Walking Comparison",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#expected-sarsa",
+    "href": "lessons/expert/7-temporal-difference-learning.html#expected-sarsa",
+    "title": "Temporal Difference Learning",
+    "section": "Expected SARSA",
+    "text": "Expected SARSA\nIdea: Instead of sampling the next action, use the expected value over all possible actions.\nUpdate rule: Q(S_t, A_t) \\leftarrow Q(S_t, A_t) + \\alpha[R_{t+1} + \\gamma \\mathbb{E}_\\pi[Q(S_{t+1}, A_{t+1})] - Q(S_t, A_t)]\nFor ε-greedy policy: \\mathbb{E}_\\pi[Q(S_{t+1}, A_{t+1})] = \\frac{\\epsilon}{|\\mathcal{A}|} \\sum_a Q(S_{t+1}, a) + (1-\\epsilon) \\max_a Q(S_{t+1}, a)\nAdvantages: - Reduces variance compared to SARSA - More stable learning - Can be used in both on-policy and off-policy settings",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#double-q-learning",
+    "href": "lessons/expert/7-temporal-difference-learning.html#double-q-learning",
+    "title": "Temporal Difference Learning",
+    "section": "Double Q-Learning",
+    "text": "Double Q-Learning\nProblem: Q-learning can overestimate action values due to the max operation.\nSolution: Use two Q-functions and update them alternately.\nAlgorithm:\nInitialize Q₁(s,a) and Q₂(s,a) arbitrarily for all s ∈ S, a ∈ A\nFor each episode:\n    Initialize S\n    For each step of episode:\n        Choose A using policy derived from Q₁ + Q₂\n        Take action A, observe R, S'\n        With probability 0.5:\n            Q₁(S,A) = Q₁(S,A) + α[R + γQ₂(S', argmax_a Q₁(S',a)) - Q₁(S,A)]\n        Else:\n            Q₂(S,A) = Q₂(S,A) + α[R + γQ₁(S', argmax_a Q₂(S',a)) - Q₂(S,A)]\n        S = S'\n    Until S is terminal",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#n-step-td-methods",
+    "href": "lessons/expert/7-temporal-difference-learning.html#n-step-td-methods",
+    "title": "Temporal Difference Learning",
+    "section": "n-Step TD Methods",
+    "text": "n-Step TD Methods\nIdea: Look ahead n steps instead of just one.\nn-step return: G_t^{(n)} = R_{t+1} + \\gamma R_{t+2} + ... + \\gamma^{n-1} R_{t+n} + \\gamma^n V(S_{t+n})\nn-step TD update: V(S_t) \\leftarrow V(S_t) + \\alpha[G_t^{(n)} - V(S_t)]\nSpecial cases: - n=1: TD(0) - n=∞: Monte Carlo\nTrade-off: Higher n reduces bias but increases variance.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#eligibility-traces-tdλ",
+    "href": "lessons/expert/7-temporal-difference-learning.html#eligibility-traces-tdλ",
+    "title": "Temporal Difference Learning",
+    "section": "Eligibility Traces: TD(λ)",
+    "text": "Eligibility Traces: TD(λ)\nProblem: n-step methods require storing n steps of experience.\nSolution: Use eligibility traces to give credit to recently visited states.\nEligibility trace: e_t(s) = \\gamma \\lambda e_{t-1}(s) + \\mathbf{1}(S_t = s)\nTD(λ) update: V(s) \\leftarrow V(s) + \\alpha \\delta_t e_t(s)\nfor all states s, where \\delta_t is the TD error.\nInterpretation: States are updated proportionally to how recently and frequently they were visited.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#convergence-properties",
+    "href": "lessons/expert/7-temporal-difference-learning.html#convergence-properties",
+    "title": "Temporal Difference Learning",
+    "section": "Convergence Properties",
+    "text": "Convergence Properties\n\nUnder Tabular Representation\nTD(0) and SARSA: - Converge to true value function under decreasing step sizes - Require that all states continue to be visited\nQ-learning: - Converges to optimal Q-function Q* - Requires that all state-action pairs continue to be visited\n\n\nStep Size Requirements\nFor convergence, step sizes must satisfy: \\sum_{t=1}^{\\infty} \\alpha_t = \\infty \\quad \\text{and} \\quad \\sum_{t=1}^{\\infty} \\alpha_t^2 &lt; \\infty\nExample: \\alpha_t = \\frac{1}{t} satisfies these conditions.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#function-approximation",
+    "href": "lessons/expert/7-temporal-difference-learning.html#function-approximation",
+    "title": "Temporal Difference Learning",
+    "section": "Function Approximation",
+    "text": "Function Approximation\nProblem: Tabular methods don’t scale to large state spaces.\nSolution: Approximate value functions using function approximation.\nLinear function approximation: V(s) \\approx \\mathbf{w}^T \\mathbf{x}(s)\nTD update with function approximation: \\mathbf{w}_{t+1} = \\mathbf{w}_t + \\alpha \\delta_t \\nabla_{\\mathbf{w}} V(S_t)\nChallenges: - Convergence no longer guaranteed - Stability issues with nonlinear function approximation - Leads to deep reinforcement learning",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#code-example-q-learning",
+    "href": "lessons/expert/7-temporal-difference-learning.html#code-example-q-learning",
+    "title": "Temporal Difference Learning",
+    "section": "Code Example: Q-Learning",
+    "text": "Code Example: Q-Learning\nimport numpy as np\nimport random\n\nclass QLearning:\n    def __init__(self, num_states, num_actions, alpha=0.1, gamma=0.95, epsilon=0.1):\n        self.Q = np.zeros((num_states, num_actions))\n        self.alpha = alpha\n        self.gamma = gamma\n        self.epsilon = epsilon\n        self.num_actions = num_actions\n    \n    def choose_action(self, state):\n        if random.random() &lt; self.epsilon:\n            return random.randint(0, self.num_actions - 1)\n        else:\n            return np.argmax(self.Q[state])\n    \n    def update(self, state, action, reward, next_state, done):\n        if done:\n            target = reward\n        else:\n            target = reward + self.gamma * np.max(self.Q[next_state])\n        \n        td_error = target - self.Q[state, action]\n        self.Q[state, action] += self.alpha * td_error\n    \n    def train(self, env, num_episodes=1000):\n        for episode in range(num_episodes):\n            state = env.reset()\n            done = False\n            \n            while not done:\n                action = self.choose_action(state)\n                next_state, reward, done, _ = env.step(action)\n                self.update(state, action, reward, next_state, done)\n                state = next_state",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#applications",
+    "href": "lessons/expert/7-temporal-difference-learning.html#applications",
+    "title": "Temporal Difference Learning",
+    "section": "Applications",
+    "text": "Applications\n\nGame playing: Learning to play Atari games, board games\nRobotics: Learning motor control, navigation\nAutonomous driving: Traffic light control, path planning\nFinance: Algorithmic trading, portfolio management\nHealthcare: Treatment recommendation, drug discovery",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#advantages-of-td-learning",
+    "href": "lessons/expert/7-temporal-difference-learning.html#advantages-of-td-learning",
+    "title": "Temporal Difference Learning",
+    "section": "Advantages of TD Learning",
+    "text": "Advantages of TD Learning\n\nOnline learning: Can learn during episodes\nModel-free: No need for environment model\nEfficient: Lower variance than Monte Carlo\nFlexible: Works with continuing tasks\nBootstrapping: Can learn from partial experience",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#disadvantages-of-td-learning",
+    "href": "lessons/expert/7-temporal-difference-learning.html#disadvantages-of-td-learning",
+    "title": "Temporal Difference Learning",
+    "section": "Disadvantages of TD Learning",
+    "text": "Disadvantages of TD Learning\n\nInitially biased: Estimates are biased until convergence\nHyperparameter sensitive: Requires tuning of step size\nExploration required: Need adequate exploration for convergence\nFunction approximation challenges: Convergence issues with approximation",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/7-temporal-difference-learning.html#key-takeaways",
+    "href": "lessons/expert/7-temporal-difference-learning.html#key-takeaways",
+    "title": "Temporal Difference Learning",
+    "section": "Key Takeaways",
+    "text": "Key Takeaways\n\nTD learning is fundamental: Combines best of MC and DP\nBootstrapping is powerful: Can learn from incomplete episodes\nOn-policy vs. off-policy: SARSA vs. Q-learning serve different purposes\nExploration matters: Both algorithms need adequate exploration\nFoundation for modern RL: TD methods underpin most current algorithms\n\nTemporal difference learning represents a breakthrough in reinforcement learning, enabling agents to learn continuously from experience without requiring models or complete episodes. It forms the foundation for many modern RL algorithms!",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Temporal Difference Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#episodes-in-reinforcement-learning",
+    "href": "lessons/expert/4-episodes.html#episodes-in-reinforcement-learning",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "",
+    "text": "In reinforcement learning, we distinguish between two fundamental types of tasks based on whether they have natural ending points.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#episodic-tasks",
+    "href": "lessons/expert/4-episodes.html#episodic-tasks",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Episodic Tasks",
+    "text": "Episodic Tasks\nDefinition: Tasks that have well-defined starting and ending points, breaking the agent-environment interaction into distinct sequences called episodes.\nKey characteristics: - Each episode starts in some initial state - Episode ends when agent reaches a terminal state - Agent gets reset after each episode - Episodes are independent of each other\n\nExamples of Episodic Tasks\n\nGame Playing\n\nChess: Episode ends when game is won, lost, or drawn\nPac-Man: Episode ends when all pellets eaten or player dies\nEach game is a separate episode\n\nMaze Navigation\n\nEpisode starts at entrance\nEpisode ends when agent reaches exit or hits maximum steps\nAgent is reset to start for next episode\n\nTrading Simulation\n\nEpisode might represent one trading day\nEnds at market close, resets next day\n\nRobot Task Learning\n\nEpisode = one attempt at picking up an object\nEnds when object is grasped or dropped\n\n\n\n\nMathematical Formulation\nFor episodic tasks, we modify our return calculation:\nG_t = R_{t+1} + \\gamma R_{t+2} + ... + \\gamma^{T-t-1} R_T\nWhere T is the time step when the terminal state is reached.\nKey insight: Since episodes end, we don’t need to worry about infinite sums!",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#continuing-tasks",
+    "href": "lessons/expert/4-episodes.html#continuing-tasks",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Continuing Tasks",
+    "text": "Continuing Tasks\nDefinition: Tasks that go on forever without natural breakpoints.\nKey characteristics: - No terminal states - Agent-environment interaction continues indefinitely - Need discounting (\\gamma &lt; 1) to ensure finite returns\n\nExamples of Continuing Tasks\n\nProcess Control\n\nTemperature control in a building\nServer load balancing\nNever “ends” - just keeps running\n\nPortfolio Management\n\nContinuous investment decisions\nMarkets never truly “close” globally\n\nAutonomous Driving\n\nCar keeps driving until turned off\nNo natural episode boundaries\n\n\n\n\nMathematical Formulation\nFor continuing tasks:\nG_t = R_{t+1} + \\gamma R_{t+2} + \\gamma^2 R_{t+3} + ... = \\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1}\nDiscounting is crucial: Without \\gamma &lt; 1, returns could be infinite!",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#unified-treatment",
+    "href": "lessons/expert/4-episodes.html#unified-treatment",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Unified Treatment",
+    "text": "Unified Treatment\nWe can handle both episodic and continuing tasks with a unified notation by introducing the concept of absorption.\nFor episodic tasks, we can think of terminal states as transitioning to a special absorbing state with zero reward: - P(\\text{absorbing}|\\text{terminal}, a) = 1 for all actions a - R(\\text{absorbing}, a) = 0 for all actions a\nThis allows us to use the infinite sum formulation for both types of tasks.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#value-functions-for-episodes",
+    "href": "lessons/expert/4-episodes.html#value-functions-for-episodes",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Value Functions for Episodes",
+    "text": "Value Functions for Episodes\n\nState Value Function\nV^\\pi(s) = \\mathbb{E}_\\pi\\left[\\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1} \\mid S_t = s\\right]\nThis works for both episodic and continuing tasks!\n\n\nAction-Value Function\nQ^\\pi(s,a) = \\mathbb{E}_\\pi\\left[\\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1} \\mid S_t = s, A_t = a\\right]",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#bellman-equations-revisited",
+    "href": "lessons/expert/4-episodes.html#bellman-equations-revisited",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Bellman Equations Revisited",
+    "text": "Bellman Equations Revisited\nNow let’s properly derive the Bellman equations, which are fundamental to understanding RL algorithms.\n\nBellman Equation for State Values\nStarting from the definition: V^\\pi(s) = \\mathbb{E}_\\pi[G_t | S_t = s]\n= \\mathbb{E}_\\pi[R_{t+1} + \\gamma G_{t+1} | S_t = s]\n= \\mathbb{E}_\\pi[R_{t+1} | S_t = s] + \\gamma \\mathbb{E}_\\pi[G_{t+1} | S_t = s]\nUsing the law of total expectation: = \\sum_a \\pi(a|s) \\sum_{s'} P(s'|s,a) [R(s,a,s') + \\gamma V^\\pi(s')]\nThis is the Bellman equation for V^\\pi!\n\n\nBellman Equation for Action Values\nSimilarly, for Q^\\pi(s,a):\nQ^\\pi(s,a) = \\mathbb{E}_\\pi[G_t | S_t = s, A_t = a]\n= \\sum_{s'} P(s'|s,a) [R(s,a,s') + \\gamma \\mathbb{E}_\\pi[G_{t+1} | S_{t+1} = s']]\n= \\sum_{s'} P(s'|s,a) [R(s,a,s') + \\gamma V^\\pi(s')]\nAlternative form: Q^\\pi(s,a) = \\sum_{s'} P(s'|s,a) [R(s,a,s') + \\gamma \\sum_{a'} \\pi(a'|s') Q^\\pi(s',a')]",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#optimal-value-functions",
+    "href": "lessons/expert/4-episodes.html#optimal-value-functions",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Optimal Value Functions",
+    "text": "Optimal Value Functions\n\nOptimal State-Value Function\nV^*(s) = \\max_\\pi V^\\pi(s)\nThis represents the best possible expected return starting from state s.\n\n\nOptimal Action-Value Function\nQ^*(s,a) = \\max_\\pi Q^\\pi(s,a)\nThis represents the best possible expected return from taking action a in state s.\n\n\nRelationship Between V^* and Q^*\nV^*(s) = \\max_a Q^*(s,a)\nQ^*(s,a) = \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^*(s')]",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#bellman-optimality-equations",
+    "href": "lessons/expert/4-episodes.html#bellman-optimality-equations",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Bellman Optimality Equations",
+    "text": "Bellman Optimality Equations\nThese are the key equations that optimal value functions must satisfy:\n\nFor V^*:\nV^*(s) = \\max_a \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^*(s')]\n\n\nFor Q^*:\nQ^*(s,a) = \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma \\max_{a'} Q^*(s',a')]\nIntuition: The value of a state under an optimal policy equals the value of the best action in that state. The value of the best action is the expected immediate reward plus the discounted value of the best possible future.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#optimal-policies",
+    "href": "lessons/expert/4-episodes.html#optimal-policies",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Optimal Policies",
+    "text": "Optimal Policies\nAn optimal policy \\pi^* satisfies: \\pi^*(s) = \\arg\\max_a Q^*(s,a)\nKey properties: 1. Existence: Every finite MDP has at least one optimal policy 2. Deterministic: There exists an optimal deterministic policy 3. Uniqueness: V^* and Q^* are unique (but multiple optimal policies may exist)",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#solving-the-bellman-optimality-equations",
+    "href": "lessons/expert/4-episodes.html#solving-the-bellman-optimality-equations",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Solving the Bellman Optimality Equations",
+    "text": "Solving the Bellman Optimality Equations\nThe Bellman optimality equations are a system of nonlinear equations (due to the \\max operation). For finite MDPs with known dynamics, we can solve them using:\n\nValue Iteration: Iteratively apply Bellman optimality operator\nPolicy Iteration: Alternate between policy evaluation and improvement\nLinear Programming: Formulate as an optimization problem\n\nThese methods are covered in detail in the Dynamic Programming lesson.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#episode-length-considerations",
+    "href": "lessons/expert/4-episodes.html#episode-length-considerations",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Episode Length Considerations",
+    "text": "Episode Length Considerations\n\nFixed-Length Episodes\n\nAll episodes have the same length T\nSimpler to analyze and implement\nExample: Chess with move limit\n\n\n\nVariable-Length Episodes\n\nEpisodes can end at different times\nMore realistic for many applications\nNeed to handle varying episode lengths in algorithms\n\n\n\nInfinite Episodes\n\nContinuing tasks\nMust use discounting or average reward\nMore complex but more general",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/4-episodes.html#practical-considerations",
+    "href": "lessons/expert/4-episodes.html#practical-considerations",
+    "title": "Episodic vs Continuing Tasks",
+    "section": "Practical Considerations",
+    "text": "Practical Considerations\n\nEpisode Design: How you define episodes affects learning\nTerminal State Rewards: Should terminal states give rewards?\nEpisode Length: Too short = not enough learning, too long = slow convergence\nReset Conditions: When should episodes end?\n\nUnderstanding the distinction between episodic and continuing tasks is crucial for choosing appropriate RL algorithms and designing effective reward structures!",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Episodic vs Continuing Tasks"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#what-is-dynamic-programming",
+    "href": "lessons/expert/5-dynamic-programming.html#what-is-dynamic-programming",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "",
+    "text": "Dynamic Programming (DP) is a general approach to solving complex problems by breaking them down into simpler, overlapping subproblems. The key insight is to solve each subproblem exactly once, store the result, and reuse it whenever needed.\nClassic example - Fibonacci sequence: - Naive approach: F(5) = F(4) + F(3), F(4) = F(3) + F(2), etc. - This recalculates F(3) multiple times → exponential complexity - DP approach: Calculate F(3) once, store it, reuse it → linear complexity",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#dynamic-programming-in-reinforcement-learning",
+    "href": "lessons/expert/5-dynamic-programming.html#dynamic-programming-in-reinforcement-learning",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Dynamic Programming in Reinforcement Learning",
+    "text": "Dynamic Programming in Reinforcement Learning\nIn RL, DP refers to algorithms that use the Bellman equations to compute optimal policies and value functions. These methods assume we have a perfect model of the environment (i.e., we know the MDP).\nKey requirements for DP: 1. Optimal substructure: Optimal solution contains optimal sub-solutions 2. Overlapping subproblems: Same subproblems appear multiple times\nBoth properties hold for MDPs!",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#the-two-fundamental-operations",
+    "href": "lessons/expert/5-dynamic-programming.html#the-two-fundamental-operations",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "The Two Fundamental Operations",
+    "text": "The Two Fundamental Operations\nAll DP methods for RL are built on two core operations:\n\n1. Policy Evaluation (Prediction)\nProblem: Given a policy \\pi, compute the value function V^\\pi\nBellman equation for V^\\pi: V^\\pi(s) = \\sum_a \\pi(a|s) \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^\\pi(s')]\nThis gives us a system of |\\mathcal{S}| linear equations in |\\mathcal{S}| unknowns.\n\n\n2. Policy Improvement (Control)\nProblem: Given V^\\pi, find a better policy \\pi'\nPolicy improvement theorem: If Q^\\pi(s, \\pi'(s)) \\geq V^\\pi(s) for all s, then \\pi' \\geq \\pi.\nGreedy policy improvement: \\pi'(s) = \\arg\\max_a Q^\\pi(s,a) = \\arg\\max_a \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^\\pi(s')]",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#policy-evaluation-iterative",
+    "href": "lessons/expert/5-dynamic-programming.html#policy-evaluation-iterative",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Policy Evaluation (Iterative)",
+    "text": "Policy Evaluation (Iterative)\nSince solving the linear system directly can be expensive, we use iterative methods.\nAlgorithm:\nInitialize V₀(s) arbitrarily for all s ∈ S\nFor k = 0, 1, 2, ... until convergence:\n    For each s ∈ S:\n        Vₖ₊₁(s) = Σₐ π(a|s) Σₛ' P(s'|s,a)[R(s,a,s') + γVₖ(s')]\nConvergence: V_k \\to V^\\pi as k \\to \\infty (guaranteed for finite MDPs)\nStopping condition: \\max_s |V_{k+1}(s) - V_k(s)| &lt; \\theta for small \\theta &gt; 0\n\nPolicy Evaluation Example\nGrid World: 4×4 grid, uniform random policy, \\gamma = 1\nInitial: V₀(s) = 0 for all non-terminal states\n\nAfter 1 iteration:\n┌─────┬─────┬─────┬─────┐\n│  0  │ -1  │ -1  │ -1  │\n├─────┼─────┼─────┼─────┤\n│ -1  │ -1  │ -1  │ -1  │\n├─────┼─────┼─────┼─────┤\n│ -1  │ -1  │ -1  │ -1  │\n├─────┼─────┼─────┼─────┤\n│ -1  │ -1  │ -1  │  0  │\n└─────┴─────┴─────┴─────┘\n\nAfter convergence:\n┌─────┬─────┬─────┬─────┐\n│  0  │ -14 │ -20 │ -22 │\n├─────┼─────┼─────┼─────┤\n│-14  │ -18 │ -20 │ -20 │\n├─────┼─────┼─────┼─────┤\n│-20  │ -20 │ -18 │ -14 │\n├─────┼─────┼─────┼─────┤\n│-22  │ -20 │ -14 │  0  │\n└─────┴─────┴─────┴─────┘",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#policy-iteration",
+    "href": "lessons/expert/5-dynamic-programming.html#policy-iteration",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Policy Iteration",
+    "text": "Policy Iteration\nPolicy iteration alternates between policy evaluation and policy improvement.\nAlgorithm:\n1. Initialize π₀ arbitrarily\n2. Repeat:\n   a. Policy Evaluation: Solve Vᵖⁱ (exactly or approximately)\n   b. Policy Improvement: π' = greedy(Vᵖⁱ)\n   c. If π' = π, stop; otherwise π = π'\nProperties: - Each iteration gives a strictly better policy (unless already optimal) - Finite number of policies → guaranteed convergence - Each policy better than previous → monotonic improvement\n\nPolicy Iteration Example\nSame 4×4 grid world:\nInitial policy: Random (equal probability for all actions)\nAfter policy evaluation: Get value function shown above\nPolicy improvement: For each state, choose action that maximizes: \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^\\pi(s')]\nResult: Arrows pointing toward terminal states\nAfter few iterations: Optimal policy found!\n┌─────┬─────┬─────┬─────┐\n│  0  │  ←  │  ←  │  ↓  │\n├─────┼─────┼─────┼─────┤\n│  ↑  │  ←  │  ←  │  ↓  │\n├─────┼─────┼─────┼─────┤\n│  ↑  │  →  │  →  │  ↓  │\n├─────┼─────┼─────┼─────┤\n│  ↑  │  →  │  →  │  0  │\n└─────┴─────┴─────┴─────┘",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#value-iteration",
+    "href": "lessons/expert/5-dynamic-programming.html#value-iteration",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Value Iteration",
+    "text": "Value Iteration\nValue iteration combines policy evaluation and improvement into a single step.\nKey insight: Don’t need to wait for policy evaluation to converge! One step of policy evaluation + policy improvement works.\nAlgorithm:\nInitialize V₀(s) arbitrarily for all s ∈ S\nFor k = 0, 1, 2, ... until convergence:\n    For each s ∈ S:\n        Vₖ₊₁(s) = max_a Σₛ' P(s'|s,a)[R(s,a,s') + γVₖ(s')]\nThis is just the Bellman optimality equation as an update rule!\nConvergence: V_k \\to V^* as k \\to \\infty\nExtract policy: \\pi(s) = \\arg\\max_a \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^*(s')]\n\nValue Iteration Properties\nAdvantages: - Simpler than policy iteration (no explicit policy) - Often faster in practice - Each iteration guaranteed to improve\nDisadvantages: - Requires computing max over all actions each iteration - May oscillate between near-optimal policies",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#comparison-policy-iteration-vs-value-iteration",
+    "href": "lessons/expert/5-dynamic-programming.html#comparison-policy-iteration-vs-value-iteration",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Comparison: Policy Iteration vs Value Iteration",
+    "text": "Comparison: Policy Iteration vs Value Iteration\n\n\n\nAspect\nPolicy Iteration\nValue Iteration\n\n\n\n\nConvergence\nFinite steps\nAsymptotic\n\n\nPer iteration\nMore expensive\nCheaper\n\n\nTotal time\nOften faster\nOften slower\n\n\nMemory\nStore policy + values\nStore only values\n\n\nUse case\nSmall action spaces\nLarge action spaces",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#asynchronous-dynamic-programming",
+    "href": "lessons/expert/5-dynamic-programming.html#asynchronous-dynamic-programming",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Asynchronous Dynamic Programming",
+    "text": "Asynchronous Dynamic Programming\nInstead of updating all states simultaneously, update states individually:\nKey insight: As long as all states continue to be updated, we still converge!\n\nAsynchronous Value Iteration\nInitialize V(s) arbitrarily for all s ∈ S\nRepeat forever:\n    Pick any state s\n    V(s) = max_a Σₛ' P(s'|s,a)[R(s,a,s') + γV(s')]\nAdvantages: - More flexible computation - Can focus on important states - Better for parallel computation\n\n\nPrioritized Sweeping\nUpdate states in order of how much their values might change:\nPriority queue of states based on |Bellman backup - current value|\nRepeat:\n    s = state with highest priority\n    Update V(s)\n    For each predecessor s' of s:\n        Compute priority for s'\n        Update priority queue",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#generalized-policy-iteration-gpi",
+    "href": "lessons/expert/5-dynamic-programming.html#generalized-policy-iteration-gpi",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Generalized Policy Iteration (GPI)",
+    "text": "Generalized Policy Iteration (GPI)\nKey insight: Policy evaluation and improvement can be interleaved in many ways!\n\n\n\nGPI Diagram\n\n\nExamples of GPI: - Policy Iteration: Complete evaluation, then improvement - Value Iteration: One step of evaluation, then improvement\n- Asynchronous DP: Update individual states\nConvergence theorem: Any GPI algorithm converges to optimal policy as long as both processes (evaluation and improvement) continue.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#limitations-of-dynamic-programming",
+    "href": "lessons/expert/5-dynamic-programming.html#limitations-of-dynamic-programming",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Limitations of Dynamic Programming",
+    "text": "Limitations of Dynamic Programming\n\nPerfect model required: Need to know P(s'|s,a) and R(s,a,s')\nCurse of dimensionality: Exponential in number of state variables\nDiscrete spaces: Hard to apply to continuous state/action spaces\nComputational complexity: O(|\\mathcal{S}|^2|\\mathcal{A}|) per iteration",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#extensions-and-variations",
+    "href": "lessons/expert/5-dynamic-programming.html#extensions-and-variations",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Extensions and Variations",
+    "text": "Extensions and Variations\n\nApproximate Dynamic Programming\n\nUse function approximation for large state spaces\nSample-based methods (Monte Carlo)\nTemporal difference methods\n\n\n\nReal-Time Dynamic Programming\n\nFocus computation on states agent actually visits\nUseful for large state spaces where most states never visited\n\n\n\nParallel Dynamic Programming\n\nUpdate multiple states simultaneously\nDistributed computation across multiple processors",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#code-example-value-iteration",
+    "href": "lessons/expert/5-dynamic-programming.html#code-example-value-iteration",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Code Example: Value Iteration",
+    "text": "Code Example: Value Iteration\nimport numpy as np\n\ndef value_iteration(P, R, gamma, theta=1e-6):\n    \"\"\"\n    P: transition probabilities [s, a, s'] \n    R: rewards [s, a, s']\n    gamma: discount factor\n    theta: convergence threshold\n    \"\"\"\n    n_states, n_actions = P.shape[:2]\n    V = np.zeros(n_states)\n    \n    while True:\n        V_old = V.copy()\n        for s in range(n_states):\n            # Compute Q-values for all actions\n            Q = np.sum(P[s] * (R[s] + gamma * V), axis=1)\n            # Take max over actions\n            V[s] = np.max(Q)\n        \n        # Check convergence\n        if np.max(np.abs(V - V_old)) &lt; theta:\n            break\n    \n    # Extract policy\n    policy = np.zeros(n_states, dtype=int)\n    for s in range(n_states):\n        Q = np.sum(P[s] * (R[s] + gamma * V), axis=1)\n        policy[s] = np.argmax(Q)\n    \n    return V, policy",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/5-dynamic-programming.html#key-takeaways",
+    "href": "lessons/expert/5-dynamic-programming.html#key-takeaways",
+    "title": "Dynamic Programming in Reinforcement Learning",
+    "section": "Key Takeaways",
+    "text": "Key Takeaways\n\nDP is the foundation: Most RL algorithms are variations of DP ideas\nTwo key operations: Policy evaluation + policy improvement\nMany ways to combine them: Policy iteration, value iteration, asynchronous DP\nPerfect model assumption: Major limitation in practice\nConvergence guarantees: Strong theoretical foundation\n\nDynamic programming provides the theoretical backbone for understanding reinforcement learning. While requiring perfect knowledge of the environment limits its direct applicability, the core ideas underpin virtually all RL algorithms!",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Dynamic Programming in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#what-is-a-markov-decision-process",
+    "href": "lessons/expert/3-markov-decision-process.html#what-is-a-markov-decision-process",
+    "title": "Markov Decision Process (MDP)",
+    "section": "",
+    "text": "A Markov Decision Process (MDP) provides a mathematical framework for modeling sequential decision-making problems where outcomes are partly random and partly controlled by the agent.\nThink of it like chess, but with dice: In regular chess, the outcome of each move is deterministic. In an MDP, when you move your piece, there’s some randomness in where it actually ends up - but you still have control over which piece to move.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#formal-definition",
+    "href": "lessons/expert/3-markov-decision-process.html#formal-definition",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Formal Definition",
+    "text": "Formal Definition\nAn MDP is defined by a 5-tuple: (\\mathcal{S}, \\mathcal{A}, P, R, \\gamma)\n\n\\mathcal{S}: Set of all possible states\n\\mathcal{A}: Set of all possible actions\n\nP: Transition probability function P(s'|s,a) = \\Pr(S_{t+1} = s' | S_t = s, A_t = a)\nR: Reward function R(s,a,s') or R(s,a)\n\\gamma: Discount factor \\gamma \\in [0,1]",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#the-markov-property",
+    "href": "lessons/expert/3-markov-decision-process.html#the-markov-property",
+    "title": "Markov Decision Process (MDP)",
+    "section": "The Markov Property",
+    "text": "The Markov Property\nKey assumption: The future depends only on the present state, not the entire history.\n\\Pr(S_{t+1} = s' | S_t = s, A_t = a, S_{t-1}, A_{t-1}, ..., S_0, A_0) = \\Pr(S_{t+1} = s' | S_t = s, A_t = a)\nIntuition: To predict where you’ll be tomorrow, you only need to know where you are today and what you do today - not your entire life history.\nThis makes problems tractable! Without this assumption, we’d need infinite memory.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#mdp-components-in-detail",
+    "href": "lessons/expert/3-markov-decision-process.html#mdp-components-in-detail",
+    "title": "Markov Decision Process (MDP)",
+    "section": "MDP Components in Detail",
+    "text": "MDP Components in Detail\n\nStates (\\mathcal{S})\nThe state captures all relevant information needed to make optimal decisions.\nExamples: - Grid World: (x, y) coordinates - Blackjack: (player sum, dealer showing card, usable ace?) - Robot Navigation: (position, velocity, battery level, sensor readings) - Stock Trading: (prices, portfolio, market indicators)\nComplete vs. Incomplete Information: - Complete: Agent observes true state s_t - Incomplete: Agent observes o_t (observation), true state s_t may be hidden\n\n\nActions (\\mathcal{A})\nAvailable choices the agent can make. May depend on state: \\mathcal{A}(s).\nExamples: - Grid World: {North, South, East, West} - Blackjack: {Hit, Stand, Double Down, Split} - Stock Trading: {Buy, Sell, Hold}\n\n\nTransition Probabilities (P)\nP(s'|s,a) defines the probability of reaching state s' after taking action a in state s.\nProperties: - P(s'|s,a) \\geq 0 for all s, a, s' - \\sum_{s'} P(s'|s,a) = 1 for all s, a (probability distribution)\nExamples: - Deterministic: Robot moves exactly where commanded - Stochastic: Robot moves in intended direction 80% of time, slips left/right 10% each\n\n\nRewards (R)\nImmediate feedback signal that guides learning.\nForms: - R(s,a,s'): Reward depends on state, action, and next state - R(s,a): Reward depends only on state and action - R(s): Reward depends only on state\nDesign principles: - Positive rewards for good outcomes - Negative rewards (penalties) for bad outcomes - Small negative rewards for each step (encourages efficiency)",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#the-agent-environment-loop",
+    "href": "lessons/expert/3-markov-decision-process.html#the-agent-environment-loop",
+    "title": "Markov Decision Process (MDP)",
+    "section": "The Agent-Environment Loop",
+    "text": "The Agent-Environment Loop\nt=0: Agent observes initial state s₀\n     ↓\nt=1: Agent chooses action a₀\n     Environment returns reward r₁ and new state s₁\n     ↓\nt=2: Agent chooses action a₁\n     Environment returns reward r₂ and new state s₂\n     ↓\n     ... continues forever (or until terminal state)\nTrajectory: s_0, a_0, r_1, s_1, a_1, r_2, s_2, a_2, r_3, ...",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#example-grid-world-mdp",
+    "href": "lessons/expert/3-markov-decision-process.html#example-grid-world-mdp",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Example: Grid World MDP",
+    "text": "Example: Grid World MDP\nSetup: 4×4 grid, agent starts at bottom-left, goal at top-right\nStates: \\mathcal{S} = \\{(i,j) : i,j \\in \\{1,2,3,4\\}\\}\nActions: \\mathcal{A} = \\{\\text{North, South, East, West}\\}\nTransitions: - 80% chance of moving in intended direction - 10% chance of moving perpendicular to intended direction - Can’t move outside grid (stay in place)\nRewards: - R = +10 for reaching goal state (4,4) - R = -1 for each step (encourages efficiency) - R = -10 for hitting obstacles",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#types-of-mdps",
+    "href": "lessons/expert/3-markov-decision-process.html#types-of-mdps",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Types of MDPs",
+    "text": "Types of MDPs\n\nEpisodic vs. Continuing Tasks\nEpisodic: Natural stopping points (episodes) - Episodes have terminal states - Agent resets after each episode - Examples: Games, maze navigation\nContinuing: No natural stopping points - Runs indefinitely - Need discounting to prevent infinite returns - Examples: Stock trading, server management\n\n\nFinite vs. Infinite MDPs\nFinite: Finite state and action spaces Infinite: Continuous states and/or actions (requires function approximation)",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#value-functions-in-mdps",
+    "href": "lessons/expert/3-markov-decision-process.html#value-functions-in-mdps",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Value Functions in MDPs",
+    "text": "Value Functions in MDPs\n\nReturn (Cumulative Reward)\nG_t = R_{t+1} + \\gamma R_{t+2} + \\gamma^2 R_{t+3} + ... = \\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1}\n\n\nState Value Function\nV^\\pi(s) = \\mathbb{E}_\\pi[G_t | S_t = s]\n\n\nAction-Value Function\nQ^\\pi(s,a) = \\mathbb{E}_\\pi[G_t | S_t = s, A_t = a]",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#bellman-equations",
+    "href": "lessons/expert/3-markov-decision-process.html#bellman-equations",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Bellman Equations",
+    "text": "Bellman Equations\n\nBellman Equation for V^\\pi\nV^\\pi(s) = \\sum_a \\pi(a|s) \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^\\pi(s')]\n\n\nBellman Equation for Q^\\pi\nQ^\\pi(s,a) = \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma \\sum_{a'} \\pi(a'|s') Q^\\pi(s',a')]\nIntuition: The value of a state equals the immediate reward plus the discounted value of future states, weighted by their probabilities.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#optimal-policies-and-value-functions",
+    "href": "lessons/expert/3-markov-decision-process.html#optimal-policies-and-value-functions",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Optimal Policies and Value Functions",
+    "text": "Optimal Policies and Value Functions\nOptimal state-value function: V^*(s) = \\max_\\pi V^\\pi(s)\nOptimal action-value function: Q^*(s,a) = \\max_\\pi Q^\\pi(s,a)\nBellman Optimality Equations: V^*(s) = \\max_a \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma V^*(s')]\nQ^*(s,a) = \\sum_{s'} P(s'|s,a)[R(s,a,s') + \\gamma \\max_{a'} Q^*(s',a')]",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#key-properties",
+    "href": "lessons/expert/3-markov-decision-process.html#key-properties",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Key Properties",
+    "text": "Key Properties\n\nExistence: Every finite MDP has at least one optimal policy\nDeterministic: There exists an optimal policy that is deterministic\nUniqueness: V^* and Q^* are unique\nPolicy Extraction: \\pi^*(s) = \\arg\\max_a Q^*(s,a)",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#common-challenges",
+    "href": "lessons/expert/3-markov-decision-process.html#common-challenges",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Common Challenges",
+    "text": "Common Challenges\n\nCurse of Dimensionality: State space grows exponentially with problem complexity\nExploration vs. Exploitation: Need to balance trying new actions vs. using known good ones\nPartial Observability: Often can’t observe true state\nContinuous Spaces: Real-world problems often have continuous state/action spaces\nNon-stationarity: Environment may change over time",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/3-markov-decision-process.html#real-world-applications",
+    "href": "lessons/expert/3-markov-decision-process.html#real-world-applications",
+    "title": "Markov Decision Process (MDP)",
+    "section": "Real-World Applications",
+    "text": "Real-World Applications\n\nAutonomous Driving: States = traffic situations, Actions = driving maneuvers\nGame Playing: States = board positions, Actions = legal moves\nResource Allocation: States = resource levels, Actions = allocation decisions\nMedical Treatment: States = patient conditions, Actions = treatment options\n\nThe MDP framework provides the theoretical foundation for most reinforcement learning algorithms. Understanding MDPs is crucial for designing effective RL solutions!",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Markov Decision Process (MDP)"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html",
+    "href": "lessons/expert/6-monte-carlo-methods.html",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "",
+    "text": "Monte Carlo methods are a class of reinforcement learning algorithms that learn directly from episodes of experience without requiring a model of the environment. They are named after the famous casino, as they rely on random sampling and statistical averaging.\nKey insight: Instead of using mathematical models (like Dynamic Programming), we learn from actual experience by running episodes and averaging the results.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#introduction-to-monte-carlo-methods",
+    "href": "lessons/expert/6-monte-carlo-methods.html#introduction-to-monte-carlo-methods",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "",
+    "text": "Monte Carlo methods are a class of reinforcement learning algorithms that learn directly from episodes of experience without requiring a model of the environment. They are named after the famous casino, as they rely on random sampling and statistical averaging.\nKey insight: Instead of using mathematical models (like Dynamic Programming), we learn from actual experience by running episodes and averaging the results.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#the-monte-carlo-approach",
+    "href": "lessons/expert/6-monte-carlo-methods.html#the-monte-carlo-approach",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "The Monte Carlo Approach",
+    "text": "The Monte Carlo Approach\nBasic idea: To estimate the value of a state, simply average the returns observed after visiting that state.\nWhy this works: By the Law of Large Numbers, the average of a large number of samples converges to the true expected value.\nV^\\pi(s) = \\mathbb{E}_\\pi[G_t | S_t = s] \\approx \\frac{1}{N} \\sum_{i=1}^N G_t^{(i)}\nWhere G_t^{(i)} is the return from the i-th visit to state s.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#key-assumptions",
+    "href": "lessons/expert/6-monte-carlo-methods.html#key-assumptions",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Key Assumptions",
+    "text": "Key Assumptions\n\nEpisodic tasks: Episodes must terminate (we need complete returns)\nFinite episodes: Each episode eventually ends\nStationary environment: The environment doesn’t change over time",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#monte-carlo-prediction",
+    "href": "lessons/expert/6-monte-carlo-methods.html#monte-carlo-prediction",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Monte Carlo Prediction",
+    "text": "Monte Carlo Prediction\n\nFirst-Visit Monte Carlo\nAlgorithm: For each state, average returns only from the first time that state is visited in each episode.\nInitialize:\n    V(s) = 0 for all s ∈ S\n    Returns(s) = empty list for all s ∈ S\n\nFor each episode:\n    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ\n    G = 0\n    For t = T-1, T-2, ..., 0:\n        G = γG + R_{t+1}\n        If S_t does not appear in S₀, S₁, ..., S_{t-1}:\n            Append G to Returns(S_t)\n            V(S_t) = average(Returns(S_t))\n\n\nEvery-Visit Monte Carlo\nAlgorithm: For each state, average returns from every visit to that state.\nInitialize:\n    V(s) = 0 for all s ∈ S\n    Returns(s) = empty list for all s ∈ S\n\nFor each episode:\n    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ\n    G = 0\n    For t = T-1, T-2, ..., 0:\n        G = γG + R_{t+1}\n        Append G to Returns(S_t)\n        V(S_t) = average(Returns(S_t))\n\n\nConvergence Properties\nFirst-Visit MC: Converges to V^\\pi(s) as the number of first visits to s approaches infinity.\nEvery-Visit MC: Also converges to V^\\pi(s) under the same conditions.\nPractical difference: Often minimal, but every-visit MC can converge faster for some problems.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#example-blackjack",
+    "href": "lessons/expert/6-monte-carlo-methods.html#example-blackjack",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Example: Blackjack",
+    "text": "Example: Blackjack\nPerfect example for MC methods: - Natural episodes (hands of blackjack) - Clear terminal states (win/lose/draw) - Reward only at the end of episode\nState representation: (player sum, dealer showing card, usable ace)\nResults after 500,000 episodes: - States visited frequently: accurate value estimates - States visited rarely: less accurate estimates - Natural exploration through random policy",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#monte-carlo-control",
+    "href": "lessons/expert/6-monte-carlo-methods.html#monte-carlo-control",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Monte Carlo Control",
+    "text": "Monte Carlo Control\nGoal: Find optimal policy using Monte Carlo methods.\nChallenge: We need to ensure adequate exploration of all state-action pairs.\n\nMonte Carlo with Exploring Starts\nKey idea: Every state-action pair has a non-zero probability of being the starting pair of an episode.\nInitialize:\n    Q(s,a) = 0 for all s ∈ S, a ∈ A\n    Returns(s,a) = empty list for all s ∈ S, a ∈ A\n    π(s) = arbitrary policy\n\nFor each episode:\n    Choose random S₀ ∈ S and A₀ ∈ A (exploring starts)\n    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ\n    G = 0\n    For t = T-1, T-2, ..., 0:\n        G = γG + R_{t+1}\n        If (S_t, A_t) does not appear in (S₀,A₀), (S₁,A₁), ..., (S_{t-1},A_{t-1}):\n            Append G to Returns(S_t, A_t)\n            Q(S_t, A_t) = average(Returns(S_t, A_t))\n    \n    For each s in episode:\n        π(s) = argmax_a Q(s,a)\nProblem: Exploring starts assumption is often unrealistic in practice.\n\n\nOn-Policy Monte Carlo Control\nWithout exploring starts: Use \\epsilon-greedy policies to ensure exploration.\n\\epsilon-greedy policy: \\pi(a|s) = \\begin{cases}\n1 - \\epsilon + \\frac{\\epsilon}{|\\mathcal{A}(s)|} & \\text{if } a = \\arg\\max_{a'} Q(s,a') \\\\\n\\frac{\\epsilon}{|\\mathcal{A}(s)|} & \\text{otherwise}\n\\end{cases}\nInitialize:\n    Q(s,a) = 0 for all s ∈ S, a ∈ A\n    Returns(s,a) = empty list for all s ∈ S, a ∈ A\n    π = ε-greedy policy derived from Q\n\nFor each episode:\n    Generate episode using π: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ\n    G = 0\n    For t = T-1, T-2, ..., 0:\n        G = γG + R_{t+1}\n        If (S_t, A_t) not in (S₀,A₀), ..., (S_{t-1},A_{t-1}):\n            Append G to Returns(S_t, A_t)\n            Q(S_t, A_t) = average(Returns(S_t, A_t))\n            A* = argmax_a Q(S_t, a)\n            Update π to be ε-greedy w.r.t. Q\n\n\nOff-Policy Monte Carlo Control\nKey insight: Use one policy to generate episodes (behavior policy b) and another to evaluate/improve (target policy \\pi).\nImportance sampling: Weight returns by the probability ratio between policies.\n\\rho_{t:T-1} = \\prod_{k=t}^{T-1} \\frac{\\pi(A_k|S_k)}{b(A_k|S_k)}\nWeighted importance sampling: V^\\pi(s) = \\frac{\\sum_{t \\in \\mathcal{T}(s)} \\rho_{t:T(t)-1} G_t}{\\sum_{t \\in \\mathcal{T}(s)} \\rho_{t:T(t)-1}}\nWhere \\mathcal{T}(s) is the set of all time steps in which state s is visited.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#advantages-of-monte-carlo-methods",
+    "href": "lessons/expert/6-monte-carlo-methods.html#advantages-of-monte-carlo-methods",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Advantages of Monte Carlo Methods",
+    "text": "Advantages of Monte Carlo Methods\n\nModel-free: No need to know transition probabilities or rewards\nUnbiased: Estimates are unbiased (average of samples equals true value)\nSimple: Easy to understand and implement\nFlexible: Can handle any MDP structure\nStatistically independent: Value estimates for different states are independent",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#disadvantages-of-monte-carlo-methods",
+    "href": "lessons/expert/6-monte-carlo-methods.html#disadvantages-of-monte-carlo-methods",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Disadvantages of Monte Carlo Methods",
+    "text": "Disadvantages of Monte Carlo Methods\n\nHigh variance: Estimates can vary significantly between episodes\nSlow convergence: Need many episodes for accurate estimates\nEpisodic only: Can’t handle continuing tasks directly\nDelayed learning: Must wait until episode ends to update\nRare states: States visited infrequently have poor estimates",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#reducing-variance",
+    "href": "lessons/expert/6-monte-carlo-methods.html#reducing-variance",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Reducing Variance",
+    "text": "Reducing Variance\n\nIncremental Updates\nInstead of storing all returns, update estimates incrementally:\nV(S_t) \\leftarrow V(S_t) + \\alpha[G_t - V(S_t)]\nWhere \\alpha is a step size parameter.\n\n\nBaseline Methods\nUse a baseline to reduce variance: G_t - b(S_t)\nWhere b(S_t) is some baseline function.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#comparison-with-dynamic-programming",
+    "href": "lessons/expert/6-monte-carlo-methods.html#comparison-with-dynamic-programming",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Comparison with Dynamic Programming",
+    "text": "Comparison with Dynamic Programming\n\n\n\nAspect\nMonte Carlo\nDynamic Programming\n\n\n\n\nModel requirement\nModel-free\nRequires model\n\n\nBootstrapping\nNo\nYes\n\n\nBias\nUnbiased\nBiased (initially)\n\n\nVariance\nHigh\nLow\n\n\nConvergence\nSlow\nFast\n\n\nEpisodes\nMust complete\nCan be continuous",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#code-example-monte-carlo-policy-evaluation",
+    "href": "lessons/expert/6-monte-carlo-methods.html#code-example-monte-carlo-policy-evaluation",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Code Example: Monte Carlo Policy Evaluation",
+    "text": "Code Example: Monte Carlo Policy Evaluation\nimport numpy as np\nfrom collections import defaultdict\n\ndef mc_policy_evaluation(env, policy, num_episodes=100000, gamma=1.0):\n    \"\"\"\n    Monte Carlo policy evaluation using first-visit MC\n    \"\"\"\n    # Initialize\n    V = defaultdict(float)\n    returns = defaultdict(list)\n    \n    for episode in range(num_episodes):\n        # Generate episode\n        states, actions, rewards = generate_episode(env, policy)\n        \n        # Calculate returns\n        G = 0\n        visited_states = set()\n        \n        # Work backwards through episode\n        for t in range(len(states) - 1, -1, -1):\n            G = gamma * G + rewards[t]\n            \n            # First-visit MC\n            if states[t] not in visited_states:\n                visited_states.add(states[t])\n                returns[states[t]].append(G)\n                V[states[t]] = np.mean(returns[states[t]])\n    \n    return dict(V)\n\ndef generate_episode(env, policy):\n    \"\"\"Generate a single episode following given policy\"\"\"\n    states, actions, rewards = [], [], []\n    state = env.reset()\n    \n    while True:\n        action = policy(state)\n        states.append(state)\n        actions.append(action)\n        \n        state, reward, done, _ = env.step(action)\n        rewards.append(reward)\n        \n        if done:\n            break\n    \n    return states, actions, rewards",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#applications",
+    "href": "lessons/expert/6-monte-carlo-methods.html#applications",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Applications",
+    "text": "Applications\n\nGame playing: Learning to play games like Blackjack, Go\nFinancial modeling: Portfolio optimization, risk assessment\nRobotics: Learning motor skills through trial and error\nA/B testing: Evaluating different strategies\nSimulation optimization: When analytic solutions are intractable",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#historical-context",
+    "href": "lessons/expert/6-monte-carlo-methods.html#historical-context",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Historical Context",
+    "text": "Historical Context\n\nOrigin: Developed in 1940s for nuclear weapons research\nRL application: Introduced by Sutton and Barto in 1980s\nKey insight: Learning from experience without models\nModern relevance: Foundation for many current RL algorithms",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
+    ]
+  },
+  {
+    "objectID": "lessons/expert/6-monte-carlo-methods.html#key-takeaways",
+    "href": "lessons/expert/6-monte-carlo-methods.html#key-takeaways",
+    "title": "Monte Carlo Methods in Reinforcement Learning",
+    "section": "Key Takeaways",
+    "text": "Key Takeaways\n\nExperience-based learning: MC methods learn from actual episodes\nNo model required: Work directly with environment interactions\nUnbiased estimates: Sample averages converge to true values\nHigh variance: Need many samples for accurate estimates\nExploration crucial: Must visit all states/actions sufficiently\n\nMonte Carlo methods provide a crucial bridge between dynamic programming (which requires models) and temporal difference learning (which learns from partial episodes). They demonstrate that we can learn optimal behavior purely from experience!",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Monte Carlo Methods in Reinforcement Learning"
     ]
   }
 ]

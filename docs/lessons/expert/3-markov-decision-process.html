@@ -238,6 +238,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/1-rl-part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reinforcement Learning Expanded Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../lessons/expert/2-bandit-algos.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Bandit Algorithms</span></a>
   </div>
@@ -248,6 +254,30 @@ window.Quarto = {
  <span class="menu-text">Markov Decision Process (MDP)</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episodic vs Continuing Tasks</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/5-dynamic-programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dynamic Programming in Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/6-monte-carlo-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Monte Carlo Methods in Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/7-temporal-difference-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Temporal Difference Learning</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -255,8 +285,45 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-a-markov-decision-process" id="toc-what-is-a-markov-decision-process" class="nav-link active" data-scroll-target="#what-is-a-markov-decision-process">What is a Markov Decision Process?</a></li>
+  <li><a href="#formal-definition" id="toc-formal-definition" class="nav-link" data-scroll-target="#formal-definition">Formal Definition</a></li>
+  <li><a href="#the-markov-property" id="toc-the-markov-property" class="nav-link" data-scroll-target="#the-markov-property">The Markov Property</a></li>
+  <li><a href="#mdp-components-in-detail" id="toc-mdp-components-in-detail" class="nav-link" data-scroll-target="#mdp-components-in-detail">MDP Components in Detail</a>
+  <ul class="collapse">
+  <li><a href="#states-mathcals" id="toc-states-mathcals" class="nav-link" data-scroll-target="#states-mathcals">States (<span class="math inline">\mathcal{S}</span>)</a></li>
+  <li><a href="#actions-mathcala" id="toc-actions-mathcala" class="nav-link" data-scroll-target="#actions-mathcala">Actions (<span class="math inline">\mathcal{A}</span>)</a></li>
+  <li><a href="#transition-probabilities-p" id="toc-transition-probabilities-p" class="nav-link" data-scroll-target="#transition-probabilities-p">Transition Probabilities (<span class="math inline">P</span>)</a></li>
+  <li><a href="#rewards-r" id="toc-rewards-r" class="nav-link" data-scroll-target="#rewards-r">Rewards (<span class="math inline">R</span>)</a></li>
+  </ul></li>
+  <li><a href="#the-agent-environment-loop" id="toc-the-agent-environment-loop" class="nav-link" data-scroll-target="#the-agent-environment-loop">The Agent-Environment Loop</a></li>
+  <li><a href="#example-grid-world-mdp" id="toc-example-grid-world-mdp" class="nav-link" data-scroll-target="#example-grid-world-mdp">Example: Grid World MDP</a></li>
+  <li><a href="#types-of-mdps" id="toc-types-of-mdps" class="nav-link" data-scroll-target="#types-of-mdps">Types of MDPs</a>
+  <ul class="collapse">
+  <li><a href="#episodic-vs.-continuing-tasks" id="toc-episodic-vs.-continuing-tasks" class="nav-link" data-scroll-target="#episodic-vs.-continuing-tasks">Episodic vs.&nbsp;Continuing Tasks</a></li>
+  <li><a href="#finite-vs.-infinite-mdps" id="toc-finite-vs.-infinite-mdps" class="nav-link" data-scroll-target="#finite-vs.-infinite-mdps">Finite vs.&nbsp;Infinite MDPs</a></li>
+  </ul></li>
+  <li><a href="#value-functions-in-mdps" id="toc-value-functions-in-mdps" class="nav-link" data-scroll-target="#value-functions-in-mdps">Value Functions in MDPs</a>
+  <ul class="collapse">
+  <li><a href="#return-cumulative-reward" id="toc-return-cumulative-reward" class="nav-link" data-scroll-target="#return-cumulative-reward">Return (Cumulative Reward)</a></li>
+  <li><a href="#state-value-function" id="toc-state-value-function" class="nav-link" data-scroll-target="#state-value-function">State Value Function</a></li>
+  <li><a href="#action-value-function" id="toc-action-value-function" class="nav-link" data-scroll-target="#action-value-function">Action-Value Function</a></li>
+  </ul></li>
+  <li><a href="#bellman-equations" id="toc-bellman-equations" class="nav-link" data-scroll-target="#bellman-equations">Bellman Equations</a>
+  <ul class="collapse">
+  <li><a href="#bellman-equation-for-vpi" id="toc-bellman-equation-for-vpi" class="nav-link" data-scroll-target="#bellman-equation-for-vpi">Bellman Equation for <span class="math inline">V^\pi</span></a></li>
+  <li><a href="#bellman-equation-for-qpi" id="toc-bellman-equation-for-qpi" class="nav-link" data-scroll-target="#bellman-equation-for-qpi">Bellman Equation for <span class="math inline">Q^\pi</span></a></li>
+  </ul></li>
+  <li><a href="#optimal-policies-and-value-functions" id="toc-optimal-policies-and-value-functions" class="nav-link" data-scroll-target="#optimal-policies-and-value-functions">Optimal Policies and Value Functions</a></li>
+  <li><a href="#key-properties" id="toc-key-properties" class="nav-link" data-scroll-target="#key-properties">Key Properties</a></li>
+  <li><a href="#common-challenges" id="toc-common-challenges" class="nav-link" data-scroll-target="#common-challenges">Common Challenges</a></li>
+  <li><a href="#real-world-applications" id="toc-real-world-applications" class="nav-link" data-scroll-target="#real-world-applications">Real-World Applications</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -280,11 +347,154 @@ window.Quarto = {
 </header>
 
 
-<p>We choose an action given a <strong>state</strong> that we are in. We think of an <strong>agent</strong> with an <strong>environment</strong> in discrete time. <span class="math inline">t=0,1,2,...</span></p>
-<p><strong>Key Idea:</strong> At time <span class="math inline">t</span>, the agent gets to observe the state <span class="math inline">s_t</span> (<span class="math inline">s_t=s</span>) and on the basis of that chooses an action <span class="math inline">A_t t A(s)</span> set of allowable actions.</p>
-<p>Then the agent gets a <strong>reward</strong> <span class="math inline">R_{t+1}</span> and goes to state <span class="math inline">s_{t+1}</span>.</p>
+<section id="what-is-a-markov-decision-process" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-markov-decision-process">What is a Markov Decision Process?</h2>
+<p>A Markov Decision Process (MDP) provides a mathematical framework for modeling sequential decision-making problems where outcomes are partly random and partly controlled by the agent.</p>
+<p><strong>Think of it like chess, but with dice:</strong> In regular chess, the outcome of each move is deterministic. In an MDP, when you move your piece, there’s some randomness in where it actually ends up - but you still have control over which piece to move.</p>
+</section>
+<section id="formal-definition" class="level2">
+<h2 class="anchored" data-anchor-id="formal-definition">Formal Definition</h2>
+<p>An MDP is defined by a 5-tuple: <span class="math inline">(\mathcal{S}, \mathcal{A}, P, R, \gamma)</span></p>
+<ul>
+<li><strong><span class="math inline">\mathcal{S}</span></strong>: Set of all possible states</li>
+<li><strong><span class="math inline">\mathcal{A}</span></strong>: Set of all possible actions<br>
+</li>
+<li><strong><span class="math inline">P</span></strong>: Transition probability function <span class="math inline">P(s'|s,a) = \Pr(S_{t+1} = s' | S_t = s, A_t = a)</span></li>
+<li><strong><span class="math inline">R</span></strong>: Reward function <span class="math inline">R(s,a,s')</span> or <span class="math inline">R(s,a)</span></li>
+<li><strong><span class="math inline">\gamma</span></strong>: Discount factor <span class="math inline">\gamma \in [0,1]</span></li>
+</ul>
+</section>
+<section id="the-markov-property" class="level2">
+<h2 class="anchored" data-anchor-id="the-markov-property">The Markov Property</h2>
+<p><strong>Key assumption:</strong> The future depends only on the present state, not the entire history.</p>
+<p><span class="math display">\Pr(S_{t+1} = s' | S_t = s, A_t = a, S_{t-1}, A_{t-1}, ..., S_0, A_0) = \Pr(S_{t+1} = s' | S_t = s, A_t = a)</span></p>
+<p><strong>Intuition:</strong> To predict where you’ll be tomorrow, you only need to know where you are today and what you do today - not your entire life history.</p>
+<p>This makes problems tractable! Without this assumption, we’d need infinite memory.</p>
+</section>
+<section id="mdp-components-in-detail" class="level2">
+<h2 class="anchored" data-anchor-id="mdp-components-in-detail">MDP Components in Detail</h2>
+<section id="states-mathcals" class="level3">
+<h3 class="anchored" data-anchor-id="states-mathcals">States (<span class="math inline">\mathcal{S}</span>)</h3>
+<p>The state captures all relevant information needed to make optimal decisions.</p>
+<p><strong>Examples:</strong> - <strong>Grid World</strong>: <span class="math inline">(x, y)</span> coordinates - <strong>Blackjack</strong>: (player sum, dealer showing card, usable ace?) - <strong>Robot Navigation</strong>: (position, velocity, battery level, sensor readings) - <strong>Stock Trading</strong>: (prices, portfolio, market indicators)</p>
+<p><strong>Complete vs.&nbsp;Incomplete Information:</strong> - <strong>Complete</strong>: Agent observes true state <span class="math inline">s_t</span> - <strong>Incomplete</strong>: Agent observes <span class="math inline">o_t</span> (observation), true state <span class="math inline">s_t</span> may be hidden</p>
+</section>
+<section id="actions-mathcala" class="level3">
+<h3 class="anchored" data-anchor-id="actions-mathcala">Actions (<span class="math inline">\mathcal{A}</span>)</h3>
+<p>Available choices the agent can make. May depend on state: <span class="math inline">\mathcal{A}(s)</span>.</p>
+<p><strong>Examples:</strong> - <strong>Grid World</strong>: {North, South, East, West} - <strong>Blackjack</strong>: {Hit, Stand, Double Down, Split} - <strong>Stock Trading</strong>: {Buy, Sell, Hold}</p>
+</section>
+<section id="transition-probabilities-p" class="level3">
+<h3 class="anchored" data-anchor-id="transition-probabilities-p">Transition Probabilities (<span class="math inline">P</span>)</h3>
+<p><span class="math inline">P(s'|s,a)</span> defines the probability of reaching state <span class="math inline">s'</span> after taking action <span class="math inline">a</span> in state <span class="math inline">s</span>.</p>
+<p><strong>Properties:</strong> - <span class="math inline">P(s'|s,a) \geq 0</span> for all <span class="math inline">s, a, s'</span> - <span class="math inline">\sum_{s'} P(s'|s,a) = 1</span> for all <span class="math inline">s, a</span> (probability distribution)</p>
+<p><strong>Examples:</strong> - <strong>Deterministic</strong>: Robot moves exactly where commanded - <strong>Stochastic</strong>: Robot moves in intended direction 80% of time, slips left/right 10% each</p>
+</section>
+<section id="rewards-r" class="level3">
+<h3 class="anchored" data-anchor-id="rewards-r">Rewards (<span class="math inline">R</span>)</h3>
+<p>Immediate feedback signal that guides learning.</p>
+<p><strong>Forms:</strong> - <span class="math inline">R(s,a,s')</span>: Reward depends on state, action, and next state - <span class="math inline">R(s,a)</span>: Reward depends only on state and action - <span class="math inline">R(s)</span>: Reward depends only on state</p>
+<p><strong>Design principles:</strong> - Positive rewards for good outcomes - Negative rewards (penalties) for bad outcomes - Small negative rewards for each step (encourages efficiency)</p>
+</section>
+</section>
+<section id="the-agent-environment-loop" class="level2">
+<h2 class="anchored" data-anchor-id="the-agent-environment-loop">The Agent-Environment Loop</h2>
+<pre><code>t=0: Agent observes initial state s₀
+     ↓
+t=1: Agent chooses action a₀
+     Environment returns reward r₁ and new state s₁
+     ↓
+t=2: Agent chooses action a₁
+     Environment returns reward r₂ and new state s₂
+     ↓
+     ... continues forever (or until terminal state)</code></pre>
+<p><strong>Trajectory:</strong> <span class="math inline">s_0, a_0, r_1, s_1, a_1, r_2, s_2, a_2, r_3, ...</span></p>
+</section>
+<section id="example-grid-world-mdp" class="level2">
+<h2 class="anchored" data-anchor-id="example-grid-world-mdp">Example: Grid World MDP</h2>
+<p><strong>Setup:</strong> 4×4 grid, agent starts at bottom-left, goal at top-right</p>
+<p><strong>States:</strong> <span class="math inline">\mathcal{S} = \{(i,j) : i,j \in \{1,2,3,4\}\}</span></p>
+<p><strong>Actions:</strong> <span class="math inline">\mathcal{A} = \{\text{North, South, East, West}\}</span></p>
+<p><strong>Transitions:</strong> - 80% chance of moving in intended direction - 10% chance of moving perpendicular to intended direction - Can’t move outside grid (stay in place)</p>
+<p><strong>Rewards:</strong> - <span class="math inline">R = +10</span> for reaching goal state <span class="math inline">(4,4)</span> - <span class="math inline">R = -1</span> for each step (encourages efficiency) - <span class="math inline">R = -10</span> for hitting obstacles</p>
+</section>
+<section id="types-of-mdps" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-mdps">Types of MDPs</h2>
+<section id="episodic-vs.-continuing-tasks" class="level3">
+<h3 class="anchored" data-anchor-id="episodic-vs.-continuing-tasks">Episodic vs.&nbsp;Continuing Tasks</h3>
+<p><strong>Episodic:</strong> Natural stopping points (episodes) - Episodes have terminal states - Agent resets after each episode - Examples: Games, maze navigation</p>
+<p><strong>Continuing:</strong> No natural stopping points - Runs indefinitely - Need discounting to prevent infinite returns - Examples: Stock trading, server management</p>
+</section>
+<section id="finite-vs.-infinite-mdps" class="level3">
+<h3 class="anchored" data-anchor-id="finite-vs.-infinite-mdps">Finite vs.&nbsp;Infinite MDPs</h3>
+<p><strong>Finite:</strong> Finite state and action spaces <strong>Infinite:</strong> Continuous states and/or actions (requires function approximation)</p>
+</section>
+</section>
+<section id="value-functions-in-mdps" class="level2">
+<h2 class="anchored" data-anchor-id="value-functions-in-mdps">Value Functions in MDPs</h2>
+<section id="return-cumulative-reward" class="level3">
+<h3 class="anchored" data-anchor-id="return-cumulative-reward">Return (Cumulative Reward)</h3>
+<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}</span></p>
+</section>
+<section id="state-value-function" class="level3">
+<h3 class="anchored" data-anchor-id="state-value-function">State Value Function</h3>
+<p><span class="math display">V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s]</span></p>
+</section>
+<section id="action-value-function" class="level3">
+<h3 class="anchored" data-anchor-id="action-value-function">Action-Value Function</h3>
+<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi[G_t | S_t = s, A_t = a]</span></p>
+</section>
+</section>
+<section id="bellman-equations" class="level2">
+<h2 class="anchored" data-anchor-id="bellman-equations">Bellman Equations</h2>
+<section id="bellman-equation-for-vpi" class="level3">
+<h3 class="anchored" data-anchor-id="bellman-equation-for-vpi">Bellman Equation for <span class="math inline">V^\pi</span></h3>
+<p><span class="math display">V^\pi(s) = \sum_a \pi(a|s) \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^\pi(s')]</span></p>
+</section>
+<section id="bellman-equation-for-qpi" class="level3">
+<h3 class="anchored" data-anchor-id="bellman-equation-for-qpi">Bellman Equation for <span class="math inline">Q^\pi</span></h3>
+<p><span class="math display">Q^\pi(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma \sum_{a'} \pi(a'|s') Q^\pi(s',a')]</span></p>
+<p><strong>Intuition:</strong> The value of a state equals the immediate reward plus the discounted value of future states, weighted by their probabilities.</p>
+</section>
+</section>
+<section id="optimal-policies-and-value-functions" class="level2">
+<h2 class="anchored" data-anchor-id="optimal-policies-and-value-functions">Optimal Policies and Value Functions</h2>
+<p><strong>Optimal state-value function:</strong> <span class="math display">V^*(s) = \max_\pi V^\pi(s)</span></p>
+<p><strong>Optimal action-value function:</strong> <span class="math display">Q^*(s,a) = \max_\pi Q^\pi(s,a)</span></p>
+<p><strong>Bellman Optimality Equations:</strong> <span class="math display">V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
+<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma \max_{a'} Q^*(s',a')]</span></p>
+</section>
+<section id="key-properties" class="level2">
+<h2 class="anchored" data-anchor-id="key-properties">Key Properties</h2>
+<ol type="1">
+<li><strong>Existence:</strong> Every finite MDP has at least one optimal policy</li>
+<li><strong>Deterministic:</strong> There exists an optimal policy that is deterministic</li>
+<li><strong>Uniqueness:</strong> <span class="math inline">V^*</span> and <span class="math inline">Q^*</span> are unique</li>
+<li><strong>Policy Extraction:</strong> <span class="math inline">\pi^*(s) = \arg\max_a Q^*(s,a)</span></li>
+</ol>
+</section>
+<section id="common-challenges" class="level2">
+<h2 class="anchored" data-anchor-id="common-challenges">Common Challenges</h2>
+<ol type="1">
+<li><strong>Curse of Dimensionality:</strong> State space grows exponentially with problem complexity</li>
+<li><strong>Exploration vs.&nbsp;Exploitation:</strong> Need to balance trying new actions vs.&nbsp;using known good ones</li>
+<li><strong>Partial Observability:</strong> Often can’t observe true state</li>
+<li><strong>Continuous Spaces:</strong> Real-world problems often have continuous state/action spaces</li>
+<li><strong>Non-stationarity:</strong> Environment may change over time</li>
+</ol>
+</section>
+<section id="real-world-applications" class="level2">
+<h2 class="anchored" data-anchor-id="real-world-applications">Real-World Applications</h2>
+<ul>
+<li><strong>Autonomous Driving:</strong> States = traffic situations, Actions = driving maneuvers</li>
+<li><strong>Game Playing:</strong> States = board positions, Actions = legal moves</li>
+<li><strong>Resource Allocation:</strong> States = resource levels, Actions = allocation decisions</li>
+<li><strong>Medical Treatment:</strong> States = patient conditions, Actions = treatment options</li>
+</ul>
+<p>The MDP framework provides the theoretical foundation for most reinforcement learning algorithms. Understanding MDPs is crucial for designing effective RL solutions!</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

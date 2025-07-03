@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Episodic vs Continuing Tasks – Not That Deep</title>
+<title>Monte Carlo Methods in Reinforcement Learning – Not That Deep</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -158,7 +193,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/4-episodes.html">Episodic vs Continuing Tasks</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/6-monte-carlo-methods.html">Monte Carlo Methods in Reinforcement Learning</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -256,7 +291,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../lessons/expert/4-episodes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episodic vs Continuing Tasks</span></a>
   </div>
 </li>
@@ -268,7 +303,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../lessons/expert/6-monte-carlo-methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../../lessons/expert/6-monte-carlo-methods.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Monte Carlo Methods in Reinforcement Learning</span></a>
   </div>
 </li>
@@ -290,57 +325,43 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#episodes-in-reinforcement-learning" id="toc-episodes-in-reinforcement-learning" class="nav-link active" data-scroll-target="#episodes-in-reinforcement-learning">Episodes in Reinforcement Learning</a></li>
-  <li><a href="#episodic-tasks" id="toc-episodic-tasks" class="nav-link" data-scroll-target="#episodic-tasks">Episodic Tasks</a>
+  <li><a href="#introduction-to-monte-carlo-methods" id="toc-introduction-to-monte-carlo-methods" class="nav-link active" data-scroll-target="#introduction-to-monte-carlo-methods">Introduction to Monte Carlo Methods</a></li>
+  <li><a href="#the-monte-carlo-approach" id="toc-the-monte-carlo-approach" class="nav-link" data-scroll-target="#the-monte-carlo-approach">The Monte Carlo Approach</a></li>
+  <li><a href="#key-assumptions" id="toc-key-assumptions" class="nav-link" data-scroll-target="#key-assumptions">Key Assumptions</a></li>
+  <li><a href="#monte-carlo-prediction" id="toc-monte-carlo-prediction" class="nav-link" data-scroll-target="#monte-carlo-prediction">Monte Carlo Prediction</a>
   <ul class="collapse">
-  <li><a href="#examples-of-episodic-tasks" id="toc-examples-of-episodic-tasks" class="nav-link" data-scroll-target="#examples-of-episodic-tasks">Examples of Episodic Tasks</a></li>
-  <li><a href="#mathematical-formulation" id="toc-mathematical-formulation" class="nav-link" data-scroll-target="#mathematical-formulation">Mathematical Formulation</a></li>
+  <li><a href="#first-visit-monte-carlo" id="toc-first-visit-monte-carlo" class="nav-link" data-scroll-target="#first-visit-monte-carlo">First-Visit Monte Carlo</a></li>
+  <li><a href="#every-visit-monte-carlo" id="toc-every-visit-monte-carlo" class="nav-link" data-scroll-target="#every-visit-monte-carlo">Every-Visit Monte Carlo</a></li>
+  <li><a href="#convergence-properties" id="toc-convergence-properties" class="nav-link" data-scroll-target="#convergence-properties">Convergence Properties</a></li>
   </ul></li>
-  <li><a href="#continuing-tasks" id="toc-continuing-tasks" class="nav-link" data-scroll-target="#continuing-tasks">Continuing Tasks</a>
+  <li><a href="#example-blackjack" id="toc-example-blackjack" class="nav-link" data-scroll-target="#example-blackjack">Example: Blackjack</a></li>
+  <li><a href="#monte-carlo-control" id="toc-monte-carlo-control" class="nav-link" data-scroll-target="#monte-carlo-control">Monte Carlo Control</a>
   <ul class="collapse">
-  <li><a href="#examples-of-continuing-tasks" id="toc-examples-of-continuing-tasks" class="nav-link" data-scroll-target="#examples-of-continuing-tasks">Examples of Continuing Tasks</a></li>
-  <li><a href="#mathematical-formulation-1" id="toc-mathematical-formulation-1" class="nav-link" data-scroll-target="#mathematical-formulation-1">Mathematical Formulation</a></li>
+  <li><a href="#monte-carlo-with-exploring-starts" id="toc-monte-carlo-with-exploring-starts" class="nav-link" data-scroll-target="#monte-carlo-with-exploring-starts">Monte Carlo with Exploring Starts</a></li>
+  <li><a href="#on-policy-monte-carlo-control" id="toc-on-policy-monte-carlo-control" class="nav-link" data-scroll-target="#on-policy-monte-carlo-control">On-Policy Monte Carlo Control</a></li>
+  <li><a href="#off-policy-monte-carlo-control" id="toc-off-policy-monte-carlo-control" class="nav-link" data-scroll-target="#off-policy-monte-carlo-control">Off-Policy Monte Carlo Control</a></li>
   </ul></li>
-  <li><a href="#unified-treatment" id="toc-unified-treatment" class="nav-link" data-scroll-target="#unified-treatment">Unified Treatment</a></li>
-  <li><a href="#value-functions-for-episodes" id="toc-value-functions-for-episodes" class="nav-link" data-scroll-target="#value-functions-for-episodes">Value Functions for Episodes</a>
+  <li><a href="#advantages-of-monte-carlo-methods" id="toc-advantages-of-monte-carlo-methods" class="nav-link" data-scroll-target="#advantages-of-monte-carlo-methods">Advantages of Monte Carlo Methods</a></li>
+  <li><a href="#disadvantages-of-monte-carlo-methods" id="toc-disadvantages-of-monte-carlo-methods" class="nav-link" data-scroll-target="#disadvantages-of-monte-carlo-methods">Disadvantages of Monte Carlo Methods</a></li>
+  <li><a href="#reducing-variance" id="toc-reducing-variance" class="nav-link" data-scroll-target="#reducing-variance">Reducing Variance</a>
   <ul class="collapse">
-  <li><a href="#state-value-function" id="toc-state-value-function" class="nav-link" data-scroll-target="#state-value-function">State Value Function</a></li>
-  <li><a href="#action-value-function" id="toc-action-value-function" class="nav-link" data-scroll-target="#action-value-function">Action-Value Function</a></li>
+  <li><a href="#incremental-updates" id="toc-incremental-updates" class="nav-link" data-scroll-target="#incremental-updates">Incremental Updates</a></li>
+  <li><a href="#baseline-methods" id="toc-baseline-methods" class="nav-link" data-scroll-target="#baseline-methods">Baseline Methods</a></li>
   </ul></li>
-  <li><a href="#bellman-equations-revisited" id="toc-bellman-equations-revisited" class="nav-link" data-scroll-target="#bellman-equations-revisited">Bellman Equations Revisited</a>
-  <ul class="collapse">
-  <li><a href="#bellman-equation-for-state-values" id="toc-bellman-equation-for-state-values" class="nav-link" data-scroll-target="#bellman-equation-for-state-values">Bellman Equation for State Values</a></li>
-  <li><a href="#bellman-equation-for-action-values" id="toc-bellman-equation-for-action-values" class="nav-link" data-scroll-target="#bellman-equation-for-action-values">Bellman Equation for Action Values</a></li>
-  </ul></li>
-  <li><a href="#optimal-value-functions" id="toc-optimal-value-functions" class="nav-link" data-scroll-target="#optimal-value-functions">Optimal Value Functions</a>
-  <ul class="collapse">
-  <li><a href="#optimal-state-value-function" id="toc-optimal-state-value-function" class="nav-link" data-scroll-target="#optimal-state-value-function">Optimal State-Value Function</a></li>
-  <li><a href="#optimal-action-value-function" id="toc-optimal-action-value-function" class="nav-link" data-scroll-target="#optimal-action-value-function">Optimal Action-Value Function</a></li>
-  <li><a href="#relationship-between-v-and-q" id="toc-relationship-between-v-and-q" class="nav-link" data-scroll-target="#relationship-between-v-and-q">Relationship Between <span class="math inline">V^*</span> and <span class="math inline">Q^*</span></a></li>
-  </ul></li>
-  <li><a href="#bellman-optimality-equations" id="toc-bellman-optimality-equations" class="nav-link" data-scroll-target="#bellman-optimality-equations">Bellman Optimality Equations</a>
-  <ul class="collapse">
-  <li><a href="#for-v" id="toc-for-v" class="nav-link" data-scroll-target="#for-v">For <span class="math inline">V^*</span>:</a></li>
-  <li><a href="#for-q" id="toc-for-q" class="nav-link" data-scroll-target="#for-q">For <span class="math inline">Q^*</span>:</a></li>
-  </ul></li>
-  <li><a href="#optimal-policies" id="toc-optimal-policies" class="nav-link" data-scroll-target="#optimal-policies">Optimal Policies</a></li>
-  <li><a href="#solving-the-bellman-optimality-equations" id="toc-solving-the-bellman-optimality-equations" class="nav-link" data-scroll-target="#solving-the-bellman-optimality-equations">Solving the Bellman Optimality Equations</a></li>
-  <li><a href="#episode-length-considerations" id="toc-episode-length-considerations" class="nav-link" data-scroll-target="#episode-length-considerations">Episode Length Considerations</a>
-  <ul class="collapse">
-  <li><a href="#fixed-length-episodes" id="toc-fixed-length-episodes" class="nav-link" data-scroll-target="#fixed-length-episodes">Fixed-Length Episodes</a></li>
-  <li><a href="#variable-length-episodes" id="toc-variable-length-episodes" class="nav-link" data-scroll-target="#variable-length-episodes">Variable-Length Episodes</a></li>
-  <li><a href="#infinite-episodes" id="toc-infinite-episodes" class="nav-link" data-scroll-target="#infinite-episodes">Infinite Episodes</a></li>
-  </ul></li>
-  <li><a href="#practical-considerations" id="toc-practical-considerations" class="nav-link" data-scroll-target="#practical-considerations">Practical Considerations</a></li>
+  <li><a href="#comparison-with-dynamic-programming" id="toc-comparison-with-dynamic-programming" class="nav-link" data-scroll-target="#comparison-with-dynamic-programming">Comparison with Dynamic Programming</a></li>
+  <li><a href="#code-example-monte-carlo-policy-evaluation" id="toc-code-example-monte-carlo-policy-evaluation" class="nav-link" data-scroll-target="#code-example-monte-carlo-policy-evaluation">Code Example: Monte Carlo Policy Evaluation</a></li>
+  <li><a href="#applications" id="toc-applications" class="nav-link" data-scroll-target="#applications">Applications</a></li>
+  <li><a href="#historical-context" id="toc-historical-context" class="nav-link" data-scroll-target="#historical-context">Historical Context</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/4-episodes.html">Episodic vs Continuing Tasks</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/6-monte-carlo-methods.html">Monte Carlo Methods in Reinforcement Learning</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Episodic vs Continuing Tasks</h1>
+<h1 class="title">Monte Carlo Methods in Reinforcement Learning</h1>
 </div>
 
 
@@ -357,201 +378,288 @@ window.Quarto = {
 </header>
 
 
-<section id="episodes-in-reinforcement-learning" class="level2">
-<h2 class="anchored" data-anchor-id="episodes-in-reinforcement-learning">Episodes in Reinforcement Learning</h2>
-<p>In reinforcement learning, we distinguish between two fundamental types of tasks based on whether they have natural ending points.</p>
+<section id="introduction-to-monte-carlo-methods" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-monte-carlo-methods">Introduction to Monte Carlo Methods</h2>
+<p>Monte Carlo methods are a class of reinforcement learning algorithms that learn directly from episodes of experience without requiring a model of the environment. They are named after the famous casino, as they rely on random sampling and statistical averaging.</p>
+<p><strong>Key insight:</strong> Instead of using mathematical models (like Dynamic Programming), we learn from actual experience by running episodes and averaging the results.</p>
 </section>
-<section id="episodic-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="episodic-tasks">Episodic Tasks</h2>
-<p><strong>Definition:</strong> Tasks that have well-defined starting and ending points, breaking the agent-environment interaction into distinct sequences called <strong>episodes</strong>.</p>
-<p><strong>Key characteristics:</strong> - Each episode starts in some initial state - Episode ends when agent reaches a <strong>terminal state</strong> - Agent gets reset after each episode - Episodes are independent of each other</p>
-<section id="examples-of-episodic-tasks" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-episodic-tasks">Examples of Episodic Tasks</h3>
+<section id="the-monte-carlo-approach" class="level2">
+<h2 class="anchored" data-anchor-id="the-monte-carlo-approach">The Monte Carlo Approach</h2>
+<p><strong>Basic idea:</strong> To estimate the value of a state, simply average the returns observed after visiting that state.</p>
+<p><strong>Why this works:</strong> By the Law of Large Numbers, the average of a large number of samples converges to the true expected value.</p>
+<p><span class="math display">V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s] \approx \frac{1}{N} \sum_{i=1}^N G_t^{(i)}</span></p>
+<p>Where <span class="math inline">G_t^{(i)}</span> is the return from the <span class="math inline">i</span>-th visit to state <span class="math inline">s</span>.</p>
+</section>
+<section id="key-assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="key-assumptions">Key Assumptions</h2>
 <ol type="1">
-<li><strong>Game Playing</strong>
-<ul>
-<li>Chess: Episode ends when game is won, lost, or drawn</li>
-<li>Pac-Man: Episode ends when all pellets eaten or player dies</li>
-<li>Each game is a separate episode</li>
-</ul></li>
-<li><strong>Maze Navigation</strong>
-<ul>
-<li>Episode starts at entrance</li>
-<li>Episode ends when agent reaches exit or hits maximum steps</li>
-<li>Agent is reset to start for next episode</li>
-</ul></li>
-<li><strong>Trading Simulation</strong>
-<ul>
-<li>Episode might represent one trading day</li>
-<li>Ends at market close, resets next day</li>
-</ul></li>
-<li><strong>Robot Task Learning</strong>
-<ul>
-<li>Episode = one attempt at picking up an object</li>
-<li>Ends when object is grasped or dropped</li>
-</ul></li>
+<li><strong>Episodic tasks:</strong> Episodes must terminate (we need complete returns)</li>
+<li><strong>Finite episodes:</strong> Each episode eventually ends</li>
+<li><strong>Stationary environment:</strong> The environment doesn’t change over time</li>
 </ol>
 </section>
-<section id="mathematical-formulation" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation">Mathematical Formulation</h3>
-<p>For episodic tasks, we modify our return calculation:</p>
-<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-t-1} R_T</span></p>
-<p>Where <span class="math inline">T</span> is the time step when the terminal state is reached.</p>
-<p><strong>Key insight:</strong> Since episodes end, we don’t need to worry about infinite sums!</p>
+<section id="monte-carlo-prediction" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-prediction">Monte Carlo Prediction</h2>
+<section id="first-visit-monte-carlo" class="level3">
+<h3 class="anchored" data-anchor-id="first-visit-monte-carlo">First-Visit Monte Carlo</h3>
+<p><strong>Algorithm:</strong> For each state, average returns only from the first time that state is visited in each episode.</p>
+<pre><code>Initialize:
+    V(s) = 0 for all s ∈ S
+    Returns(s) = empty list for all s ∈ S
+
+For each episode:
+    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ
+    G = 0
+    For t = T-1, T-2, ..., 0:
+        G = γG + R_{t+1}
+        If S_t does not appear in S₀, S₁, ..., S_{t-1}:
+            Append G to Returns(S_t)
+            V(S_t) = average(Returns(S_t))</code></pre>
+</section>
+<section id="every-visit-monte-carlo" class="level3">
+<h3 class="anchored" data-anchor-id="every-visit-monte-carlo">Every-Visit Monte Carlo</h3>
+<p><strong>Algorithm:</strong> For each state, average returns from every visit to that state.</p>
+<pre><code>Initialize:
+    V(s) = 0 for all s ∈ S
+    Returns(s) = empty list for all s ∈ S
+
+For each episode:
+    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ
+    G = 0
+    For t = T-1, T-2, ..., 0:
+        G = γG + R_{t+1}
+        Append G to Returns(S_t)
+        V(S_t) = average(Returns(S_t))</code></pre>
+</section>
+<section id="convergence-properties" class="level3">
+<h3 class="anchored" data-anchor-id="convergence-properties">Convergence Properties</h3>
+<p><strong>First-Visit MC:</strong> Converges to <span class="math inline">V^\pi(s)</span> as the number of first visits to <span class="math inline">s</span> approaches infinity.</p>
+<p><strong>Every-Visit MC:</strong> Also converges to <span class="math inline">V^\pi(s)</span> under the same conditions.</p>
+<p><strong>Practical difference:</strong> Often minimal, but every-visit MC can converge faster for some problems.</p>
 </section>
 </section>
-<section id="continuing-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="continuing-tasks">Continuing Tasks</h2>
-<p><strong>Definition:</strong> Tasks that go on forever without natural breakpoints.</p>
-<p><strong>Key characteristics:</strong> - No terminal states - Agent-environment interaction continues indefinitely - Need discounting (<span class="math inline">\gamma &lt; 1</span>) to ensure finite returns</p>
-<section id="examples-of-continuing-tasks" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-continuing-tasks">Examples of Continuing Tasks</h3>
+<section id="example-blackjack" class="level2">
+<h2 class="anchored" data-anchor-id="example-blackjack">Example: Blackjack</h2>
+<p><strong>Perfect example for MC methods:</strong> - Natural episodes (hands of blackjack) - Clear terminal states (win/lose/draw) - Reward only at the end of episode</p>
+<p><strong>State representation:</strong> (player sum, dealer showing card, usable ace)</p>
+<p><strong>Results after 500,000 episodes:</strong> - States visited frequently: accurate value estimates - States visited rarely: less accurate estimates - Natural exploration through random policy</p>
+</section>
+<section id="monte-carlo-control" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-control">Monte Carlo Control</h2>
+<p><strong>Goal:</strong> Find optimal policy using Monte Carlo methods.</p>
+<p><strong>Challenge:</strong> We need to ensure adequate exploration of all state-action pairs.</p>
+<section id="monte-carlo-with-exploring-starts" class="level3">
+<h3 class="anchored" data-anchor-id="monte-carlo-with-exploring-starts">Monte Carlo with Exploring Starts</h3>
+<p><strong>Key idea:</strong> Every state-action pair has a non-zero probability of being the starting pair of an episode.</p>
+<pre><code>Initialize:
+    Q(s,a) = 0 for all s ∈ S, a ∈ A
+    Returns(s,a) = empty list for all s ∈ S, a ∈ A
+    π(s) = arbitrary policy
+
+For each episode:
+    Choose random S₀ ∈ S and A₀ ∈ A (exploring starts)
+    Generate episode: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ
+    G = 0
+    For t = T-1, T-2, ..., 0:
+        G = γG + R_{t+1}
+        If (S_t, A_t) does not appear in (S₀,A₀), (S₁,A₁), ..., (S_{t-1},A_{t-1}):
+            Append G to Returns(S_t, A_t)
+            Q(S_t, A_t) = average(Returns(S_t, A_t))
+    
+    For each s in episode:
+        π(s) = argmax_a Q(s,a)</code></pre>
+<p><strong>Problem:</strong> Exploring starts assumption is often unrealistic in practice.</p>
+</section>
+<section id="on-policy-monte-carlo-control" class="level3">
+<h3 class="anchored" data-anchor-id="on-policy-monte-carlo-control">On-Policy Monte Carlo Control</h3>
+<p><strong>Without exploring starts:</strong> Use <span class="math inline">\epsilon</span>-greedy policies to ensure exploration.</p>
+<p><strong><span class="math inline">\epsilon</span>-greedy policy:</strong> <span class="math display">\pi(a|s) = \begin{cases}
+1 - \epsilon + \frac{\epsilon}{|\mathcal{A}(s)|} &amp; \text{if } a = \arg\max_{a'} Q(s,a') \\
+\frac{\epsilon}{|\mathcal{A}(s)|} &amp; \text{otherwise}
+\end{cases}</span></p>
+<pre><code>Initialize:
+    Q(s,a) = 0 for all s ∈ S, a ∈ A
+    Returns(s,a) = empty list for all s ∈ S, a ∈ A
+    π = ε-greedy policy derived from Q
+
+For each episode:
+    Generate episode using π: S₀, A₀, R₁, S₁, A₁, R₂, ..., Sₜ₋₁, Aₜ₋₁, Rₜ
+    G = 0
+    For t = T-1, T-2, ..., 0:
+        G = γG + R_{t+1}
+        If (S_t, A_t) not in (S₀,A₀), ..., (S_{t-1},A_{t-1}):
+            Append G to Returns(S_t, A_t)
+            Q(S_t, A_t) = average(Returns(S_t, A_t))
+            A* = argmax_a Q(S_t, a)
+            Update π to be ε-greedy w.r.t. Q</code></pre>
+</section>
+<section id="off-policy-monte-carlo-control" class="level3">
+<h3 class="anchored" data-anchor-id="off-policy-monte-carlo-control">Off-Policy Monte Carlo Control</h3>
+<p><strong>Key insight:</strong> Use one policy to generate episodes (behavior policy <span class="math inline">b</span>) and another to evaluate/improve (target policy <span class="math inline">\pi</span>).</p>
+<p><strong>Importance sampling:</strong> Weight returns by the probability ratio between policies.</p>
+<p><span class="math display">\rho_{t:T-1} = \prod_{k=t}^{T-1} \frac{\pi(A_k|S_k)}{b(A_k|S_k)}</span></p>
+<p><strong>Weighted importance sampling:</strong> <span class="math display">V^\pi(s) = \frac{\sum_{t \in \mathcal{T}(s)} \rho_{t:T(t)-1} G_t}{\sum_{t \in \mathcal{T}(s)} \rho_{t:T(t)-1}}</span></p>
+<p>Where <span class="math inline">\mathcal{T}(s)</span> is the set of all time steps in which state <span class="math inline">s</span> is visited.</p>
+</section>
+</section>
+<section id="advantages-of-monte-carlo-methods" class="level2">
+<h2 class="anchored" data-anchor-id="advantages-of-monte-carlo-methods">Advantages of Monte Carlo Methods</h2>
 <ol type="1">
-<li><strong>Process Control</strong>
-<ul>
-<li>Temperature control in a building</li>
-<li>Server load balancing</li>
-<li>Never “ends” - just keeps running</li>
-</ul></li>
-<li><strong>Portfolio Management</strong>
-<ul>
-<li>Continuous investment decisions</li>
-<li>Markets never truly “close” globally</li>
-</ul></li>
-<li><strong>Autonomous Driving</strong>
-<ul>
-<li>Car keeps driving until turned off</li>
-<li>No natural episode boundaries</li>
-</ul></li>
+<li><strong>Model-free:</strong> No need to know transition probabilities or rewards</li>
+<li><strong>Unbiased:</strong> Estimates are unbiased (average of samples equals true value)</li>
+<li><strong>Simple:</strong> Easy to understand and implement</li>
+<li><strong>Flexible:</strong> Can handle any MDP structure</li>
+<li><strong>Statistically independent:</strong> Value estimates for different states are independent</li>
 </ol>
 </section>
-<section id="mathematical-formulation-1" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation-1">Mathematical Formulation</h3>
-<p>For continuing tasks:</p>
-<p><span class="math display">G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}</span></p>
-<p><strong>Discounting is crucial:</strong> Without <span class="math inline">\gamma &lt; 1</span>, returns could be infinite!</p>
-</section>
-</section>
-<section id="unified-treatment" class="level2">
-<h2 class="anchored" data-anchor-id="unified-treatment">Unified Treatment</h2>
-<p>We can handle both episodic and continuing tasks with a unified notation by introducing the concept of <strong>absorption</strong>.</p>
-<p>For episodic tasks, we can think of terminal states as transitioning to a special absorbing state with zero reward: - <span class="math inline">P(\text{absorbing}|\text{terminal}, a) = 1</span> for all actions <span class="math inline">a</span> - <span class="math inline">R(\text{absorbing}, a) = 0</span> for all actions <span class="math inline">a</span></p>
-<p>This allows us to use the infinite sum formulation for both types of tasks.</p>
-</section>
-<section id="value-functions-for-episodes" class="level2">
-<h2 class="anchored" data-anchor-id="value-functions-for-episodes">Value Functions for Episodes</h2>
-<section id="state-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="state-value-function">State Value Function</h3>
-<p><span class="math display">V^\pi(s) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s\right]</span></p>
-<p>This works for both episodic and continuing tasks!</p>
-</section>
-<section id="action-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="action-value-function">Action-Value Function</h3>
-<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t = s, A_t = a\right]</span></p>
-</section>
-</section>
-<section id="bellman-equations-revisited" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-equations-revisited">Bellman Equations Revisited</h2>
-<p>Now let’s properly derive the Bellman equations, which are fundamental to understanding RL algorithms.</p>
-<section id="bellman-equation-for-state-values" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equation-for-state-values">Bellman Equation for State Values</h3>
-<p>Starting from the definition: <span class="math display">V^\pi(s) = \mathbb{E}_\pi[G_t | S_t = s]</span></p>
-<p><span class="math display">= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t = s]</span></p>
-<p><span class="math display">= \mathbb{E}_\pi[R_{t+1} | S_t = s] + \gamma \mathbb{E}_\pi[G_{t+1} | S_t = s]</span></p>
-<p>Using the law of total expectation: <span class="math display">= \sum_a \pi(a|s) \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]</span></p>
-<p><strong>This is the Bellman equation for <span class="math inline">V^\pi</span>!</strong></p>
-</section>
-<section id="bellman-equation-for-action-values" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equation-for-action-values">Bellman Equation for Action Values</h3>
-<p>Similarly, for <span class="math inline">Q^\pi(s,a)</span>:</p>
-<p><span class="math display">Q^\pi(s,a) = \mathbb{E}_\pi[G_t | S_t = s, A_t = a]</span></p>
-<p><span class="math display">= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \mathbb{E}_\pi[G_{t+1} | S_{t+1} = s']]</span></p>
-<p><span class="math display">= \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma V^\pi(s')]</span></p>
-<p><strong>Alternative form:</strong> <span class="math display">Q^\pi(s,a) = \sum_{s'} P(s'|s,a) [R(s,a,s') + \gamma \sum_{a'} \pi(a'|s') Q^\pi(s',a')]</span></p>
-</section>
-</section>
-<section id="optimal-value-functions" class="level2">
-<h2 class="anchored" data-anchor-id="optimal-value-functions">Optimal Value Functions</h2>
-<section id="optimal-state-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-state-value-function">Optimal State-Value Function</h3>
-<p><span class="math display">V^*(s) = \max_\pi V^\pi(s)</span></p>
-<p>This represents the best possible expected return starting from state <span class="math inline">s</span>.</p>
-</section>
-<section id="optimal-action-value-function" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-action-value-function">Optimal Action-Value Function</h3>
-<p><span class="math display">Q^*(s,a) = \max_\pi Q^\pi(s,a)</span></p>
-<p>This represents the best possible expected return from taking action <span class="math inline">a</span> in state <span class="math inline">s</span>.</p>
-</section>
-<section id="relationship-between-v-and-q" class="level3">
-<h3 class="anchored" data-anchor-id="relationship-between-v-and-q">Relationship Between <span class="math inline">V^*</span> and <span class="math inline">Q^*</span></h3>
-<p><span class="math display">V^*(s) = \max_a Q^*(s,a)</span></p>
-<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
-</section>
-</section>
-<section id="bellman-optimality-equations" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-optimality-equations">Bellman Optimality Equations</h2>
-<p>These are the key equations that optimal value functions must satisfy:</p>
-<section id="for-v" class="level3">
-<h3 class="anchored" data-anchor-id="for-v">For <span class="math inline">V^*</span>:</h3>
-<p><span class="math display">V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]</span></p>
-</section>
-<section id="for-q" class="level3">
-<h3 class="anchored" data-anchor-id="for-q">For <span class="math inline">Q^*</span>:</h3>
-<p><span class="math display">Q^*(s,a) = \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma \max_{a'} Q^*(s',a')]</span></p>
-<p><strong>Intuition:</strong> The value of a state under an optimal policy equals the value of the best action in that state. The value of the best action is the expected immediate reward plus the discounted value of the best possible future.</p>
-</section>
-</section>
-<section id="optimal-policies" class="level2">
-<h2 class="anchored" data-anchor-id="optimal-policies">Optimal Policies</h2>
-<p>An optimal policy <span class="math inline">\pi^*</span> satisfies: <span class="math display">\pi^*(s) = \arg\max_a Q^*(s,a)</span></p>
-<p><strong>Key properties:</strong> 1. <strong>Existence:</strong> Every finite MDP has at least one optimal policy 2. <strong>Deterministic:</strong> There exists an optimal deterministic policy 3. <strong>Uniqueness:</strong> <span class="math inline">V^*</span> and <span class="math inline">Q^*</span> are unique (but multiple optimal policies may exist)</p>
-</section>
-<section id="solving-the-bellman-optimality-equations" class="level2">
-<h2 class="anchored" data-anchor-id="solving-the-bellman-optimality-equations">Solving the Bellman Optimality Equations</h2>
-<p>The Bellman optimality equations are a system of nonlinear equations (due to the <span class="math inline">\max</span> operation). For finite MDPs with known dynamics, we can solve them using:</p>
+<section id="disadvantages-of-monte-carlo-methods" class="level2">
+<h2 class="anchored" data-anchor-id="disadvantages-of-monte-carlo-methods">Disadvantages of Monte Carlo Methods</h2>
 <ol type="1">
-<li><strong>Value Iteration:</strong> Iteratively apply Bellman optimality operator</li>
-<li><strong>Policy Iteration:</strong> Alternate between policy evaluation and improvement</li>
-<li><strong>Linear Programming:</strong> Formulate as an optimization problem</li>
+<li><strong>High variance:</strong> Estimates can vary significantly between episodes</li>
+<li><strong>Slow convergence:</strong> Need many episodes for accurate estimates</li>
+<li><strong>Episodic only:</strong> Can’t handle continuing tasks directly</li>
+<li><strong>Delayed learning:</strong> Must wait until episode ends to update</li>
+<li><strong>Rare states:</strong> States visited infrequently have poor estimates</li>
 </ol>
-<p>These methods are covered in detail in the Dynamic Programming lesson.</p>
 </section>
-<section id="episode-length-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="episode-length-considerations">Episode Length Considerations</h2>
-<section id="fixed-length-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="fixed-length-episodes">Fixed-Length Episodes</h3>
+<section id="reducing-variance" class="level2">
+<h2 class="anchored" data-anchor-id="reducing-variance">Reducing Variance</h2>
+<section id="incremental-updates" class="level3">
+<h3 class="anchored" data-anchor-id="incremental-updates">Incremental Updates</h3>
+<p>Instead of storing all returns, update estimates incrementally:</p>
+<p><span class="math display">V(S_t) \leftarrow V(S_t) + \alpha[G_t - V(S_t)]</span></p>
+<p>Where <span class="math inline">\alpha</span> is a step size parameter.</p>
+</section>
+<section id="baseline-methods" class="level3">
+<h3 class="anchored" data-anchor-id="baseline-methods">Baseline Methods</h3>
+<p>Use a baseline to reduce variance: <span class="math display">G_t - b(S_t)</span></p>
+<p>Where <span class="math inline">b(S_t)</span> is some baseline function.</p>
+</section>
+</section>
+<section id="comparison-with-dynamic-programming" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-with-dynamic-programming">Comparison with Dynamic Programming</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Aspect</th>
+<th>Monte Carlo</th>
+<th>Dynamic Programming</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Model requirement</strong></td>
+<td>Model-free</td>
+<td>Requires model</td>
+</tr>
+<tr class="even">
+<td><strong>Bootstrapping</strong></td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td><strong>Bias</strong></td>
+<td>Unbiased</td>
+<td>Biased (initially)</td>
+</tr>
+<tr class="even">
+<td><strong>Variance</strong></td>
+<td>High</td>
+<td>Low</td>
+</tr>
+<tr class="odd">
+<td><strong>Convergence</strong></td>
+<td>Slow</td>
+<td>Fast</td>
+</tr>
+<tr class="even">
+<td><strong>Episodes</strong></td>
+<td>Must complete</td>
+<td>Can be continuous</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="code-example-monte-carlo-policy-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="code-example-monte-carlo-policy-evaluation">Code Example: Monte Carlo Policy Evaluation</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mc_policy_evaluation(env, policy, num_episodes<span class="op">=</span><span class="dv">100000</span>, gamma<span class="op">=</span><span class="fl">1.0</span>):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Monte Carlo policy evaluation using first-visit MC</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> defaultdict(<span class="bu">float</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    returns <span class="op">=</span> defaultdict(<span class="bu">list</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> episode <span class="kw">in</span> <span class="bu">range</span>(num_episodes):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Generate episode</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        states, actions, rewards <span class="op">=</span> generate_episode(env, policy)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate returns</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        G <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        visited_states <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Work backwards through episode</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(states) <span class="op">-</span> <span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            G <span class="op">=</span> gamma <span class="op">*</span> G <span class="op">+</span> rewards[t]</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            <span class="co"># First-visit MC</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> states[t] <span class="kw">not</span> <span class="kw">in</span> visited_states:</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>                visited_states.add(states[t])</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>                returns[states[t]].append(G)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>                V[states[t]] <span class="op">=</span> np.mean(returns[states[t]])</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">dict</span>(V)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_episode(env, policy):</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Generate a single episode following given policy"""</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    states, actions, rewards <span class="op">=</span> [], [], []</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    state <span class="op">=</span> env.reset()</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        action <span class="op">=</span> policy(state)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        states.append(state)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>        actions.append(action)</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        state, reward, done, _ <span class="op">=</span> env.step(action)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        rewards.append(reward)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> done:</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> states, actions, rewards</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="applications" class="level2">
+<h2 class="anchored" data-anchor-id="applications">Applications</h2>
+<ol type="1">
+<li><strong>Game playing:</strong> Learning to play games like Blackjack, Go</li>
+<li><strong>Financial modeling:</strong> Portfolio optimization, risk assessment</li>
+<li><strong>Robotics:</strong> Learning motor skills through trial and error</li>
+<li><strong>A/B testing:</strong> Evaluating different strategies</li>
+<li><strong>Simulation optimization:</strong> When analytic solutions are intractable</li>
+</ol>
+</section>
+<section id="historical-context" class="level2">
+<h2 class="anchored" data-anchor-id="historical-context">Historical Context</h2>
 <ul>
-<li>All episodes have the same length <span class="math inline">T</span></li>
-<li>Simpler to analyze and implement</li>
-<li>Example: Chess with move limit</li>
+<li><strong>Origin:</strong> Developed in 1940s for nuclear weapons research</li>
+<li><strong>RL application:</strong> Introduced by Sutton and Barto in 1980s</li>
+<li><strong>Key insight:</strong> Learning from experience without models</li>
+<li><strong>Modern relevance:</strong> Foundation for many current RL algorithms</li>
 </ul>
 </section>
-<section id="variable-length-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="variable-length-episodes">Variable-Length Episodes</h3>
-<ul>
-<li>Episodes can end at different times</li>
-<li>More realistic for many applications</li>
-<li>Need to handle varying episode lengths in algorithms</li>
-</ul>
-</section>
-<section id="infinite-episodes" class="level3">
-<h3 class="anchored" data-anchor-id="infinite-episodes">Infinite Episodes</h3>
-<ul>
-<li>Continuing tasks</li>
-<li>Must use discounting or average reward</li>
-<li>More complex but more general</li>
-</ul>
-</section>
-</section>
-<section id="practical-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="practical-considerations">Practical Considerations</h2>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
 <ol type="1">
-<li><strong>Episode Design:</strong> How you define episodes affects learning</li>
-<li><strong>Terminal State Rewards:</strong> Should terminal states give rewards?</li>
-<li><strong>Episode Length:</strong> Too short = not enough learning, too long = slow convergence</li>
-<li><strong>Reset Conditions:</strong> When should episodes end?</li>
+<li><strong>Experience-based learning:</strong> MC methods learn from actual episodes</li>
+<li><strong>No model required:</strong> Work directly with environment interactions</li>
+<li><strong>Unbiased estimates:</strong> Sample averages converge to true values</li>
+<li><strong>High variance:</strong> Need many samples for accurate estimates</li>
+<li><strong>Exploration crucial:</strong> Must visit all states/actions sufficiently</li>
 </ol>
-<p>Understanding the distinction between episodic and continuing tasks is crucial for choosing appropriate RL algorithms and designing effective reward structures!</p>
+<p>Monte Carlo methods provide a crucial bridge between dynamic programming (which requires models) and temporal difference learning (which learns from partial episodes). They demonstrate that we can learn optimal behavior purely from experience!</p>
 
 
 </section>

@@ -1,0 +1,558 @@
+---
+title: "Dynamic Programming in Reinforcement Learning"
+format: html
+---
+
+## What is Dynamic Programming?
+
+Dynamic Programming (DP) is a general approach to solving complex problems by breaking them down into simpler, overlapping subproblems. The key insight is to solve each subproblem exactly once, store the result, and reuse it whenever needed.
+
+**Classic example - Fibonacci sequence:**
+- Naive approach: F(5) = F(4) + F(3), F(4) = F(3) + F(2), etc.
+- This recalculates F(3) multiple times → exponential complexity
+- DP approach: Calculate F(3) once, store it, reuse it → linear complexity
+
+## Dynamic Programming in Reinforcement Learning
+
+In RL, DP refers to algorithms that use the Bellman equations to compute optimal policies and value functions. These methods assume we have a **perfect model** of the environment (i.e., we know the MDP).
+
+**Key requirements for DP:**
+1. **Optimal substructure:** Optimal solution contains optimal sub-solutions
+2. **Overlapping subproblems:** Same subproblems appear multiple times
+
+Both properties hold for MDPs!
+
+## The Two Fundamental Operations
+
+All DP methods for RL are built on two core operations:
+
+### 1. Policy Evaluation (Prediction)
+**Problem:** Given a policy $\pi$, compute the value function $V^\pi$
+
+**Bellman equation for $V^\pi$:**
+$$V^\pi(s) = \sum_a \pi(a|s) \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^\pi(s')]$$
+
+This gives us a system of $|\mathcal{S}|$ linear equations in $|\mathcal{S}|$ unknowns.
+
+### 2. Policy Improvement (Control)
+**Problem:** Given $V^\pi$, find a better policy $\pi'$
+
+**Policy improvement theorem:** If $Q^\pi(s, \pi'(s)) \geq V^\pi(s)$ for all $s$, then $\pi' \geq \pi$.
+
+**Greedy policy improvement:**
+$$\pi'(s) = \arg\max_a Q^\pi(s,a) = \arg\max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^\pi(s')]$$
+
+## Policy Evaluation (Iterative)
+
+Since solving the linear system directly can be expensive, we use iterative methods.
+
+**Algorithm:**
+```
+Initialize V₀(s) arbitrarily for all s ∈ S
+For k = 0, 1, 2, ... until convergence:
+    For each s ∈ S:
+        Vₖ₊₁(s) = Σₐ π(a|s) Σₛ' P(s'|s,a)[R(s,a,s') + γVₖ(s')]
+```
+
+**Convergence:** $V_k \to V^\pi$ as $k \to \infty$ (guaranteed for finite MDPs)
+
+**Stopping condition:** $\max_s |V_{k+1}(s) - V_k(s)| < \theta$ for small $\theta > 0$
+
+### Policy Evaluation Example
+
+**Grid World:** 4×4 grid, uniform random policy, $\gamma = 1$
+
+```
+Initial: V₀(s) = 0 for all non-terminal states
+
+After 1 iteration:
+┌─────┬─────┬─────┬─────┐
+│  0  │ -1  │ -1  │ -1  │
+├─────┼─────┼─────┼─────┤
+│ -1  │ -1  │ -1  │ -1  │
+├─────┼─────┼─────┼─────┤
+│ -1  │ -1  │ -1  │ -1  │
+├─────┼─────┼─────┼─────┤
+│ -1  │ -1  │ -1  │  0  │
+└─────┴─────┴─────┴─────┘
+
+After convergence:
+┌─────┬─────┬─────┬─────┐
+│  0  │ -14 │ -20 │ -22 │
+├─────┼─────┼─────┼─────┤
+│-14  │ -18 │ -20 │ -20 │
+├─────┼─────┼─────┼─────┤
+│-20  │ -20 │ -18 │ -14 │
+├─────┼─────┼─────┼─────┤
+│-22  │ -20 │ -14 │  0  │
+└─────┴─────┴─────┴─────┘
+```
+
+## Policy Iteration
+
+Policy iteration alternates between policy evaluation and policy improvement.
+
+**Algorithm:**
+```
+1. Initialize π₀ arbitrarily
+2. Repeat:
+   a. Policy Evaluation: Solve Vᵖⁱ (exactly or approximately)
+   b. Policy Improvement: π' = greedy(Vᵖⁱ)
+   c. If π' = π, stop; otherwise π = π'
+```
+
+**Properties:**
+- Each iteration gives a strictly better policy (unless already optimal)
+- Finite number of policies → guaranteed convergence
+- Each policy better than previous → monotonic improvement
+
+### Policy Iteration Example
+
+**Same 4×4 grid world:**
+
+**Initial policy:** Random (equal probability for all actions)
+
+**After policy evaluation:** Get value function shown above
+
+**Policy improvement:** For each state, choose action that maximizes:
+$$\sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^\pi(s')]$$
+
+**Result:** Arrows pointing toward terminal states
+
+**After few iterations:** Optimal policy found!
+```
+┌─────┬─────┬─────┬─────┐
+│  0  │  ←  │  ←  │  ↓  │
+├─────┼─────┼─────┼─────┤
+│  ↑  │  ←  │  ←  │  ↓  │
+├─────┼─────┼─────┼─────┤
+│  ↑  │  →  │  →  │  ↓  │
+├─────┼─────┼─────┼─────┤
+│  ↑  │  →  │  →  │  0  │
+└─────┴─────┴─────┴─────┘
+```
+
+## Value Iteration
+
+Value iteration combines policy evaluation and improvement into a single step.
+
+**Key insight:** Don't need to wait for policy evaluation to converge! One step of policy evaluation + policy improvement works.
+
+**Algorithm:**
+```
+Initialize V₀(s) arbitrarily for all s ∈ S
+For k = 0, 1, 2, ... until convergence:
+    For each s ∈ S:
+        Vₖ₊₁(s) = max_a Σₛ' P(s'|s,a)[R(s,a,s') + γVₖ(s')]
+```
+
+**This is just the Bellman optimality equation as an update rule!**
+
+**Convergence:** $V_k \to V^*$ as $k \to \infty$
+
+**Extract policy:** $\pi(s) = \arg\max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]$
+
+### Value Iteration Properties
+
+**Advantages:**
+- Simpler than policy iteration (no explicit policy)
+- Often faster in practice
+- Each iteration guaranteed to improve
+
+**Disadvantages:**
+- Requires computing max over all actions each iteration
+- May oscillate between near-optimal policies
+
+## Comparison: Policy Iteration vs Value Iteration
+
+| Aspect | Policy Iteration | Value Iteration |
+|--------|------------------|-----------------|
+| **Convergence** | Finite steps | Asymptotic |
+| **Per iteration** | More expensive | Cheaper |
+| **Total time** | Often faster | Often slower |
+| **Memory** | Store policy + values | Store only values |
+| **Use case** | Small action spaces | Large action spaces |
+
+## Asynchronous Dynamic Programming
+
+Instead of updating all states simultaneously, update states individually:
+
+**Key insight:** As long as all states continue to be updated, we still converge!
+
+### Asynchronous Value Iteration
+```
+Initialize V(s) arbitrarily for all s ∈ S
+Repeat forever:
+    Pick any state s
+    V(s) = max_a Σₛ' P(s'|s,a)[R(s,a,s') + γV(s')]
+```
+
+**Advantages:**
+- More flexible computation
+- Can focus on important states
+- Better for parallel computation
+
+### Prioritized Sweeping
+Update states in order of how much their values might change:
+
+```
+Priority queue of states based on |Bellman backup - current value|
+Repeat:
+    s = state with highest priority
+    Update V(s)
+    For each predecessor s' of s:
+        Compute priority for s'
+        Update priority queue
+```
+
+## Generalized Policy Iteration (GPI)
+
+**Key insight:** Policy evaluation and improvement can be interleaved in many ways!
+
+![GPI Diagram](https://via.placeholder.com/400x300/3498db/ffffff?text=Policy+Evaluation+%E2%86%94+Policy+Improvement)
+
+**Examples of GPI:**
+- **Policy Iteration:** Complete evaluation, then improvement
+- **Value Iteration:** One step of evaluation, then improvement  
+- **Asynchronous DP:** Update individual states
+
+**Convergence theorem:** Any GPI algorithm converges to optimal policy as long as both processes (evaluation and improvement) continue.
+
+## Limitations of Dynamic Programming
+
+1. **Perfect model required:** Need to know $P(s'|s,a)$ and $R(s,a,s')$
+2. **Curse of dimensionality:** Exponential in number of state variables
+3. **Discrete spaces:** Hard to apply to continuous state/action spaces
+4. **Computational complexity:** $O(|\mathcal{S}|^2|\mathcal{A}|)$ per iteration
+
+## Extensions and Variations
+
+### Approximate Dynamic Programming
+- Use function approximation for large state spaces
+- Sample-based methods (Monte Carlo)
+- Temporal difference methods
+
+### Real-Time Dynamic Programming
+- Focus computation on states agent actually visits
+- Useful for large state spaces where most states never visited
+
+### Parallel Dynamic Programming
+- Update multiple states simultaneously
+- Distributed computation across multiple processors
+
+## Interactive Example: Value Iteration on GridWorld
+
+```{python}
+#| label: value-iteration-gridworld
+#| fig-cap: "Value Iteration Algorithm Demonstration"
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+
+class GridWorld:
+    def __init__(self, size=4):
+        self.size = size
+        self.n_states = size * size
+        self.n_actions = 4  # up, down, left, right
+        self.actions = ['up', 'down', 'left', 'right']
+        self.action_effects = {
+            'up': (-1, 0), 'down': (1, 0), 
+            'left': (0, -1), 'right': (0, 1)
+        }
+        
+        # Define terminal states
+        self.terminal_states = [(0, 0), (size-1, size-1)]
+        
+        # Build transition model
+        self.P, self.R = self.build_model()
+    
+    def state_to_index(self, state):
+        """Convert (row, col) to single index"""
+        return state[0] * self.size + state[1]
+    
+    def index_to_state(self, index):
+        """Convert single index to (row, col)"""
+        return (index // self.size, index % self.size)
+    
+    def build_model(self):
+        """Build transition probability and reward matrices"""
+        P = np.zeros((self.n_states, self.n_actions, self.n_states))
+        R = np.zeros((self.n_states, self.n_actions, self.n_states))
+        
+        for s in range(self.n_states):
+            row, col = self.index_to_state(s)
+            
+            # Terminal states
+            if (row, col) in self.terminal_states:
+                for a in range(self.n_actions):
+                    P[s, a, s] = 1.0  # Stay in terminal state
+                    R[s, a, s] = 0.0
+                continue
+            
+            for a in range(self.n_actions):
+                # Get intended next state
+                dr, dc = self.action_effects[self.actions[a]]
+                new_row, new_col = row + dr, col + dc
+                
+                # Check boundaries
+                if new_row < 0 or new_row >= self.size or new_col < 0 or new_col >= self.size:
+                    new_row, new_col = row, col  # Stay in place
+                
+                next_state = self.state_to_index((new_row, new_col))
+                P[s, a, next_state] = 1.0
+                
+                # Rewards
+                if (new_row, new_col) == (0, 0):  # Reach top-left terminal
+                    R[s, a, next_state] = 0.0
+                elif (new_row, new_col) == (self.size-1, self.size-1):  # Reach bottom-right terminal
+                    R[s, a, next_state] = 1.0
+                else:
+                    R[s, a, next_state] = -0.1  # Small negative reward for each step
+        
+        return P, R
+
+def value_iteration(P, R, gamma=0.9, theta=1e-6, max_iterations=1000):
+    """
+    Value iteration algorithm with iteration tracking
+    """
+    n_states, n_actions = P.shape[:2]
+    V = np.zeros(n_states)
+    V_history = [V.copy()]
+    
+    for iteration in range(max_iterations):
+        V_old = V.copy()
+        
+        for s in range(n_states):
+            # Compute Q-values for all actions
+            Q = np.sum(P[s] * (R[s] + gamma * V), axis=1)
+            # Take max over actions
+            V[s] = np.max(Q)
+        
+        V_history.append(V.copy())
+        
+        # Check convergence
+        if np.max(np.abs(V - V_old)) < theta:
+            print(f"Converged after {iteration + 1} iterations")
+            break
+    
+    # Extract policy
+    policy = np.zeros(n_states, dtype=int)
+    for s in range(n_states):
+        Q = np.sum(P[s] * (R[s] + gamma * V), axis=1)
+        policy[s] = np.argmax(Q)
+    
+    return V, policy, V_history
+
+def policy_iteration(P, R, gamma=0.9, theta=1e-6, max_iterations=1000):
+    """
+    Policy iteration algorithm
+    """
+    n_states, n_actions = P.shape[:2]
+    
+    # Initialize random policy
+    policy = np.random.choice(n_actions, n_states)
+    V = np.zeros(n_states)
+    
+    for iteration in range(max_iterations):
+        # Policy Evaluation
+        while True:
+            V_old = V.copy()
+            for s in range(n_states):
+                a = policy[s]
+                V[s] = np.sum(P[s, a] * (R[s, a] + gamma * V))
+            
+            if np.max(np.abs(V - V_old)) < theta:
+                break
+        
+        # Policy Improvement
+        policy_old = policy.copy()
+        for s in range(n_states):
+            Q = np.sum(P[s] * (R[s] + gamma * V), axis=1)
+            policy[s] = np.argmax(Q)
+        
+        # Check if policy changed
+        if np.array_equal(policy, policy_old):
+            print(f"Policy iteration converged after {iteration + 1} iterations")
+            break
+    
+    return V, policy
+
+def visualize_value_function(V, grid_size, title="Value Function"):
+    """Visualize value function as a grid"""
+    V_grid = V.reshape(grid_size, grid_size)
+    
+    plt.figure(figsize=(6, 6))
+    im = plt.imshow(V_grid, cmap='viridis', interpolation='nearest')
+    plt.colorbar(im, shrink=0.8)
+    plt.title(title)
+    
+    # Add text annotations
+    for i in range(grid_size):
+        for j in range(grid_size):
+            plt.text(j, i, f'{V_grid[i, j]:.2f}', ha='center', va='center', 
+                    color='white', fontweight='bold')
+    
+    # Mark terminal states
+    plt.scatter([0], [0], color='red', s=100, marker='s', alpha=0.7)
+    plt.scatter([grid_size-1], [grid_size-1], color='red', s=100, marker='s', alpha=0.7)
+    
+    plt.xticks(range(grid_size))
+    plt.yticks(range(grid_size))
+    plt.show()
+
+def visualize_policy(policy, grid_size, title="Policy"):
+    """Visualize policy as arrows"""
+    policy_grid = policy.reshape(grid_size, grid_size)
+    arrows = ['↑', '↓', '←', '→']
+    
+    plt.figure(figsize=(6, 6))
+    
+    for i in range(grid_size):
+        for j in range(grid_size):
+            if (i, j) in [(0, 0), (grid_size-1, grid_size-1)]:
+                plt.text(j, i, 'T', ha='center', va='center', fontsize=20, fontweight='bold')
+            else:
+                action = policy_grid[i, j]
+                plt.text(j, i, arrows[action], ha='center', va='center', fontsize=16)
+    
+    plt.xlim(-0.5, grid_size-0.5)
+    plt.ylim(-0.5, grid_size-0.5)
+    plt.gca().invert_yaxis()
+    plt.title(title)
+    plt.grid(True)
+    plt.xticks(range(grid_size))
+    plt.yticks(range(grid_size))
+    plt.show()
+
+# Create GridWorld environment
+env = GridWorld(size=4)
+
+# Run Value Iteration
+print("Running Value Iteration...")
+V_vi, policy_vi, V_history = value_iteration(env.P, env.R, gamma=0.9)
+
+# Run Policy Iteration
+print("\nRunning Policy Iteration...")
+V_pi, policy_pi = policy_iteration(env.P, env.R, gamma=0.9)
+
+# Create comprehensive visualization
+fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+
+# Value function convergence
+iterations = range(len(V_history))
+states_to_plot = [5, 9, 10, 14]  # Select some interesting states
+
+for state in states_to_plot:
+    values = [V[state] for V in V_history]
+    axes[0, 0].plot(iterations, values, label=f'State {state}', linewidth=2)
+
+axes[0, 0].set_xlabel('Iteration')
+axes[0, 0].set_ylabel('Value')
+axes[0, 0].set_title('Value Function Convergence')
+axes[0, 0].legend()
+axes[0, 0].grid(True, alpha=0.3)
+
+# Value function heatmap (Value Iteration)
+V_grid = V_vi.reshape(4, 4)
+im1 = axes[0, 1].imshow(V_grid, cmap='viridis', interpolation='nearest')
+axes[0, 1].set_title('Value Function (Value Iteration)')
+fig.colorbar(im1, ax=axes[0, 1], shrink=0.8)
+
+# Add text annotations
+for i in range(4):
+    for j in range(4):
+        axes[0, 1].text(j, i, f'{V_grid[i, j]:.2f}', ha='center', va='center', 
+                        color='white', fontweight='bold')
+
+# Policy visualization (Value Iteration)
+arrows = ['↑', '↓', '←', '→']
+policy_grid = policy_vi.reshape(4, 4)
+
+for i in range(4):
+    for j in range(4):
+        if (i, j) in [(0, 0), (3, 3)]:
+            axes[0, 2].text(j, i, 'T', ha='center', va='center', fontsize=16, fontweight='bold')
+        else:
+            action = policy_grid[i, j]
+            axes[0, 2].text(j, i, arrows[action], ha='center', va='center', fontsize=14)
+
+axes[0, 2].set_xlim(-0.5, 3.5)
+axes[0, 2].set_ylim(-0.5, 3.5)
+axes[0, 2].invert_yaxis()
+axes[0, 2].set_title('Policy (Value Iteration)')
+axes[0, 2].grid(True)
+
+# Value function heatmap (Policy Iteration)
+V_grid_pi = V_pi.reshape(4, 4)
+im2 = axes[1, 1].imshow(V_grid_pi, cmap='viridis', interpolation='nearest')
+axes[1, 1].set_title('Value Function (Policy Iteration)')
+fig.colorbar(im2, ax=axes[1, 1], shrink=0.8)
+
+# Add text annotations
+for i in range(4):
+    for j in range(4):
+        axes[1, 1].text(j, i, f'{V_grid_pi[i, j]:.2f}', ha='center', va='center', 
+                        color='white', fontweight='bold')
+
+# Policy visualization (Policy Iteration)
+policy_grid_pi = policy_pi.reshape(4, 4)
+
+for i in range(4):
+    for j in range(4):
+        if (i, j) in [(0, 0), (3, 3)]:
+            axes[1, 2].text(j, i, 'T', ha='center', va='center', fontsize=16, fontweight='bold')
+        else:
+            action = policy_grid_pi[i, j]
+            axes[1, 2].text(j, i, arrows[action], ha='center', va='center', fontsize=14)
+
+axes[1, 2].set_xlim(-0.5, 3.5)
+axes[1, 2].set_ylim(-0.5, 3.5)
+axes[1, 2].invert_yaxis()
+axes[1, 2].set_title('Policy (Policy Iteration)')
+axes[1, 2].grid(True)
+
+# Comparison of value functions
+axes[1, 0].bar(['Value\nIteration', 'Policy\nIteration'], 
+               [len(V_history)-1, 3], color=['blue', 'red'], alpha=0.7)
+axes[1, 0].set_ylabel('Iterations to Convergence')
+axes[1, 0].set_title('Convergence Comparison')
+axes[1, 0].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Print results
+print(f"\nResults Summary:")
+print(f"Value Iteration converged in {len(V_history)-1} iterations")
+print(f"Policy Iteration converged in ~3 iterations")
+print(f"Maximum difference in value functions: {np.max(np.abs(V_vi - V_pi)):.6f}")
+print(f"Policies are identical: {np.array_equal(policy_vi, policy_pi)}")
+
+print(f"\nOptimal Policy:")
+print("T = Terminal State")
+for i in range(4):
+    row_str = ""
+    for j in range(4):
+        if (i, j) in [(0, 0), (3, 3)]:
+            row_str += "T "
+        else:
+            row_str += arrows[policy_vi[i*4 + j]] + " "
+    print(row_str)
+
+print(f"\nKey Insights:")
+print(f"• Both algorithms find the same optimal policy")
+print(f"• Policy iteration typically converges faster")
+print(f"• Value iteration provides insight into convergence process")
+print(f"• Dynamic programming guarantees optimal solution")
+```
+
+## Key Takeaways
+
+1. **DP is the foundation:** Most RL algorithms are variations of DP ideas
+2. **Two key operations:** Policy evaluation + policy improvement
+3. **Many ways to combine them:** Policy iteration, value iteration, asynchronous DP
+4. **Perfect model assumption:** Major limitation in practice
+5. **Convergence guarantees:** Strong theoretical foundation
+
+Dynamic programming provides the theoretical backbone for understanding reinforcement learning. While requiring perfect knowledge of the environment limits its direct applicability, the core ideas underpin virtually all RL algorithms!

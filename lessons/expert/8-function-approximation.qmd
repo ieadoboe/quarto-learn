@@ -1,0 +1,336 @@
+---
+title: "Function Approximation in Reinforcement Learning"
+format: html
+---
+
+## The Need for Function Approximation
+
+**Problem:** Tabular methods store a separate value for each state (or state-action pair). This doesn't scale:
+
+- **Chess:** ~10^47 states
+- **Go:** ~10^170 states  
+- **Continuous control:** Infinite states
+- **Atari games:** 210 × 160 × 3 = 100,800 dimensions per frame
+
+**Solution:** Use function approximation to generalize across states.
+
+**Key insight:** Similar states should have similar values. We can use the structure in the problem to generalize from limited experience.
+
+## Function Approximation Paradigm
+
+Instead of storing values in a table, we approximate the value function:
+
+**State value:** $V(s) \approx \hat{V}(s, \mathbf{w})$  
+**Action value:** $Q(s,a) \approx \hat{Q}(s,a, \mathbf{w})$
+
+Where $\mathbf{w} \in \mathbb{R}^n$ is a weight vector with much fewer parameters than states.
+
+**Goal:** Find weight vector $\mathbf{w}$ that makes $\hat{V}(s, \mathbf{w})$ close to $V^\pi(s)$ for all states $s$.
+
+## Types of Function Approximation
+
+### 1. Linear Function Approximation
+
+**Form:** $\hat{V}(s, \mathbf{w}) = \mathbf{w}^T \mathbf{x}(s) = \sum_{i=1}^n w_i x_i(s)$
+
+Where $\mathbf{x}(s) = [x_1(s), x_2(s), ..., x_n(s)]^T$ is a feature vector.
+
+**Advantages:**
+- Simple and well-understood
+- Guaranteed convergence for many algorithms
+- Computationally efficient
+
+**Disadvantages:**
+- Limited expressiveness
+- Requires hand-crafted features
+
+### 2. Nonlinear Function Approximation
+
+**Examples:**
+- Neural networks
+- Decision trees
+- Kernel methods
+- Fourier basis
+
+**Advantages:**
+- More expressive
+- Can learn features automatically
+- Better performance on complex problems
+
+**Disadvantages:**
+- No convergence guarantees
+- More complex to tune
+- Computationally expensive
+
+## Feature Engineering
+
+**The art of creating good features $\mathbf{x}(s)$:**
+
+### Polynomial Features
+For a 2D position $(x, y)$:
+$$\mathbf{x}(s) = [1, x, y, x^2, y^2, xy, x^3, y^3, x^2y, xy^2, ...]$$
+
+### Radial Basis Functions (RBF)
+$$x_i(s) = \exp\left(-\frac{||s - c_i||^2}{2\sigma^2}\right)$$
+
+Where $c_i$ are center points and $\sigma$ controls the width.
+
+### Fourier Features
+$$x_i(s) = \cos(\pi \mathbf{c}_i^T \mathbf{s})$$
+
+Where $\mathbf{c}_i$ are coefficient vectors.
+
+### Tile Coding
+Partition the state space into overlapping tiles:
+- Each tile is a binary feature
+- State activates multiple tiles
+- Provides good generalization
+
+## Value Function Approximation
+
+### The Objective
+
+We want to minimize the mean squared error:
+$$\overline{VE}(\mathbf{w}) = \sum_{s \in \mathcal{S}} \mu(s) [V^\pi(s) - \hat{V}(s, \mathbf{w})]^2$$
+
+Where $\mu(s)$ is the state distribution under policy $\pi$.
+
+### Gradient Descent
+
+**Update rule:**
+$$\mathbf{w}_{t+1} = \mathbf{w}_t - \frac{1}{2} \alpha \nabla_{\mathbf{w}} [V^\pi(S_t) - \hat{V}(S_t, \mathbf{w}_t)]^2$$
+
+$$= \mathbf{w}_t + \alpha [V^\pi(S_t) - \hat{V}(S_t, \mathbf{w}_t)] \nabla_{\mathbf{w}} \hat{V}(S_t, \mathbf{w}_t)$$
+
+**Problem:** We don't know $V^\pi(S_t)$!
+
+**Solution:** Use an estimate as the target.
+
+## TD Learning with Function Approximation
+
+### Linear TD(0)
+
+**Update rule:**
+$$\mathbf{w}_{t+1} = \mathbf{w}_t + \alpha [R_{t+1} + \gamma \hat{V}(S_{t+1}, \mathbf{w}_t) - \hat{V}(S_t, \mathbf{w}_t)] \nabla_{\mathbf{w}} \hat{V}(S_t, \mathbf{w}_t)$$
+
+**For linear approximation:**
+$$\nabla_{\mathbf{w}} \hat{V}(S_t, \mathbf{w}_t) = \mathbf{x}(S_t)$$
+
+**So the update becomes:**
+$$\mathbf{w}_{t+1} = \mathbf{w}_t + \alpha [R_{t+1} + \gamma \mathbf{w}_t^T \mathbf{x}(S_{t+1}) - \mathbf{w}_t^T \mathbf{x}(S_t)] \mathbf{x}(S_t)$$
+
+### Convergence Properties
+
+**Linear TD(0):**
+- Converges to a unique solution
+- Solution minimizes error weighted by state distribution
+- Convergence rate depends on feature quality
+
+**Nonlinear approximation:**
+- No convergence guarantees
+- Can diverge or oscillate
+- Requires careful tuning
+
+## Action-Value Function Approximation
+
+### Linear Q-Learning
+
+**Function approximation:**
+$$\hat{Q}(s, a, \mathbf{w}) = \mathbf{w}^T \mathbf{x}(s, a)$$
+
+**Update rule:**
+$$\mathbf{w}_{t+1} = \mathbf{w}_t + \alpha [R_{t+1} + \gamma \max_{a'} \hat{Q}(S_{t+1}, a', \mathbf{w}_t) - \hat{Q}(S_t, A_t, \mathbf{w}_t)] \mathbf{x}(S_t, A_t)$$
+
+**Feature representation options:**
+1. **Separate features:** $\mathbf{x}(s, a) = [\mathbf{x}_1(s), \mathbf{x}_2(s), ..., \mathbf{x}_{|\mathcal{A}|}(s)]$
+2. **Shared features:** $\mathbf{x}(s, a) = \phi(s) \otimes \mathbf{e}_a$ where $\mathbf{e}_a$ is one-hot encoding
+
+## Deep Q-Networks (DQN)
+
+**Revolutionary idea:** Use deep neural networks for Q-function approximation.
+
+**Architecture:**
+- Input: Raw state (e.g., game screen)
+- Hidden layers: Convolutional/fully connected
+- Output: Q-values for all actions
+
+**Key innovations:**
+1. **Experience replay:** Store and sample past experiences
+2. **Target network:** Separate network for computing targets
+3. **Reward clipping:** Clip rewards to [-1, 1]
+
+### DQN Algorithm
+
+```
+Initialize replay buffer D
+Initialize Q-network with weights θ
+Initialize target network with weights θ⁻ = θ
+
+For each episode:
+    Initialize state s₁
+    For t = 1, 2, ..., T:
+        Choose action aₜ using ε-greedy policy
+        Execute aₜ, observe rₜ, sₜ₊₁
+        Store (sₜ, aₜ, rₜ, sₜ₊₁) in D
+        Sample random minibatch from D
+        Compute target: yⱼ = rⱼ + γ max Q(sⱼ₊₁, a'; θ⁻)
+        Update θ using gradient descent on (yⱼ - Q(sⱼ, aⱼ; θ))²
+        Every C steps: θ⁻ = θ
+```
+
+## Challenges with Function Approximation
+
+### 1. Deadly Triad
+
+**The three things that can cause instability:**
+1. **Function approximation**
+2. **Bootstrapping** (using estimates to update estimates)
+3. **Off-policy learning**
+
+When all three are present, learning can diverge.
+
+### 2. Overestimation Bias
+
+**Problem:** Max operation in Q-learning leads to overestimation.
+
+**Solution:** Double DQN uses two networks:
+$$y_t = R_{t+1} + \gamma Q(S_{t+1}, \arg\max_{a'} Q(S_{t+1}, a'; \theta_t); \theta_t^-)$$
+
+### 3. Exploration
+
+**Problem:** ε-greedy exploration is inefficient with function approximation.
+
+**Better approaches:**
+- **UCB-based:** Use uncertainty estimates for exploration
+- **Thompson sampling:** Sample from posterior distribution
+- **Curiosity-driven:** Explore based on prediction error
+
+## Policy Approximation
+
+**Directly approximate the policy:**
+$$\pi(a|s, \boldsymbol{\theta}) = \text{probability of action } a \text{ in state } s$$
+
+**Advantages:**
+- Can handle continuous action spaces
+- Can represent stochastic policies
+- Natural exploration through stochasticity
+
+**Disadvantages:**
+- Higher variance
+- Slower convergence
+- Requires policy gradient methods
+
+## Practical Considerations
+
+### Feature Selection
+
+**Good features should:**
+1. Be relevant to the value function
+2. Provide good generalization
+3. Be computationally efficient
+4. Avoid redundancy
+
+### Hyperparameter Tuning
+
+**Key hyperparameters:**
+- Step size (α)
+- Discount factor (γ)
+- Exploration parameter (ε)
+- Network architecture
+- Replay buffer size
+
+### Debugging
+
+**Common issues:**
+1. **Divergence:** Learning becomes unstable
+2. **Slow convergence:** Takes too long to learn
+3. **Poor generalization:** Overfits to training data
+4. **Catastrophic forgetting:** Forgets old experiences
+
+## Code Example: Linear Function Approximation
+
+```python
+import numpy as np
+
+class LinearValueFunction:
+    def __init__(self, num_features, alpha=0.1, gamma=0.95):
+        self.weights = np.zeros(num_features)
+        self.alpha = alpha
+        self.gamma = gamma
+    
+    def value(self, features):
+        return np.dot(self.weights, features)
+    
+    def update(self, features, reward, next_features, done):
+        current_value = self.value(features)
+        
+        if done:
+            target = reward
+        else:
+            target = reward + self.gamma * self.value(next_features)
+        
+        td_error = target - current_value
+        self.weights += self.alpha * td_error * features
+
+class TileCoding:
+    def __init__(self, num_tilings, tiles_per_dim, state_low, state_high):
+        self.num_tilings = num_tilings
+        self.tiles_per_dim = tiles_per_dim
+        self.state_low = state_low
+        self.state_high = state_high
+        self.num_features = num_tilings * tiles_per_dim
+        
+    def get_features(self, state):
+        features = np.zeros(self.num_features)
+        
+        for i in range(self.num_tilings):
+            # Add offset for this tiling
+            offset = i / self.num_tilings
+            scaled_state = (state - self.state_low) / (self.state_high - self.state_low)
+            tile_index = int((scaled_state + offset) * self.tiles_per_dim) % self.tiles_per_dim
+            features[i * self.tiles_per_dim + tile_index] = 1
+            
+        return features
+```
+
+## Modern Developments
+
+### 1. Deep Reinforcement Learning
+
+**Key algorithms:**
+- **DQN:** Deep Q-Networks
+- **A3C:** Asynchronous Actor-Critic
+- **PPO:** Proximal Policy Optimization
+- **SAC:** Soft Actor-Critic
+
+### 2. Meta-Learning
+
+**Learning to learn quickly:**
+- MAML (Model-Agnostic Meta-Learning)
+- Reptile
+- Few-shot learning
+
+### 3. Representation Learning
+
+**Learning good representations:**
+- Autoencoders
+- Variational methods
+- Contrastive learning
+
+## Applications
+
+1. **Game playing:** Atari, Go, StarCraft
+2. **Robotics:** Manipulation, locomotion
+3. **Autonomous driving:** Path planning, control
+4. **Finance:** Trading, portfolio management
+5. **Healthcare:** Treatment recommendation
+
+## Key Takeaways
+
+1. **Function approximation is essential:** Required for large-scale RL
+2. **Feature engineering matters:** Good features can make or break performance
+3. **Linear methods are stable:** Guaranteed convergence but limited expressiveness
+4. **Nonlinear methods are powerful:** Can solve complex problems but less stable
+5. **Deep RL is the future:** Combines representational power with RL algorithms
+
+Function approximation transforms reinforcement learning from a theoretical framework into a practical tool for solving real-world problems. While it introduces new challenges, the ability to generalize across states makes it indispensable for modern RL applications! 

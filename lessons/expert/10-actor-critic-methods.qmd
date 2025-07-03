@@ -1,0 +1,331 @@
+---
+title: "Actor-Critic Methods"
+format: html
+---
+
+## Introduction to Actor-Critic Methods
+
+Actor-Critic methods combine the best of both worlds:
+- **Value-based methods:** Learn value functions (low variance, biased)
+- **Policy-based methods:** Learn policies directly (high variance, unbiased)
+
+**Key insight:** Use the value function to reduce variance of policy gradient estimates.
+
+## The Actor-Critic Architecture
+
+**Actor:** Policy $\pi(a|s, \boldsymbol{\theta})$ 
+- **Role:** Decides what action to take
+- **Learning:** Updates policy parameters to maximize expected return
+
+**Critic:** Value function $V(s, \boldsymbol{w})$ or $Q(s,a, \boldsymbol{w})$
+- **Role:** Evaluates how good the actor's actions are
+- **Learning:** Updates value function parameters to minimize prediction error
+
+**Interaction:**
+1. Actor chooses action based on current policy
+2. Critic evaluates the action
+3. Actor updates policy based on critic's feedback
+4. Critic updates value estimates based on observed rewards
+
+## Basic Actor-Critic Algorithm
+
+**Update equations:**
+- **Critic:** $\boldsymbol{w}_{t+1} = \boldsymbol{w}_t + \alpha_w \delta_t \nabla_{\boldsymbol{w}} V(S_t, \boldsymbol{w}_t)$
+- **Actor:** $\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t + \alpha_\theta \delta_t \nabla_{\boldsymbol{\theta}} \log \pi(A_t|S_t, \boldsymbol{\theta}_t)$
+
+Where $\delta_t = R_{t+1} + \gamma V(S_{t+1}, \boldsymbol{w}_t) - V(S_t, \boldsymbol{w}_t)$ is the **TD error**.
+
+**Algorithm:**
+```
+Initialize actor parameters θ and critic parameters w
+For each episode:
+    Initialize state S
+    For each step:
+        Choose action A ~ π(·|S, θ)
+        Take action A, observe reward R and next state S'
+        
+        # Critic update
+        δ = R + γV(S', w) - V(S, w)
+        w = w + α_w * δ * ∇_w V(S, w)
+        
+        # Actor update  
+        θ = θ + α_θ * δ * ∇_θ log π(A|S, θ)
+        
+        S = S'
+    Until S is terminal
+```
+
+## Advantage Actor-Critic (A2C)
+
+**Key improvement:** Use advantage function instead of raw TD error.
+
+**Advantage function:** $A(s,a) = Q(s,a) - V(s)$
+
+**Interpretation:** How much better is action $a$ compared to the average action in state $s$?
+
+**TD error as advantage estimate:**
+$$\delta_t = R_{t+1} + \gamma V(S_{t+1}) - V(S_t) \approx A(S_t, A_t)$$
+
+**Benefits:**
+- Reduces variance of policy gradient estimates
+- Centers the gradient updates around zero
+- More stable learning
+
+## Asynchronous Advantage Actor-Critic (A3C)
+
+**Problem:** Single-threaded learning can be slow and unstable.
+
+**Solution:** Run multiple parallel actors collecting experience asynchronously.
+
+**Key innovations:**
+1. **Parallel actors:** Multiple agents exploring different parts of environment
+2. **Asynchronous updates:** Each actor updates global parameters independently
+3. **Decorrelated experience:** Parallel exploration reduces correlation
+
+**Algorithm:**
+```
+Global parameters: θ (actor), w (critic)
+For each parallel actor:
+    Initialize local parameters: θ' = θ, w' = w
+    For each episode:
+        Collect trajectory of length T
+        For each step in trajectory:
+            Calculate advantages using local critic
+        
+        # Calculate gradients
+        dθ = sum of policy gradients weighted by advantages
+        dw = sum of value function gradients
+        
+        # Update global parameters
+        θ = θ + α_θ * dθ
+        w = w + α_w * dw
+        
+        # Sync local parameters
+        θ' = θ, w' = w
+```
+
+**Advantages:**
+- Faster learning through parallelization
+- Better exploration through diversity
+- More stable due to decorrelated updates
+
+## Generalized Advantage Estimation (GAE)
+
+**Problem:** Bias-variance tradeoff in advantage estimation.
+
+**Solution:** Use exponentially weighted average of n-step advantages.
+
+**GAE formula:**
+$$A_t^{GAE(\gamma,\lambda)} = \sum_{l=0}^{\infty} (\gamma\lambda)^l \delta_{t+l}$$
+
+Where $\delta_{t+l} = R_{t+l+1} + \gamma V(S_{t+l+1}) - V(S_{t+l})$
+
+**Intuition:** 
+- $\lambda = 0$: Use only 1-step TD error (low variance, high bias)
+- $\lambda = 1$: Use full Monte Carlo return (high variance, low bias)
+- $\lambda \in (0,1)$: Balance between bias and variance
+
+## Proximal Policy Optimization (PPO)
+
+**Problem:** Large policy updates can be harmful.
+
+**Solution:** Constrain policy updates to stay close to old policy.
+
+**PPO-Clip objective:**
+$$L^{CLIP}(\boldsymbol{\theta}) = \mathbb{E}_t\left[\min\left(r_t(\boldsymbol{\theta}) \hat{A}_t, \text{clip}(r_t(\boldsymbol{\theta}), 1-\epsilon, 1+\epsilon) \hat{A}_t\right)\right]$$
+
+Where:
+- $r_t(\boldsymbol{\theta}) = \frac{\pi_{\boldsymbol{\theta}}(A_t|S_t)}{\pi_{\boldsymbol{\theta}_{old}}(A_t|S_t)}$ (probability ratio)
+- $\hat{A}_t$ is advantage estimate
+- $\epsilon$ is clipping parameter (typically 0.2)
+
+**Algorithm:**
+```
+For each iteration:
+    Collect trajectories using current policy
+    Compute advantages using GAE
+    
+    For multiple epochs:
+        For each minibatch:
+            Update policy using PPO-Clip loss
+            Update value function using MSE loss
+```
+
+## Soft Actor-Critic (SAC)
+
+**For continuous control:** Combines actor-critic with maximum entropy RL.
+
+**Key idea:** Maximize both reward and policy entropy.
+
+**Objective:**
+$$J(\boldsymbol{\theta}) = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T R(s_t, a_t) + \alpha \mathcal{H}(\pi_\theta(\cdot|s_t))\right]$$
+
+Where $\mathcal{H}$ is entropy and $\alpha$ is temperature parameter.
+
+**Components:**
+- **Actor:** Stochastic policy $\pi_\theta(a|s)$
+- **Critic:** Twin Q-functions $Q_{\phi_1}(s,a)$, $Q_{\phi_2}(s,a)$
+- **Target networks:** For stable learning
+
+## Twin Delayed Deep Deterministic Policy Gradient (TD3)
+
+**Improvements over DDPG:**
+1. **Twin critics:** Use two Q-functions, take minimum
+2. **Delayed policy updates:** Update policy less frequently than critics
+3. **Target policy smoothing:** Add noise to target policy
+
+**Algorithm:**
+```
+For each step:
+    # Collect experience
+    a = μ(s) + noise
+    Execute a, observe r, s'
+    Store (s, a, r, s') in replay buffer
+    
+    # Update critics
+    Sample batch from replay buffer
+    Update both Q-functions using Bellman equation
+    
+    # Update actor (delayed)
+    If step % d == 0:
+        Update policy using deterministic policy gradient
+        Update target networks
+```
+
+## Comparison of Actor-Critic Methods
+
+| Method | Type | Key Features | Best For |
+|--------|------|-------------|----------|
+| **A2C** | On-policy | Advantage estimation | Discrete actions |
+| **A3C** | On-policy | Asynchronous parallel learning | Fast learning |
+| **PPO** | On-policy | Clipped updates, stable | General purpose |
+| **SAC** | Off-policy | Maximum entropy, stochastic | Continuous control |
+| **TD3** | Off-policy | Deterministic, twin critics | Continuous control |
+
+## Code Example: A2C
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+
+class ActorCritic(nn.Module):
+    def __init__(self, state_size, action_size, hidden_size=128):
+        super().__init__()
+        
+        # Shared layers
+        self.shared = nn.Sequential(
+            nn.Linear(state_size, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, hidden_size),
+            nn.ReLU()
+        )
+        
+        # Actor head
+        self.actor = nn.Sequential(
+            nn.Linear(hidden_size, action_size),
+            nn.Softmax(dim=-1)
+        )
+        
+        # Critic head
+        self.critic = nn.Linear(hidden_size, 1)
+    
+    def forward(self, state):
+        shared_features = self.shared(state)
+        policy = self.actor(shared_features)
+        value = self.critic(shared_features)
+        return policy, value
+
+class A2C:
+    def __init__(self, state_size, action_size, lr=0.001):
+        self.model = ActorCritic(state_size, action_size)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=lr)
+        self.gamma = 0.99
+        
+    def select_action(self, state):
+        state = torch.FloatTensor(state).unsqueeze(0)
+        policy, value = self.model(state)
+        action = torch.multinomial(policy, 1)
+        return action.item(), torch.log(policy[0, action]), value
+    
+    def update(self, trajectories):
+        policy_losses = []
+        value_losses = []
+        
+        for trajectory in trajectories:
+            states, actions, rewards, log_probs, values = trajectory
+            
+            # Calculate returns
+            returns = []
+            G = 0
+            for reward in reversed(rewards):
+                G = reward + self.gamma * G
+                returns.insert(0, G)
+            returns = torch.tensor(returns)
+            
+            # Calculate advantages
+            advantages = returns - values
+            
+            # Policy loss
+            policy_loss = -(log_probs * advantages.detach()).mean()
+            policy_losses.append(policy_loss)
+            
+            # Value loss
+            value_loss = advantages.pow(2).mean()
+            value_losses.append(value_loss)
+        
+        # Update parameters
+        total_loss = sum(policy_losses) + sum(value_losses)
+        self.optimizer.zero_grad()
+        total_loss.backward()
+        self.optimizer.step()
+```
+
+## Practical Considerations
+
+### Hyperparameter Tuning
+
+**Learning rates:**
+- Actor learning rate typically smaller than critic
+- Common ratio: $\alpha_\theta = 0.1 \times \alpha_w$
+
+**Network architecture:**
+- Shared layers often beneficial
+- Separate networks sometimes better for complex tasks
+
+**Batch size:**
+- Larger batches more stable
+- Smaller batches faster updates
+
+### Common Issues
+
+1. **Instability:** Actor and critic learning can interfere
+2. **Catastrophic forgetting:** Network can forget previous knowledge
+3. **Hyperparameter sensitivity:** Requires careful tuning
+4. **Sample efficiency:** Often requires many samples
+
+### Debugging Tips
+
+1. **Monitor value function:** Should track true returns
+2. **Check policy entropy:** Should not collapse too quickly
+3. **Gradient norms:** Should be reasonable magnitude
+4. **Advantage distribution:** Should be centered around zero
+
+## Applications
+
+1. **Continuous control:** Robotics, autonomous vehicles
+2. **Game playing:** Real-time strategy games
+3. **Resource allocation:** Cloud computing, power grids
+4. **Natural language processing:** Dialogue systems, text generation
+5. **Finance:** Trading, portfolio management
+
+## Key Takeaways
+
+1. **Best of both worlds:** Combines value and policy methods
+2. **Variance reduction:** Critic reduces policy gradient variance
+3. **Parallel learning:** A3C-style parallelism improves efficiency
+4. **Stability matters:** Methods like PPO provide stable updates
+5. **Continuous control:** Excellent for continuous action spaces
+
+Actor-critic methods represent a major advance in reinforcement learning, providing a principled way to combine the benefits of both value-based and policy-based approaches. They form the foundation for many state-of-the-art deep RL algorithms! 

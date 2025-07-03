@@ -1,0 +1,515 @@
+---
+title: "Bandit Algorithms"
+format: html
+---
+
+## Multi-Armed Bandit Theory
+
+Let's delve into the theory behind the multi-armed bandit problem. Choice amongst R options at each time step. Step returns a numerical reward sampled from a reward distribution.
+
+Goal: Maximize expected total reward over time.
+
+-   $R_t$ is the reward received at time $t$.
+-   $A_t$ be action selected at time $t$.
+-   $a$ is choice of a given machine/agent.
+
+#### **True Value of an Action**
+
+$$q_*(a) = E(R_t|A_t = a)$$
+
+But since we do not know $q_*(a)$, the true action-value function, we must estimate it. If we knew the true value of an agent's action, $q_*(a)$, for every possible choice of $a$, we would always pick the $a$ which maximizes it.
+
+#### **Estimated value of an Action**
+
+We denote the estimate by $Q(a)$. Ideally, $Q(a)$ should converge to $q_*(a)$.
+
+**How do we choose** $Q_t(a)$?
+
+One possibility is to use the average (expected value) of all rewards received for action $a$ up to time $t$:
+
+$$
+Q_t(a) = \frac{\text{total rewards for }a}{\text{Number of times }a \text{ was performed}}
+$$
+
+$$
+Q_t(a) = \frac{\sum_{i=1}^{t-1}{R_i I(A_i=a)}}{\sum_{i=1}^{t-1}{I(A_i=a)}}
+$$
+
+$Q_t(a) \implies q_*(a)$ by Law of Large Numbers (LLN).
+
+### How do we use this for decision-making?
+
+1.  "Greedy" Action Selection\
+    $A_t = \arg\max_a{Q_t(a)}$ ties ave broken at random $Q_t(a)$ is initialized to be 0, for all $a$. This means that at time t, we choose the action (A) that gives us the maximum expected reward according to our current estimate of the Q-value for each possible action.
+
+    ```{python}
+    #| label: greedy-action-selection
+    #| fig-cap: "Greedy vs Epsilon-Greedy Performance"
+    
+    import numpy as np
+    import matplotlib.pyplot as plt
+    
+    class GreedyBandit:
+        def __init__(self, k=10):
+            self.k = k
+            self.Q = np.zeros(k)  # Action value estimates
+            self.action_counts = np.zeros(k)
+            
+        def select_action(self):
+            return np.argmax(self.Q)  # Always choose best current estimate
+        
+        def update(self, action, reward):
+            self.action_counts[action] += 1
+            # Incremental update: Q_new = Q_old + (1/n) * (reward - Q_old)
+            self.Q[action] += (reward - self.Q[action]) / self.action_counts[action]
+    
+    # Demonstrate greedy action selection
+    np.random.seed(42)
+    bandit = GreedyBandit(k=5)
+    
+    # Simulate some rewards (action 3 is actually best with mean reward 2.0)
+    true_rewards = [0.0, 0.5, 1.0, 2.0, -0.5]
+    
+    print("Greedy Action Selection Demonstration:")
+    print("True reward means:", true_rewards)
+    print("\nStep | Action | Reward | Q-values")
+    print("-" * 40)
+    
+    for step in range(10):
+        action = bandit.select_action()
+        reward = np.random.normal(true_rewards[action], 0.1)
+        bandit.update(action, reward)
+        
+        print(f"{step+1:4d} | {action:6d} | {reward:6.2f} | {bandit.Q}")
+    
+    print(f"\nFinal action counts: {bandit.action_counts}")
+    print("Notice: Greedy gets stuck on first action that seems good!")
+    ```
+
+2.  "$\epsilon$-Greedy" Method\
+    Use greedy action selection most of the time. "Occasionally", with probability $\epsilon > 0$, select an action amongst **all** possible actions uniformly at random. Eventually guaranteed to estimate all $q_*(a)$ (but might not be practical).
+
+    ```{python}
+    #| label: epsilon-greedy-comparison
+    #| fig-cap: "Epsilon-Greedy Performance for Different ε Values"
+    
+    class EpsilonGreedyBandit:
+        def __init__(self, k=10, epsilon=0.1):
+            self.k = k
+            self.epsilon = epsilon
+            self.Q = np.zeros(k)  # Action value estimates
+            self.action_counts = np.zeros(k)
+            
+        def select_action(self):
+            if np.random.random() < self.epsilon:
+                return np.random.randint(self.k)  # Explore randomly
+            else:
+                return np.argmax(self.Q)  # Exploit best known action
+        
+        def update(self, action, reward):
+            self.action_counts[action] += 1
+            self.Q[action] += (reward - self.Q[action]) / self.action_counts[action]
+    
+    class MultiArmedBandit:
+        """Environment with k arms, each with different reward distributions"""
+        def __init__(self, k=10):
+            self.k = k
+            # Random true values for each arm
+            np.random.seed(42)
+            self.true_values = np.random.normal(0, 1, k)
+            self.optimal_action = np.argmax(self.true_values)
+            
+        def get_reward(self, action):
+            # Return reward from normal distribution around true value
+            return np.random.normal(self.true_values[action], 1)
+    
+    def run_bandit_experiment(epsilon_values, n_steps=1000, n_runs=50):
+        """Run bandit experiment for different epsilon values"""
+        results = {}
+        
+        for epsilon in epsilon_values:
+            print(f"Running experiments for ε = {epsilon}...")
+            all_rewards = []
+            all_optimal_actions = []
+            
+            for run in range(n_runs):
+                env = MultiArmedBandit(k=10)
+                agent = EpsilonGreedyBandit(k=10, epsilon=epsilon)
+                
+                rewards = []
+                optimal_actions = []
+                
+                for step in range(n_steps):
+                    action = agent.select_action()
+                    reward = env.get_reward(action)
+                    agent.update(action, reward)
+                    
+                    rewards.append(reward)
+                    optimal_actions.append(1 if action == env.optimal_action else 0)
+                
+                all_rewards.append(rewards)
+                all_optimal_actions.append(optimal_actions)
+            
+            # Average across all runs
+            avg_rewards = np.mean(all_rewards, axis=0)
+            avg_optimal = np.mean(all_optimal_actions, axis=0)
+            
+            results[epsilon] = {
+                'rewards': avg_rewards,
+                'optimal_actions': avg_optimal
+            }
+        
+        return results
+    
+    # Run experiments for different epsilon values
+    epsilon_values = [0.0, 0.01, 0.1, 0.3]
+    results = run_bandit_experiment(epsilon_values, n_steps=1000, n_runs=30)
+    
+    # Create visualizations
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+    
+    # Plot 1: Average reward over time
+    for epsilon in epsilon_values:
+        # Use moving average for smoother plots
+        window = 50
+        smoothed_rewards = np.convolve(results[epsilon]['rewards'], 
+                                     np.ones(window)/window, mode='valid')
+        ax1.plot(range(window-1, len(results[epsilon]['rewards'])), 
+                smoothed_rewards, label=f'ε = {epsilon}', linewidth=2)
+    
+    ax1.set_xlabel('Steps')
+    ax1.set_ylabel('Average Reward')
+    ax1.set_title('Average Reward vs Time (50-step moving average)')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # Plot 2: Percentage of optimal actions
+    for epsilon in epsilon_values:
+        # Use moving average for smoother plots
+        smoothed_optimal = np.convolve(results[epsilon]['optimal_actions'], 
+                                     np.ones(window)/window, mode='valid')
+        ax2.plot(range(window-1, len(results[epsilon]['optimal_actions'])), 
+                smoothed_optimal * 100, label=f'ε = {epsilon}', linewidth=2)
+    
+    ax2.set_xlabel('Steps')
+    ax2.set_ylabel('% Optimal Action')
+    ax2.set_title('Optimal Action Selection vs Time (50-step moving average)')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # Print final performance
+    print("\nFinal Performance (last 100 steps):")
+    print("-" * 50)
+    for epsilon in epsilon_values:
+        final_reward = np.mean(results[epsilon]['rewards'][-100:])
+        final_optimal = np.mean(results[epsilon]['optimal_actions'][-100:]) * 100
+        print(f"ε = {epsilon:4.2f}: Avg Reward = {final_reward:.3f}, Optimal Actions = {final_optimal:.1f}%")
+    ```
+
+### How initial values impact exploration in Bandit Methods
+
+Initial values affect the outcome of a run in both greedy and epsilon-greedy approaches, but in different ways.
+
+**Idea:** Setting optimistic initial values (higher than realistic rewards) naturally encourages exploration without adding randomness.
+
+For **pure greedy method,** when $Q_t(a) = 5$ for instance for all actions (much higher than actual expected rewards/means of the reward distributions):
+
+-   The agent starts believing all actions are excellent.
+
+-   After trying action A, its estimate typically drops below 5
+
+-   This makes untried actions look better by comparison
+
+-   Eventually, the agent tries all actions at least once
+
+-   Then it settles into exploiting what it learned
+
+Think of it like a food critic who starts with unrealistically high expectations for every restaurant. The disappointment after each visit ensures they'll try every restaurant before settling on favorites.
+
+With **epsilon-greedy,** initial values matter less because:
+
+-   Random exploration happens regardless of initial values ($\epsilon$ portion of the time)
+
+-   High initial values still affect the exploitation phase (1-$\epsilon$ portion of the time)
+
+If $Q_t(a) = 5$ with epsilon-greedy:
+
+-   Random exploration happens anyway (at rate $\epsilon$)
+
+-   During exploitation ($1 - \epsilon$), untried actions initially appear better
+
+-   The combination creates more thorough early exploration
+
+This contradicts the common assumption that epsilon-greedy solves all exploration problems on its own. In practice, optimistic initialization can work synergistically with epsilon-greedy to front-load exploration when it matters most.
+
+**A key limitation worth considering:** optimistic initialization only drives temporary exploration. In non-stationary environments where reward distributions change over time, the initial optimism wears off, potentially leading to suboptimal performance if not combined with ongoing exploration mechanisms.
+
+In conclusion, initial values matter for determining how much exploration happens early in the learning process.
+
+## Gradient Bandit Algorithms
+
+So far we estimate action values to guide our policy.
+
+### Analogy
+
+**Concept:** Rather than asking "what's the absolute value of each action?", gradient bandits ask "how much better is one action compared to others?"
+
+Think of it like ranking restaurants rather than rating them on a fixed scale. You might not know if a restaurant deserves 3 or 4 stars absolutely, but you can more easily say you prefer it over another one.
+
+### Theory
+
+**Idea:** For action $a$, learn a **preference** $H_t(a)$. -\> Not interpretable as an expected reward.
+
+Actions with higher preferences are more likely to be taken at a given time.
+
+To convert preferences into decisions, we use a **softmax** transform. In other words, we are mapping states to action probabilities.
+
+**Policy:** The probability distribution over actions $P(A_t = a) = \pi_t(a)$. This policy changes over time as more action is taken (hence the $t$).
+
+Below is the softmax function.
+
+$$
+P(A_t = a) = \frac{e^{H_t(a)}}{\sum_{b=1}^R e^{H_t(b)}}=\pi_t(a)
+$$
+
+where $H_t(a)$ is a numerical preference value of an action $a$
+
+Do a kind of gradient ascent step.
+
+-   Step-size $\alpha > 0$, where $\alpha$ is the step-size hyperparameter
+
+-   After choosing an action $A_t$ and observing reward, $R_t$, update our preference as follows:
+
+    -   Increase the preference for the selected action if the reward is better than expected (that is the average)
+
+    -   Decrease the preference for the selected action if the reward was worse than expected (the average)
+
+        -   The update rule is:
+
+            -   Update the preference for the action you took
+
+            -   $H_{t+1}(A_t) = H_t(A_t) + \alpha(R_t - \bar R_t)(1-\pi_t(A_t))$
+
+                -   where $A_t$ is the action we took. It is the specific action that was selected and taken at time t.
+
+                <!-- -->
+
+            -   Update the preference for all other actions you didn't take
+
+            -   $H_{t+1}(a) = H_t(a) - \alpha(R_t - \bar R_t)\pi_t(a)$
+
+                -   Note that, $a \neq A_t$ and $\bar R_t$ is the average of rewards **not including time** $t$. $a$ is any action in the action space.
+
+**Note:** On baselines (in our case $\bar R_t$):
+
+Say we select our expected rewards from a normal distribution $N(u, 1)$ and not N(0, 1). $\implies$ Algorithm adapts rapidly.
+
+The below are questions assuming we ignore the baseline.
+
+$H_{t}(A_t) = H_t(A_t) + \alpha(R_t)(1-\pi_t(A_t))$
+
+$H_{t}(a) = H_t(a) - \alpha(R_t)\pi_t(a)$
+
+-   where $A_t \neq a$.
+
+The baseline helps us to make the correct decision. It can be used to compare the action we took with the average reward of all actions. This helps us to determine if the action we took was better or worse than expected.
+
+Performs way worse: No reason to not use the baseline.
+
+```{python}
+#| label: gradient-bandit-demo
+#| fig-cap: "Gradient Bandit Algorithm with and without Baseline"
+
+class GradientBandit:
+    def __init__(self, k=10, alpha=0.1, use_baseline=True):
+        self.k = k
+        self.alpha = alpha
+        self.use_baseline = use_baseline
+        self.H = np.zeros(k)  # Action preferences
+        self.reward_sum = 0
+        self.t = 0  # Time step
+        
+    def get_probabilities(self):
+        """Convert preferences to action probabilities using softmax"""
+        exp_H = np.exp(self.H - np.max(self.H))  # Subtract max for numerical stability
+        return exp_H / np.sum(exp_H)
+    
+    def select_action(self):
+        """Select action based on current probabilities"""
+        probabilities = self.get_probabilities()
+        return np.random.choice(self.k, p=probabilities)
+    
+    def update(self, action, reward):
+        """Update preferences based on reward"""
+        self.t += 1
+        self.reward_sum += reward
+        
+        # Calculate baseline (average reward so far)
+        baseline = self.reward_sum / self.t if self.use_baseline else 0
+        
+        # Get current probabilities
+        probabilities = self.get_probabilities()
+        
+        # Update preferences
+        for a in range(self.k):
+            if a == action:
+                # Increase preference for selected action
+                self.H[a] += self.alpha * (reward - baseline) * (1 - probabilities[a])
+            else:
+                # Decrease preference for non-selected actions
+                self.H[a] -= self.alpha * (reward - baseline) * probabilities[a]
+
+def run_gradient_bandit_experiment(n_steps=1000, n_runs=50):
+    """Compare gradient bandit with and without baseline"""
+    
+    # Test different alpha values
+    alpha_values = [0.1, 0.4]
+    baseline_options = [True, False]
+    
+    results = {}
+    
+    for alpha in alpha_values:
+        for use_baseline in baseline_options:
+            key = f"α={alpha}, baseline={use_baseline}"
+            print(f"Running gradient bandit: {key}")
+            
+            all_optimal_actions = []
+            
+            for run in range(n_runs):
+                env = MultiArmedBandit(k=10)
+                agent = GradientBandit(k=10, alpha=alpha, use_baseline=use_baseline)
+                
+                optimal_actions = []
+                
+                for step in range(n_steps):
+                    action = agent.select_action()
+                    reward = env.get_reward(action)
+                    agent.update(action, reward)
+                    
+                    optimal_actions.append(1 if action == env.optimal_action else 0)
+                
+                all_optimal_actions.append(optimal_actions)
+            
+            # Average across runs
+            avg_optimal = np.mean(all_optimal_actions, axis=0)
+            results[key] = avg_optimal
+    
+    return results
+
+# Run gradient bandit experiments
+gradient_results = run_gradient_bandit_experiment(n_steps=1000, n_runs=30)
+
+# Visualize results
+plt.figure(figsize=(12, 6))
+
+colors = ['blue', 'red', 'green', 'orange']
+styles = ['-', '--', '-', '--']
+
+for i, (key, optimal_actions) in enumerate(gradient_results.items()):
+    # Use moving average for smoother plots
+    window = 50
+    smoothed = np.convolve(optimal_actions, np.ones(window)/window, mode='valid')
+    plt.plot(range(window-1, len(optimal_actions)), smoothed * 100, 
+             label=key, color=colors[i], linestyle=styles[i], linewidth=2)
+
+plt.xlabel('Steps')
+plt.ylabel('% Optimal Action')
+plt.title('Gradient Bandit Algorithm: Effect of Baseline and Learning Rate')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Show how preferences evolve
+def demonstrate_preference_evolution():
+    """Show how action preferences evolve over time"""
+    np.random.seed(42)
+    env = MultiArmedBandit(k=4)  # Smaller bandit for clearer visualization
+    agent = GradientBandit(k=4, alpha=0.4, use_baseline=True)
+    
+    preference_history = []
+    probability_history = []
+    
+    for step in range(200):
+        preference_history.append(agent.H.copy())
+        probability_history.append(agent.get_probabilities().copy())
+        
+        action = agent.select_action()
+        reward = env.get_reward(action)
+        agent.update(action, reward)
+    
+    # Plot preference evolution
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
+    
+    preference_history = np.array(preference_history)
+    probability_history = np.array(probability_history)
+    
+    # Plot preferences
+    for a in range(4):
+        ax1.plot(preference_history[:, a], label=f'Action {a}', linewidth=2)
+    ax1.set_xlabel('Steps')
+    ax1.set_ylabel('Preference H(a)')
+    ax1.set_title('Evolution of Action Preferences')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # Plot probabilities
+    for a in range(4):
+        ax2.plot(probability_history[:, a] * 100, label=f'Action {a}', linewidth=2)
+    ax2.set_xlabel('Steps')
+    ax2.set_ylabel('Probability (%)')
+    ax2.set_title('Evolution of Action Probabilities')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    print(f"True reward means: {env.true_values}")
+    print(f"Optimal action: {env.optimal_action}")
+    print(f"Final preferences: {agent.H}")
+    print(f"Final probabilities: {agent.get_probabilities() * 100:.1f}%")
+
+demonstrate_preference_evolution()
+```
+
+**Comment:** The gradient bandit algorithm can be viewed as an approximation to an exact algorithm.
+
+$H_{t+1}(a) = H_t(a) + \frac{dE(R_t)}{dH_ta)}$
+
+$E(R_t) = \sum_{x}\pi_t(x)q_*(x)$
+
+where $q_*(x)$ is the true action value of action $x$ which we don't know.
+
+Our Algorithm earlier approximates these updates in expectation.
+
+### Upper Confidence Bound (UCB) Action Selection
+
+Idea: If an action is nearly optimal, but has not been selected much, give it a boost.
+
+Rule: $A_t = \arg\max_a{Q_t(a) + c\sqrt{\frac{\ln t}{N_t(a)}}}$
+
+where $Q_t(a)$ is the action-value estimates as before and $c$ is a tunable constant.
+
+If $N_t(a)=0$, we always select it.
+
+### What about Non-stationarity in Bandit problems?
+
+$Q_n = \sum_{i=1}^{n-1}R_i$ - Action-value estimate
+
+$Q_{n+1} = Q_n + \frac{1}{n}(R_n - Q_n)$ - Incremental way of computing $Q_n$.
+
+This lead to an interpretation of $\frac{1}{n}$ as A step size parameter that [goes to 0.]{.underline}
+
+Not good if the environment undergoes a change, as you will be very slow to adapt to this change.
+
+A single solution is to use a constant step size.
+
+$Q_{n+1} = Q_n + \alpha(R_n - Q_n)$
+
+$\implies (1+alpha)Q_1 + ... + \sum_{i=1}^{n}\alpha(1-alpha)^{n-i}R_i$
+
+where $\alpha$ is a constant step size. $\alpha$ quantifies the tradeoff between how much you remember and how much you forget. 
+$\alpha = 1$  means we only pay attention to the last observed reward. 
