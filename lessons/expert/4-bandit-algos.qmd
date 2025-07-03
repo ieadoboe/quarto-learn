@@ -470,7 +470,7 @@ def demonstrate_preference_evolution():
     print(f"True reward means: {env.true_values}")
     print(f"Optimal action: {env.optimal_action}")
     print(f"Final preferences: {agent.H}")
-    print(f"Final probabilities: {agent.get_probabilities() * 100:.1f}%")
+    print(f"Final probabilities: {[f'{p:.1f}%' for p in agent.get_probabilities() * 100]}")
 
 demonstrate_preference_evolution()
 ```

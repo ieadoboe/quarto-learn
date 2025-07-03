@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.23">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Function Approximation in Reinforcement Learning – Not That Deep</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-226bd0f977fa82dfae4534cac220d79a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a7149113d679ca37912618eec6fbd8f1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../assets/logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Not That Deep</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Welcome</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../lessons/index.html"> 
+<span class="menu-text">Lessons</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://ieadoboe.github.io/" target="_blank"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/8-function-approximation.html">Function Approximation in Reinforcement Learning</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Science Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/beginner/basic-concepts-and-terms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Concepts and Terms</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Neural Networks Fundamentals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/intermediate/perceptrons-activation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">perceptrons-activation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Advanced Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/advanced/advanced-cnns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">advanced-cnns</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cutting-Edge Techniques</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/1-rl-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reinforcement Learning Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/1-rl-part-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reinforcement Learning Expanded Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/10-actor-critic-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Actor-Critic Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/2-episodes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episodic vs Continuing Tasks</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/3-markov-decision-process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Markov Decision Process (MDP)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/4-bandit-algos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bandit Algorithms</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/5-dynamic-programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dynamic Programming in Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/6-monte-carlo-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Monte Carlo Methods in Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/7-temporal-difference-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Temporal Difference Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/8-function-approximation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Function Approximation in Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/expert/9-policy-gradient-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Policy Gradient Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-need-for-function-approximation" id="toc-the-need-for-function-approximation" class="nav-link active" data-scroll-target="#the-need-for-function-approximation">The Need for Function Approximation</a></li>
+  <li><a href="#function-approximation-paradigm" id="toc-function-approximation-paradigm" class="nav-link" data-scroll-target="#function-approximation-paradigm">Function Approximation Paradigm</a></li>
+  <li><a href="#types-of-function-approximation" id="toc-types-of-function-approximation" class="nav-link" data-scroll-target="#types-of-function-approximation">Types of Function Approximation</a>
+  <ul class="collapse">
+  <li><a href="#linear-function-approximation" id="toc-linear-function-approximation" class="nav-link" data-scroll-target="#linear-function-approximation">1. Linear Function Approximation</a></li>
+  <li><a href="#nonlinear-function-approximation" id="toc-nonlinear-function-approximation" class="nav-link" data-scroll-target="#nonlinear-function-approximation">2. Nonlinear Function Approximation</a></li>
+  </ul></li>
+  <li><a href="#feature-engineering" id="toc-feature-engineering" class="nav-link" data-scroll-target="#feature-engineering">Feature Engineering</a>
+  <ul class="collapse">
+  <li><a href="#polynomial-features" id="toc-polynomial-features" class="nav-link" data-scroll-target="#polynomial-features">Polynomial Features</a></li>
+  <li><a href="#radial-basis-functions-rbf" id="toc-radial-basis-functions-rbf" class="nav-link" data-scroll-target="#radial-basis-functions-rbf">Radial Basis Functions (RBF)</a></li>
+  <li><a href="#fourier-features" id="toc-fourier-features" class="nav-link" data-scroll-target="#fourier-features">Fourier Features</a></li>
+  <li><a href="#tile-coding" id="toc-tile-coding" class="nav-link" data-scroll-target="#tile-coding">Tile Coding</a></li>
+  </ul></li>
+  <li><a href="#value-function-approximation" id="toc-value-function-approximation" class="nav-link" data-scroll-target="#value-function-approximation">Value Function Approximation</a>
+  <ul class="collapse">
+  <li><a href="#the-objective" id="toc-the-objective" class="nav-link" data-scroll-target="#the-objective">The Objective</a></li>
+  <li><a href="#gradient-descent" id="toc-gradient-descent" class="nav-link" data-scroll-target="#gradient-descent">Gradient Descent</a></li>
+  </ul></li>
+  <li><a href="#td-learning-with-function-approximation" id="toc-td-learning-with-function-approximation" class="nav-link" data-scroll-target="#td-learning-with-function-approximation">TD Learning with Function Approximation</a>
+  <ul class="collapse">
+  <li><a href="#linear-td0" id="toc-linear-td0" class="nav-link" data-scroll-target="#linear-td0">Linear TD(0)</a></li>
+  <li><a href="#convergence-properties" id="toc-convergence-properties" class="nav-link" data-scroll-target="#convergence-properties">Convergence Properties</a></li>
+  </ul></li>
+  <li><a href="#action-value-function-approximation" id="toc-action-value-function-approximation" class="nav-link" data-scroll-target="#action-value-function-approximation">Action-Value Function Approximation</a>
+  <ul class="collapse">
+  <li><a href="#linear-q-learning" id="toc-linear-q-learning" class="nav-link" data-scroll-target="#linear-q-learning">Linear Q-Learning</a></li>
+  </ul></li>
+  <li><a href="#deep-q-networks-dqn" id="toc-deep-q-networks-dqn" class="nav-link" data-scroll-target="#deep-q-networks-dqn">Deep Q-Networks (DQN)</a>
+  <ul class="collapse">
+  <li><a href="#dqn-algorithm" id="toc-dqn-algorithm" class="nav-link" data-scroll-target="#dqn-algorithm">DQN Algorithm</a></li>
+  </ul></li>
+  <li><a href="#challenges-with-function-approximation" id="toc-challenges-with-function-approximation" class="nav-link" data-scroll-target="#challenges-with-function-approximation">Challenges with Function Approximation</a>
+  <ul class="collapse">
+  <li><a href="#deadly-triad" id="toc-deadly-triad" class="nav-link" data-scroll-target="#deadly-triad">1. Deadly Triad</a></li>
+  <li><a href="#overestimation-bias" id="toc-overestimation-bias" class="nav-link" data-scroll-target="#overestimation-bias">2. Overestimation Bias</a></li>
+  <li><a href="#exploration" id="toc-exploration" class="nav-link" data-scroll-target="#exploration">3. Exploration</a></li>
+  </ul></li>
+  <li><a href="#policy-approximation" id="toc-policy-approximation" class="nav-link" data-scroll-target="#policy-approximation">Policy Approximation</a></li>
+  <li><a href="#practical-considerations" id="toc-practical-considerations" class="nav-link" data-scroll-target="#practical-considerations">Practical Considerations</a>
+  <ul class="collapse">
+  <li><a href="#feature-selection" id="toc-feature-selection" class="nav-link" data-scroll-target="#feature-selection">Feature Selection</a></li>
+  <li><a href="#hyperparameter-tuning" id="toc-hyperparameter-tuning" class="nav-link" data-scroll-target="#hyperparameter-tuning">Hyperparameter Tuning</a></li>
+  <li><a href="#debugging" id="toc-debugging" class="nav-link" data-scroll-target="#debugging">Debugging</a></li>
+  </ul></li>
+  <li><a href="#code-example-linear-function-approximation" id="toc-code-example-linear-function-approximation" class="nav-link" data-scroll-target="#code-example-linear-function-approximation">Code Example: Linear Function Approximation</a></li>
+  <li><a href="#modern-developments" id="toc-modern-developments" class="nav-link" data-scroll-target="#modern-developments">Modern Developments</a>
+  <ul class="collapse">
+  <li><a href="#deep-reinforcement-learning" id="toc-deep-reinforcement-learning" class="nav-link" data-scroll-target="#deep-reinforcement-learning">1. Deep Reinforcement Learning</a></li>
+  <li><a href="#meta-learning" id="toc-meta-learning" class="nav-link" data-scroll-target="#meta-learning">2. Meta-Learning</a></li>
+  <li><a href="#representation-learning" id="toc-representation-learning" class="nav-link" data-scroll-target="#representation-learning">3. Representation Learning</a></li>
+  </ul></li>
+  <li><a href="#applications" id="toc-applications" class="nav-link" data-scroll-target="#applications">Applications</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../lessons/expert/1-rl-fundamentals.html">Cutting-Edge Techniques</a></li><li class="breadcrumb-item"><a href="../../lessons/expert/8-function-approximation.html">Function Approximation in Reinforcement Learning</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Function Approximation in Reinforcement Learning</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-need-for-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="the-need-for-function-approximation">The Need for Function Approximation</h2>
+<p><strong>Problem:</strong> Tabular methods store a separate value for each state (or state-action pair). This doesn’t scale:</p>
+<ul>
+<li><strong>Chess:</strong> ~10^47 states</li>
+<li><strong>Go:</strong> ~10^170 states<br>
+</li>
+<li><strong>Continuous control:</strong> Infinite states</li>
+<li><strong>Atari games:</strong> 210 × 160 × 3 = 100,800 dimensions per frame</li>
+</ul>
+<p><strong>Solution:</strong> Use function approximation to generalize across states.</p>
+<p><strong>Key insight:</strong> Similar states should have similar values. We can use the structure in the problem to generalize from limited experience.</p>
+</section>
+<section id="function-approximation-paradigm" class="level2">
+<h2 class="anchored" data-anchor-id="function-approximation-paradigm">Function Approximation Paradigm</h2>
+<p>Instead of storing values in a table, we approximate the value function:</p>
+<p><strong>State value:</strong> <span class="math inline">V(s) \approx \hat{V}(s, \mathbf{w})</span><br>
+<strong>Action value:</strong> <span class="math inline">Q(s,a) \approx \hat{Q}(s,a, \mathbf{w})</span></p>
+<p>Where <span class="math inline">\mathbf{w} \in \mathbb{R}^n</span> is a weight vector with much fewer parameters than states.</p>
+<p><strong>Goal:</strong> Find weight vector <span class="math inline">\mathbf{w}</span> that makes <span class="math inline">\hat{V}(s, \mathbf{w})</span> close to <span class="math inline">V^\pi(s)</span> for all states <span class="math inline">s</span>.</p>
+</section>
+<section id="types-of-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-function-approximation">Types of Function Approximation</h2>
+<section id="linear-function-approximation" class="level3">
+<h3 class="anchored" data-anchor-id="linear-function-approximation">1. Linear Function Approximation</h3>
+<p><strong>Form:</strong> <span class="math inline">\hat{V}(s, \mathbf{w}) = \mathbf{w}^T \mathbf{x}(s) = \sum_{i=1}^n w_i x_i(s)</span></p>
+<p>Where <span class="math inline">\mathbf{x}(s) = [x_1(s), x_2(s), ..., x_n(s)]^T</span> is a feature vector.</p>
+<p><strong>Advantages:</strong> - Simple and well-understood - Guaranteed convergence for many algorithms - Computationally efficient</p>
+<p><strong>Disadvantages:</strong> - Limited expressiveness - Requires hand-crafted features</p>
+</section>
+<section id="nonlinear-function-approximation" class="level3">
+<h3 class="anchored" data-anchor-id="nonlinear-function-approximation">2. Nonlinear Function Approximation</h3>
+<p><strong>Examples:</strong> - Neural networks - Decision trees - Kernel methods - Fourier basis</p>
+<p><strong>Advantages:</strong> - More expressive - Can learn features automatically - Better performance on complex problems</p>
+<p><strong>Disadvantages:</strong> - No convergence guarantees - More complex to tune - Computationally expensive</p>
+</section>
+</section>
+<section id="feature-engineering" class="level2">
+<h2 class="anchored" data-anchor-id="feature-engineering">Feature Engineering</h2>
+<p><strong>The art of creating good features <span class="math inline">\mathbf{x}(s)</span>:</strong></p>
+<section id="polynomial-features" class="level3">
+<h3 class="anchored" data-anchor-id="polynomial-features">Polynomial Features</h3>
+<p>For a 2D position <span class="math inline">(x, y)</span>: <span class="math display">\mathbf{x}(s) = [1, x, y, x^2, y^2, xy, x^3, y^3, x^2y, xy^2, ...]</span></p>
+</section>
+<section id="radial-basis-functions-rbf" class="level3">
+<h3 class="anchored" data-anchor-id="radial-basis-functions-rbf">Radial Basis Functions (RBF)</h3>
+<p><span class="math display">x_i(s) = \exp\left(-\frac{||s - c_i||^2}{2\sigma^2}\right)</span></p>
+<p>Where <span class="math inline">c_i</span> are center points and <span class="math inline">\sigma</span> controls the width.</p>
+</section>
+<section id="fourier-features" class="level3">
+<h3 class="anchored" data-anchor-id="fourier-features">Fourier Features</h3>
+<p><span class="math display">x_i(s) = \cos(\pi \mathbf{c}_i^T \mathbf{s})</span></p>
+<p>Where <span class="math inline">\mathbf{c}_i</span> are coefficient vectors.</p>
+</section>
+<section id="tile-coding" class="level3">
+<h3 class="anchored" data-anchor-id="tile-coding">Tile Coding</h3>
+<p>Partition the state space into overlapping tiles: - Each tile is a binary feature - State activates multiple tiles - Provides good generalization</p>
+</section>
+</section>
+<section id="value-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="value-function-approximation">Value Function Approximation</h2>
+<section id="the-objective" class="level3">
+<h3 class="anchored" data-anchor-id="the-objective">The Objective</h3>
+<p>We want to minimize the mean squared error: <span class="math display">\overline{VE}(\mathbf{w}) = \sum_{s \in \mathcal{S}} \mu(s) [V^\pi(s) - \hat{V}(s, \mathbf{w})]^2</span></p>
+<p>Where <span class="math inline">\mu(s)</span> is the state distribution under policy <span class="math inline">\pi</span>.</p>
+</section>
+<section id="gradient-descent" class="level3">
+<h3 class="anchored" data-anchor-id="gradient-descent">Gradient Descent</h3>
+<p><strong>Update rule:</strong> <span class="math display">\mathbf{w}_{t+1} = \mathbf{w}_t - \frac{1}{2} \alpha \nabla_{\mathbf{w}} [V^\pi(S_t) - \hat{V}(S_t, \mathbf{w}_t)]^2</span></p>
+<p><span class="math display">= \mathbf{w}_t + \alpha [V^\pi(S_t) - \hat{V}(S_t, \mathbf{w}_t)] \nabla_{\mathbf{w}} \hat{V}(S_t, \mathbf{w}_t)</span></p>
+<p><strong>Problem:</strong> We don’t know <span class="math inline">V^\pi(S_t)</span>!</p>
+<p><strong>Solution:</strong> Use an estimate as the target.</p>
+</section>
+</section>
+<section id="td-learning-with-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="td-learning-with-function-approximation">TD Learning with Function Approximation</h2>
+<section id="linear-td0" class="level3">
+<h3 class="anchored" data-anchor-id="linear-td0">Linear TD(0)</h3>
+<p><strong>Update rule:</strong> <span class="math display">\mathbf{w}_{t+1} = \mathbf{w}_t + \alpha [R_{t+1} + \gamma \hat{V}(S_{t+1}, \mathbf{w}_t) - \hat{V}(S_t, \mathbf{w}_t)] \nabla_{\mathbf{w}} \hat{V}(S_t, \mathbf{w}_t)</span></p>
+<p><strong>For linear approximation:</strong> <span class="math display">\nabla_{\mathbf{w}} \hat{V}(S_t, \mathbf{w}_t) = \mathbf{x}(S_t)</span></p>
+<p><strong>So the update becomes:</strong> <span class="math display">\mathbf{w}_{t+1} = \mathbf{w}_t + \alpha [R_{t+1} + \gamma \mathbf{w}_t^T \mathbf{x}(S_{t+1}) - \mathbf{w}_t^T \mathbf{x}(S_t)] \mathbf{x}(S_t)</span></p>
+</section>
+<section id="convergence-properties" class="level3">
+<h3 class="anchored" data-anchor-id="convergence-properties">Convergence Properties</h3>
+<p><strong>Linear TD(0):</strong> - Converges to a unique solution - Solution minimizes error weighted by state distribution - Convergence rate depends on feature quality</p>
+<p><strong>Nonlinear approximation:</strong> - No convergence guarantees - Can diverge or oscillate - Requires careful tuning</p>
+</section>
+</section>
+<section id="action-value-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="action-value-function-approximation">Action-Value Function Approximation</h2>
+<section id="linear-q-learning" class="level3">
+<h3 class="anchored" data-anchor-id="linear-q-learning">Linear Q-Learning</h3>
+<p><strong>Function approximation:</strong> <span class="math display">\hat{Q}(s, a, \mathbf{w}) = \mathbf{w}^T \mathbf{x}(s, a)</span></p>
+<p><strong>Update rule:</strong> <span class="math display">\mathbf{w}_{t+1} = \mathbf{w}_t + \alpha [R_{t+1} + \gamma \max_{a'} \hat{Q}(S_{t+1}, a', \mathbf{w}_t) - \hat{Q}(S_t, A_t, \mathbf{w}_t)] \mathbf{x}(S_t, A_t)</span></p>
+<p><strong>Feature representation options:</strong> 1. <strong>Separate features:</strong> <span class="math inline">\mathbf{x}(s, a) = [\mathbf{x}_1(s), \mathbf{x}_2(s), ..., \mathbf{x}_{|\mathcal{A}|}(s)]</span> 2. <strong>Shared features:</strong> <span class="math inline">\mathbf{x}(s, a) = \phi(s) \otimes \mathbf{e}_a</span> where <span class="math inline">\mathbf{e}_a</span> is one-hot encoding</p>
+</section>
+</section>
+<section id="deep-q-networks-dqn" class="level2">
+<h2 class="anchored" data-anchor-id="deep-q-networks-dqn">Deep Q-Networks (DQN)</h2>
+<p><strong>Revolutionary idea:</strong> Use deep neural networks for Q-function approximation.</p>
+<p><strong>Architecture:</strong> - Input: Raw state (e.g., game screen) - Hidden layers: Convolutional/fully connected - Output: Q-values for all actions</p>
+<p><strong>Key innovations:</strong> 1. <strong>Experience replay:</strong> Store and sample past experiences 2. <strong>Target network:</strong> Separate network for computing targets 3. <strong>Reward clipping:</strong> Clip rewards to [-1, 1]</p>
+<section id="dqn-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="dqn-algorithm">DQN Algorithm</h3>
+<pre><code>Initialize replay buffer D
+Initialize Q-network with weights θ
+Initialize target network with weights θ⁻ = θ
+
+For each episode:
+    Initialize state s₁
+    For t = 1, 2, ..., T:
+        Choose action aₜ using ε-greedy policy
+        Execute aₜ, observe rₜ, sₜ₊₁
+        Store (sₜ, aₜ, rₜ, sₜ₊₁) in D
+        Sample random minibatch from D
+        Compute target: yⱼ = rⱼ + γ max Q(sⱼ₊₁, a'; θ⁻)
+        Update θ using gradient descent on (yⱼ - Q(sⱼ, aⱼ; θ))²
+        Every C steps: θ⁻ = θ</code></pre>
+</section>
+</section>
+<section id="challenges-with-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="challenges-with-function-approximation">Challenges with Function Approximation</h2>
+<section id="deadly-triad" class="level3">
+<h3 class="anchored" data-anchor-id="deadly-triad">1. Deadly Triad</h3>
+<p><strong>The three things that can cause instability:</strong> 1. <strong>Function approximation</strong> 2. <strong>Bootstrapping</strong> (using estimates to update estimates) 3. <strong>Off-policy learning</strong></p>
+<p>When all three are present, learning can diverge.</p>
+</section>
+<section id="overestimation-bias" class="level3">
+<h3 class="anchored" data-anchor-id="overestimation-bias">2. Overestimation Bias</h3>
+<p><strong>Problem:</strong> Max operation in Q-learning leads to overestimation.</p>
+<p><strong>Solution:</strong> Double DQN uses two networks: <span class="math display">y_t = R_{t+1} + \gamma Q(S_{t+1}, \arg\max_{a'} Q(S_{t+1}, a'; \theta_t); \theta_t^-)</span></p>
+</section>
+<section id="exploration" class="level3">
+<h3 class="anchored" data-anchor-id="exploration">3. Exploration</h3>
+<p><strong>Problem:</strong> ε-greedy exploration is inefficient with function approximation.</p>
+<p><strong>Better approaches:</strong> - <strong>UCB-based:</strong> Use uncertainty estimates for exploration - <strong>Thompson sampling:</strong> Sample from posterior distribution - <strong>Curiosity-driven:</strong> Explore based on prediction error</p>
+</section>
+</section>
+<section id="policy-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="policy-approximation">Policy Approximation</h2>
+<p><strong>Directly approximate the policy:</strong> <span class="math display">\pi(a|s, \boldsymbol{\theta}) = \text{probability of action } a \text{ in state } s</span></p>
+<p><strong>Advantages:</strong> - Can handle continuous action spaces - Can represent stochastic policies - Natural exploration through stochasticity</p>
+<p><strong>Disadvantages:</strong> - Higher variance - Slower convergence - Requires policy gradient methods</p>
+</section>
+<section id="practical-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="practical-considerations">Practical Considerations</h2>
+<section id="feature-selection" class="level3">
+<h3 class="anchored" data-anchor-id="feature-selection">Feature Selection</h3>
+<p><strong>Good features should:</strong> 1. Be relevant to the value function 2. Provide good generalization 3. Be computationally efficient 4. Avoid redundancy</p>
+</section>
+<section id="hyperparameter-tuning" class="level3">
+<h3 class="anchored" data-anchor-id="hyperparameter-tuning">Hyperparameter Tuning</h3>
+<p><strong>Key hyperparameters:</strong> - Step size (α) - Discount factor (γ) - Exploration parameter (ε) - Network architecture - Replay buffer size</p>
+</section>
+<section id="debugging" class="level3">
+<h3 class="anchored" data-anchor-id="debugging">Debugging</h3>
+<p><strong>Common issues:</strong> 1. <strong>Divergence:</strong> Learning becomes unstable 2. <strong>Slow convergence:</strong> Takes too long to learn 3. <strong>Poor generalization:</strong> Overfits to training data 4. <strong>Catastrophic forgetting:</strong> Forgets old experiences</p>
+</section>
+</section>
+<section id="code-example-linear-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="code-example-linear-function-approximation">Code Example: Linear Function Approximation</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LinearValueFunction:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, num_features, alpha<span class="op">=</span><span class="fl">0.1</span>, gamma<span class="op">=</span><span class="fl">0.95</span>):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.weights <span class="op">=</span> np.zeros(num_features)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.alpha <span class="op">=</span> alpha</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gamma <span class="op">=</span> gamma</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> value(<span class="va">self</span>, features):</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.dot(<span class="va">self</span>.weights, features)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> update(<span class="va">self</span>, features, reward, next_features, done):</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        current_value <span class="op">=</span> <span class="va">self</span>.value(features)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> done:</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>            target <span class="op">=</span> reward</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>            target <span class="op">=</span> reward <span class="op">+</span> <span class="va">self</span>.gamma <span class="op">*</span> <span class="va">self</span>.value(next_features)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        td_error <span class="op">=</span> target <span class="op">-</span> current_value</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.weights <span class="op">+=</span> <span class="va">self</span>.alpha <span class="op">*</span> td_error <span class="op">*</span> features</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TileCoding:</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, num_tilings, tiles_per_dim, state_low, state_high):</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_tilings <span class="op">=</span> num_tilings</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.tiles_per_dim <span class="op">=</span> tiles_per_dim</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.state_low <span class="op">=</span> state_low</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.state_high <span class="op">=</span> state_high</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_features <span class="op">=</span> num_tilings <span class="op">*</span> tiles_per_dim</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_features(<span class="va">self</span>, state):</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> np.zeros(<span class="va">self</span>.num_features)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_tilings):</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Add offset for this tiling</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>            offset <span class="op">=</span> i <span class="op">/</span> <span class="va">self</span>.num_tilings</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>            scaled_state <span class="op">=</span> (state <span class="op">-</span> <span class="va">self</span>.state_low) <span class="op">/</span> (<span class="va">self</span>.state_high <span class="op">-</span> <span class="va">self</span>.state_low)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>            tile_index <span class="op">=</span> <span class="bu">int</span>((scaled_state <span class="op">+</span> offset) <span class="op">*</span> <span class="va">self</span>.tiles_per_dim) <span class="op">%</span> <span class="va">self</span>.tiles_per_dim</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>            features[i <span class="op">*</span> <span class="va">self</span>.tiles_per_dim <span class="op">+</span> tile_index] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> features</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="modern-developments" class="level2">
+<h2 class="anchored" data-anchor-id="modern-developments">Modern Developments</h2>
+<section id="deep-reinforcement-learning" class="level3">
+<h3 class="anchored" data-anchor-id="deep-reinforcement-learning">1. Deep Reinforcement Learning</h3>
+<p><strong>Key algorithms:</strong> - <strong>DQN:</strong> Deep Q-Networks - <strong>A3C:</strong> Asynchronous Actor-Critic - <strong>PPO:</strong> Proximal Policy Optimization - <strong>SAC:</strong> Soft Actor-Critic</p>
+</section>
+<section id="meta-learning" class="level3">
+<h3 class="anchored" data-anchor-id="meta-learning">2. Meta-Learning</h3>
+<p><strong>Learning to learn quickly:</strong> - MAML (Model-Agnostic Meta-Learning) - Reptile - Few-shot learning</p>
+</section>
+<section id="representation-learning" class="level3">
+<h3 class="anchored" data-anchor-id="representation-learning">3. Representation Learning</h3>
+<p><strong>Learning good representations:</strong> - Autoencoders - Variational methods - Contrastive learning</p>
+</section>
+</section>
+<section id="applications" class="level2">
+<h2 class="anchored" data-anchor-id="applications">Applications</h2>
+<ol type="1">
+<li><strong>Game playing:</strong> Atari, Go, StarCraft</li>
+<li><strong>Robotics:</strong> Manipulation, locomotion</li>
+<li><strong>Autonomous driving:</strong> Path planning, control</li>
+<li><strong>Finance:</strong> Trading, portfolio management</li>
+<li><strong>Healthcare:</strong> Treatment recommendation</li>
+</ol>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
+<ol type="1">
+<li><strong>Function approximation is essential:</strong> Required for large-scale RL</li>
+<li><strong>Feature engineering matters:</strong> Good features can make or break performance</li>
+<li><strong>Linear methods are stable:</strong> Guaranteed convergence but limited expressiveness</li>
+<li><strong>Nonlinear methods are powerful:</strong> Can solve complex problems but less stable</li>
+<li><strong>Deep RL is the future:</strong> Combines representational power with RL algorithms</li>
+</ol>
+<p>Function approximation transforms reinforcement learning from a theoretical framework into a practical tool for solving real-world problems. While it introduces new challenges, the ability to generalize across states makes it indispensable for modern RL applications!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ieadoboe\.github\.io\/quarto-learn");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

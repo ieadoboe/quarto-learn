@@ -26,11 +26,11 @@
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/index.html</loc>
-    <lastmod>2025-07-02T17:25:32.706Z</lastmod>
+    <lastmod>2025-07-03T00:39:13.200Z</lastmod>
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/3-markov-decision-process.html</loc>
-    <lastmod>2025-07-03T00:27:46.446Z</lastmod>
+    <lastmod>2025-07-03T00:39:13.206Z</lastmod>
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/2-bandit-algos.html</loc>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/5-dynamic-programming.html</loc>
-    <lastmod>2025-07-03T00:29:19.079Z</lastmod>
+    <lastmod>2025-07-03T00:56:03.264Z</lastmod>
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/1-rl-part-2.html</loc>
@@ -50,10 +50,30 @@
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/7-temporal-difference-learning.html</loc>
-    <lastmod>2025-07-03T00:31:37.292Z</lastmod>
+    <lastmod>2025-07-03T00:43:03.393Z</lastmod>
   </url>
   <url>
     <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/6-monte-carlo-methods.html</loc>
     <lastmod>2025-07-03T00:30:39.015Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/4-bandit-algos.html</loc>
+    <lastmod>2025-07-03T00:57:55.139Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/9-policy-gradient-methods.html</loc>
+    <lastmod>2025-07-03T00:45:03.075Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/8-function-approximation.html</loc>
+    <lastmod>2025-07-03T00:32:36.015Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/10-actor-critic-methods.html</loc>
+    <lastmod>2025-07-03T00:34:41.225Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ieadoboe.github.io/quarto-learn/lessons/expert/2-episodes.html</loc>
+    <lastmod>2025-07-03T00:28:25.168Z</lastmod>
   </url>
 </urlset>

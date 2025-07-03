@@ -38,5 +38,10 @@ format:
     html-math-method: katex
     smooth-scroll: true
     toc: true
-  
 
+jupyter:
+  kernelspec:
+    name: "quarto-env"
+    language: "python"
+    display_name: "Python (Quarto Env)"
+  python: "/opt/homebrew/Caskroom/miniconda/base/envs/quarto-env/bin/python3"
