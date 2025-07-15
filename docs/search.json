@@ -1586,5 +1586,16 @@
       "Cutting-Edge Techniques",
       "Temporal Difference Learning"
     ]
+  },
+  {
+    "objectID": "lessons/expert/1-rl-part-2.html#what-is-reinforcement-learning",
+    "href": "lessons/expert/1-rl-part-2.html#what-is-reinforcement-learning",
+    "title": "Reinforcement Learning Expanded Introduction",
+    "section": "",
+    "text": "Reinforcement learning (RL) is a framework for learning optimal behavior through trial-and-error interaction with an environment. Unlike supervised learning (where we have correct answers) or unsupervised learning (where we find patterns), RL learns from rewards and penalties.\nThink of it like learning to drive: You don’t get a manual with every possible scenario - instead, you learn by trying actions (steering, braking) and experiencing consequences (smooth ride, honking horns, accidents). Over time, you develop a driving policy that maximizes good outcomes.",
+    "crumbs": [
+      "Cutting-Edge Techniques",
+      "Reinforcement Learning Expanded Introduction"
+    ]
   }
 ]

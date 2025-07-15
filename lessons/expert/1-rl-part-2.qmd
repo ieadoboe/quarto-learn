@@ -85,6 +85,7 @@ We seek the policy that maximizes expected return:
 $$\pi^* = \arg\max_\pi \mathbb{E}_{s_0 \sim \rho}[V^\pi(s_0)]$$
 
 Where:
+
 - $\rho$ is the distribution over initial states.
 - $s_0$ is the initial state.
 - $\mathbb{E}_{s_0 \sim \rho}$ means "the expected value of the initial state under the distribution $\rho$".
@@ -93,13 +94,25 @@ Where:
 - $\arg\max_\pi$ means "the policy that maximizes the expected return" (point us to the best (max/optimal) policy).
 
 **Bellman Optimality Equation:**
+
+This recursive relationship is the foundation of many RL algorithms. It provides a recursive (repetitive) way to calculate the optimal value function.
+
+It states that the value of a state equals the maximum expected immediate reward plus discounted future value across all possible actions.
+
 $$V^*(s) = \max_a \sum_{s'} P(s'|s,a)[R(s,a,s') + \gamma V^*(s')]$$
 
-This recursive relationship is the foundation of many RL algorithms.
+where:
+- $V^*(s)$ is the optimal state value function.
+- $a$ is the action.
+- $s'$ is the next state.
+- $P(s'|s,a)$ is the probability of transitioning to state $s'$ from state $s$ by taking action $a$.
+- $R(s,a,s')$ is the reward for transitioning from state $s$ to state $s'$ by taking action $a$.
+- $\gamma$ is the discount factor.
+
 
 ## Exploration vs. Exploitation: The Central Dilemma
 
-![Exploration vs Exploitation Trade-off](https://via.placeholder.com/500x250/e74c3c/ffffff?text=Exploration+vs+Exploitation+Trade-off)
+![Credit: Hugging Face](https://huggingface.co/blog/assets/63_deep_rl_intro/exp_2.jpg){width=70%}
 
 *Figure 2: The exploration-exploitation dilemma - balancing trying new actions vs. using known good actions*
 
@@ -116,11 +129,13 @@ This recursive relationship is the foundation of many RL algorithms.
 ## Multi-Armed Bandits: RL Without States
 
 Bandits are a special case where:
-- No state transitions (each action is independent)
+- No state transitions (each action is independent) - the environment is static (does not change based on the action taken)
 - No temporal dependencies
 - Pure exploration vs. exploitation problem
 
-![Multi-Armed Bandit](https://via.placeholder.com/400x200/9b59b6/ffffff?text=Multi-Armed+Bandit+Problem)
+It's like choosing restaurants for lunch every day. No matter which restaurant you picked yesterday, today you're back to the same decision: "Which restaurant should I go to?" Your choice yesterday doesn't change the set of available restaurants or their quality.
+
+![Credit: Gibberblot](https://gibberblot.github.io/rl-notes/_images/multi-armed-bandit.png){width=70%}
 
 *Figure 3: Multi-armed bandit - multiple slot machines with unknown payout rates*
 
@@ -132,6 +147,7 @@ Choose action that maximizes:
 $$\hat{\mu}_a + \sqrt{\frac{2\ln t}{n_a}}$$
 
 Where:
+
 - $\hat{\mu}_a$ = estimated mean reward for action $a$
 - $n_a$ = number of times action $a$ was chosen
 - $t$ = total number of rounds
